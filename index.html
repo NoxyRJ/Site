@@ -132,17 +132,14 @@
       padding: 20px;
     }
 
-    /* Imagem no centro da tela inicial */
     .intro-logo {
       width: 400px;
-      position: absolute;
-      top: 80px;
-      left: 50%;
-      transform: translateX(-50%);
+      max-width: 90%;
+      height: auto;
+      margin-bottom: 30px;
     }
 
     #audio-modal button {
-      margin-top: 240px;
       padding: 12px 24px;
       font-size: 1.2rem;
       cursor: pointer;
@@ -152,15 +149,12 @@
       color: #fff;
       font-weight: bold;
       transition: background-color 0.3s;
-      position: relative;
-      z-index: 1;
     }
 
     #audio-modal button:hover {
       background-color: #cc0000;
     }
 
-    /* Animação ao revelar */
     .show {
       opacity: 1 !important;
     }
@@ -173,7 +167,7 @@
     <source src="bg.mp4" type="video/mp4" />
   </video>
 
-  <!-- 🔳 Overlay central escura -->
+  <!-- 🔳 Overlay escuro -->
   <div class="overlay" id="overlay"></div>
 
   <!-- 🎯 Conteúdo principal -->
@@ -211,13 +205,13 @@
     <source src="music.mp3" type="audio/mp3" />
   </audio>
 
-  <!-- 🔴 Modal de início -->
+  <!-- 🔴 Modal inicial -->
   <div id="audio-modal">
     <img src="png inicial.png" alt="Logo" class="intro-logo" />
     <button id="btn-play">Clique aqui</button>
   </div>
 
-  <!-- JavaScript -->
+  <!-- 🧠 JavaScript -->
   <script>
     const music = document.getElementById("bg-music");
     const volumeBtn = document.getElementById("volume");
@@ -231,7 +225,7 @@
     music.volume = 0.75;
     volumeSlider.value = 0.75;
 
-    // Botão de início
+    // Clique no botão de início
     btnPlay.addEventListener("click", () => {
       music.play().then(() => {
         audioModal.style.display = "none";
@@ -243,7 +237,7 @@
       });
     });
 
-    // Botão volume
+    // Controle de volume por botão
     volumeBtn.addEventListener("click", () => {
       if (music.paused) {
         music.play();
@@ -258,18 +252,19 @@
       }
     });
 
-    // Slider volume
+    // Slider de volume
     volumeSlider.addEventListener("input", () => {
       music.volume = volumeSlider.value;
       volumeBtn.textContent = music.volume == 0 ? "🔇" : "🔊";
       if (music.paused) music.play();
     });
 
-    // Contador de visitas
+    // Contador de visitas local
     let count = localStorage.getItem("visitas") || 0;
     count++;
     localStorage.setItem("visitas", count);
     document.getElementById("count").textContent = count;
   </script>
+
 </body>
 </html>

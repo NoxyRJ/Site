@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Noxy7</title>
   <style>
-    /* Vídeo de fundo estilo fullscreen atrás do conteúdo */
+    /* 🎥 Vídeo de fundo */
     #bg-video {
       position: fixed;
       right: 0;
@@ -16,7 +16,7 @@
       z-index: -1;
     }
 
-    /* Conteúdo principal por cima do vídeo */
+    /* 🌐 Conteúdo por cima */
     .content {
       position: relative;
       z-index: 1;
@@ -26,20 +26,23 @@
       font-family: Arial, sans-serif;
     }
 
-    /* Estilos do avatar */
     .avatar {
       width: 150px;
       border-radius: 50%;
       margin-bottom: 15px;
     }
 
-    /* Tags */
+    .imagem-extra {
+      max-width: 90%;
+      margin: 20px 0;
+      border-radius: 12px;
+    }
+
     .tags span {
       margin: 0 8px;
       font-size: 1.1rem;
     }
 
-    /* Links */
     .links a {
       display: inline-block;
       margin: 10px 10px 0 10px;
@@ -48,16 +51,27 @@
       font-weight: bold;
       font-size: 1.1rem;
     }
+
     .links a:hover {
       text-decoration: underline;
     }
 
-    /* Botão volume e slider alinhados */
+    /* 🔇 Botão de volume puro */
     #volume {
       font-size: 24px;
       cursor: pointer;
       vertical-align: middle;
+      background: none;
+      border: none;
+      outline: none;
+      padding: 0;
+      color: white;
     }
+
+    #volume:hover {
+      color: #00ffff;
+    }
+
     #volume-slider {
       vertical-align: middle;
       margin-left: 8px;
@@ -65,12 +79,10 @@
       cursor: pointer;
     }
 
-    /* Container do controle de volume para alinhar horizontalmente */
     .volume-control {
       margin-top: 20px;
     }
 
-    /* Contador visitas */
     #visitas {
       margin-top: 15px;
       font-size: 1.1rem;
@@ -79,17 +91,21 @@
 </head>
 <body>
 
-  <!-- Vídeo de fundo -->
+  <!-- 🎬 Vídeo de fundo -->
   <video autoplay muted loop id="bg-video">
     <source src="bg.mp4" type="video/mp4" />
     Seu navegador não suporta vídeo.
   </video>
 
-  <!-- Conteúdo principal -->
+  <!-- 🎯 Conteúdo -->
   <div class="content">
     <img src="avatar.png" alt="Avatar" class="avatar" />
     <h1>Noxy7</h1>
     <p>* Eu não te conheço, então não entrosa. *</p>
+
+    <!-- 🖼️ Imagem adicional -->
+    <img src="imagem.jpg" alt="Imagem extra" class="imagem-extra" />
+
     <div class="tags">
       <span>👨‍💻 Programador</span>
       <span>🧊 Frio</span>
@@ -104,31 +120,30 @@
       <a href="https://www.tiktok.com/@noxy.gg" target="_blank">🎥 TikTok</a>
     </div>
 
-    <!-- Controle de volume: botão + slider -->
+    <!-- 🔊 Controle de volume -->
     <div class="volume-control">
       <button id="volume">🔊</button>
       <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" />
     </div>
 
-    <!-- Contador de visitas -->
+    <!-- 👁️ Contador -->
     <p id="visitas">👁️ Visitantes: <span id="count">0</span></p>
   </div>
 
-  <!-- Áudio de fundo -->
+  <!-- 🎵 Música de fundo -->
   <audio id="bg-music" autoplay loop>
     <source src="music.mp3" type="audio/mp3" />
     Seu navegador não suporta áudio.
   </audio>
 
+  <!-- 📜 Script -->
   <script>
     const music = document.getElementById("bg-music");
     const volumeBtn = document.getElementById("volume");
     const volumeSlider = document.getElementById("volume-slider");
 
-    // Inicializa volume do áudio com o valor do slider
     music.volume = volumeSlider.value;
 
-    // Play/pause pelo botão
     volumeBtn.addEventListener("click", () => {
       if (music.paused) {
         music.play();
@@ -143,10 +158,8 @@
       }
     });
 
-    // Controla volume pelo slider
     volumeSlider.addEventListener("input", () => {
       music.volume = volumeSlider.value;
-
       if (music.volume == 0) {
         volumeBtn.textContent = "🔇";
       } else {
@@ -155,7 +168,6 @@
       }
     });
 
-    // Contador local de visitas (no navegador)
     let count = localStorage.getItem("visitas") || 0;
     count++;
     localStorage.setItem("visitas", count);

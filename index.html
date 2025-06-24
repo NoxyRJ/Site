@@ -13,6 +13,8 @@
       background: transparent;
       overflow: hidden;
     }
+
+    /* 🎥 Vídeo de fundo */
     #bg-video {
       position: fixed;
       right: 0;
@@ -22,6 +24,8 @@
       object-fit: cover;
       z-index: -2;
     }
+
+    /* 🔳 Overlay preta transparente e centralizada */
     .overlay {
       position: fixed;
       top: 50%;
@@ -33,6 +37,8 @@
       border-radius: 16px;
       z-index: 0;
     }
+
+    /* 🌐 Conteúdo centralizado flex */
     body {
       display: flex;
       align-items: center;
@@ -40,6 +46,7 @@
       height: 100vh;
       margin: 0;
     }
+
     .content {
       position: relative;
       z-index: 1;
@@ -50,20 +57,24 @@
       width: 90%;
       box-sizing: border-box;
     }
+
     .avatar {
       width: 150px;
       border-radius: 50%;
       margin-bottom: 15px;
     }
+
     .imagem-extra {
       max-width: 90%;
       margin: 20px 0;
       border-radius: 12px;
     }
+
     .tags span {
       margin: 0 8px;
       font-size: 1.1rem;
     }
+
     .links a {
       display: inline-block;
       margin: 10px 10px 0 10px;
@@ -72,9 +83,11 @@
       font-weight: bold;
       font-size: 1.1rem;
     }
+
     .links a:hover {
       text-decoration: underline;
     }
+
     #volume {
       font-size: 24px;
       cursor: pointer;
@@ -85,21 +98,57 @@
       padding: 0;
       color: white;
     }
+
     #volume:hover {
       color: #00ffff;
     }
+
     #volume-slider {
       vertical-align: middle;
       margin-left: 8px;
       width: 100px;
       cursor: pointer;
     }
+
     .volume-control {
       margin-top: 20px;
     }
+
     #visitas {
       margin-top: 15px;
       font-size: 1.1rem;
+    }
+
+    /* Modal para pedir ativação do áudio */
+    #audio-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.75);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 1.3rem;
+      z-index: 100;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    #audio-modal button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: #00ffff;
+      color: #000;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    #audio-modal button:hover {
+      background-color: #00cccc;
     }
   </style>
 </head>
@@ -111,7 +160,7 @@
     Seu navegador não suporta vídeo.
   </video>
 
-  <!-- 🔳 Overlay preta reduzida e centralizada -->
+  <!-- 🔳 Overlay preta transparente -->
   <div class="overlay"></div>
 
   <!-- 🎯 Conteúdo -->
@@ -150,23 +199,34 @@
     Seu navegador não suporta áudio.
   </audio>
 
+  <!-- Modal -->
+  <div id="audio-modal">
+    <div>Clique para ativar a música de fundo 🎵</div>
+    <button id="btn-play">Tocar Música</button>
+  </div>
+
   <script>
     const music = document.getElementById("bg-music");
     const volumeBtn = document.getElementById("volume");
     const volumeSlider = document.getElementById("volume-slider");
+    const audioModal = document.getElementById("audio-modal");
+    const btnPlay = document.getElementById("btn-play");
 
-    // Define volume inicial em 0.75
+    // Define volume inicial
     music.volume = 0.75;
     volumeSlider.value = 0.75;
 
-    // Tenta tocar a música assim que possível (alguns navegadores exigem interação)
-    window.addEventListener('load', () => {
-      music.play().catch(() => {
-        // Falhou tocar por política do navegador, usuário pode clicar para ativar
-        volumeBtn.textContent = "🔇";
+    // Quando o usuário clicar para tocar a música:
+    btnPlay.addEventListener("click", () => {
+      music.play().then(() => {
+        audioModal.style.display = "none"; // esconde modal
+        volumeBtn.textContent = "🔊";
+      }).catch(() => {
+        alert("Não foi possível tocar a música.");
       });
     });
 
+    // Botão volume play/pause
     volumeBtn.addEventListener("click", () => {
       if (music.paused) {
         music.play();
@@ -181,6 +241,7 @@
       }
     });
 
+    // Slider controla volume
     volumeSlider.addEventListener("input", () => {
       music.volume = volumeSlider.value;
       if (music.volume == 0) {
@@ -191,6 +252,7 @@
       }
     });
 
+    // Contador de visitas simples
     let count = localStorage.getItem("visitas") || 0;
     count++;
     localStorage.setItem("visitas", count);

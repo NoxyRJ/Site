@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Noxy7 - Link na Bio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <video autoplay muted loop id="bg-video">
+    <source src="bg.mp4" type="video/mp4" />
+  </video>
+
+  <div class="content">
+    <img src="avatar.png" alt="Avatar" class="avatar" />
+    <h1>Noxy7</h1>
+    <p>* Eu não te conheço, então não entrosa. *</p>
+    <div class="tags">
+      <span>👨‍💻 Programador</span>
+      <span>🧊 Frio</span>
+      <span>☠️ Tóxico(a)</span>
+      <span>🌙 Insônia</span>
+    </div>
+    <div class="links">
+      <a href="https://spotify.com" target="_blank">🎵 Spotify</a>
+      <a href="https://discord.com" target="_blank">💬 Discord</a>
+      <a href="https://instagram.com" target="_blank">📸 Instagram</a>
+      <a href="https://tiktok.com" target="_blank">🎥 TikTok</a>
+    </div>
+    <button id="volume">🔊</button>
+    <p id="visitas">👁️ Visitantes: <span id="count">0</span></p>
+  </div>
+
+  <audio id="bg-music" autoplay loop>
+    <source src="music.mp3" type="audio/mp3" />
+  </audio>
+
+  <script src="script.js"></script>
+</body>
+</html>

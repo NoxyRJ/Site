@@ -36,12 +36,19 @@
       width: 90%;
       max-width: 500px;
       height: 80%;
+      max-height: 90vh;
       transform: translate(-50%, -50%);
       background-color: rgba(0, 0, 0, 0.3);
       border-radius: 16px;
       z-index: 0;
       opacity: 0;
       transition: opacity 1s ease;
+
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      overflow-y: auto; /* Barra de rolagem vertical se necessário */
+      -webkit-overflow-scrolling: touch; /* suaviza scroll em iOS */
     }
 
     body {
@@ -53,15 +60,11 @@
     }
 
     .content {
-      position: relative;
-      z-index: 1;
+      flex: 1 1 auto;
       color: white;
       text-align: center;
-      padding: 1rem;
-      max-width: 600px;
+      max-width: 100%;
       width: 100%;
-      opacity: 0;
-      transition: opacity 1s ease;
     }
 
     h1 {
@@ -201,39 +204,38 @@
     <source src="bg.mp4" type="video/mp4" />
   </video>
 
-  <!-- Overlay -->
-  <div class="overlay" id="overlay"></div>
+  <!-- Overlay CONTENDO o conteúdo -->
+  <div class="overlay" id="overlay">
+    <div class="content" id="main-content">
+      <img src="avatar.jpg" alt="Avatar" class="avatar" />
+      <h1>Noxy7</h1>
+      <p>* Eu não te conheço, então não entrosa. *</p>
+      <img src="imagem.jpg" alt="Imagem extra" class="imagem-extra" />
 
-  <!-- Conteúdo -->
-  <div class="content" id="main-content">
-    <img src="avatar.jpg" alt="Avatar" class="avatar" />
-    <h1>Noxy7</h1>
-    <p>* Eu não te conheço, então não entrosa. *</p>
-    <img src="imagem.jpg" alt="Imagem extra" class="imagem-extra" />
+      <div class="tags">
+        <span>👨‍💻 Programador</span>
+        <span>🧊 Frio</span>
+        <span>☠️ Tóxico(a)</span>
+        <span>🌙 Insônia</span>
+      </div>
 
-    <div class="tags">
-      <span>👨‍💻 Programador</span>
-      <span>🧊 Frio</span>
-      <span>☠️ Tóxico(a)</span>
-      <span>🌙 Insônia</span>
+      <div class="links">
+        <a href="https://open.spotify.com/user/7ybhk69ilst4jfm3a24n6npzb" target="_blank">Spotify</a>
+        <a href="https://discord.com/users/278691315594559489" target="_blank">Discord</a>
+        <a href="https://www.roblox.com/pt/users/315909186/profile" target="_blank">Roblox</a>
+        <a href="https://www.instagram.com/pvd.thsc_rj/?next=%2F" target="_blank">Instagram</a>
+        <a href="https://www.tiktok.com/@noxy.gg" target="_blank">TikTok</a>
+        <a href="https://steamcommunity.com/id/Noxy_gg/" target="_blank">Steam</a>
+        <a href="https://www.youtube.com/@NoxyRJ" target="_blank">Youtube</a>
+      </div>
+
+      <div class="volume-control">
+        <button id="volume">🔊</button>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.75" />
+      </div>
+
+      <p id="visitas">👁️ Visitantes: <span id="count">0</span></p>
     </div>
-
-    <div class="links">
-      <a href="https://open.spotify.com/user/7ybhk69ilst4jfm3a24n6npzb" target="_blank">Spotify</a>
-      <a href="https://discord.com/users/278691315594559489" target="_blank">Discord</a>
-      <a href="https://www.roblox.com/pt/users/315909186/profile" target="_blank">Roblox</a>
-      <a href="https://www.instagram.com/pvd.thsc_rj/?next=%2F" target="_blank">Instagram</a>
-      <a href="https://www.tiktok.com/@noxy.gg" target="_blank">TikTok</a>
-      <a href="https://steamcommunity.com/id/Noxy_gg/" target="_blank">Steam</a>
-      <a href="https://www.youtube.com/@NoxyRJ" target="_blank">Youtube</a>
-    </div>
-
-    <div class="volume-control">
-      <button id="volume">🔊</button>
-      <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.75" />
-    </div>
-
-    <p id="visitas">👁️ Visitantes: <span id="count">0</span></p>
   </div>
 
   <!-- Música -->

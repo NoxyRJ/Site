@@ -47,8 +47,8 @@
       display: flex;
       flex-direction: column;
       padding: 20px;
-      overflow-y: auto; /* Barra de rolagem vertical se necessário */
-      -webkit-overflow-scrolling: touch; /* suaviza scroll em iOS */
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     body {
@@ -65,6 +65,8 @@
       text-align: center;
       max-width: 100%;
       width: 100%;
+      opacity: 0;
+      transition: opacity 1s ease;
     }
 
     h1 {
@@ -114,6 +116,9 @@
     }
 
     .links a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       text-decoration: none;
       color: white;
       font-weight: bold;
@@ -121,10 +126,18 @@
       padding: 0.5rem 1rem;
       border-radius: 8px;
       background: rgba(255, 255, 255, 0.1);
+      transition: background-color 0.3s;
     }
 
     .links a:hover {
       text-decoration: underline;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .link-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
     }
 
     .volume-control {
@@ -220,13 +233,34 @@
       </div>
 
       <div class="links">
-        <a href="https://open.spotify.com/user/7ybhk69ilst4jfm3a24n6npzb" target="_blank">Spotify</a>
-        <a href="https://discord.com/users/278691315594559489" target="_blank">Discord</a>
-        <a href="https://www.roblox.com/pt/users/315909186/profile" target="_blank">Roblox</a>
-        <a href="https://www.instagram.com/pvd.thsc_rj/?next=%2F" target="_blank">Instagram</a>
-        <a href="https://www.tiktok.com/@noxy.gg" target="_blank">TikTok</a>
-        <a href="https://steamcommunity.com/id/Noxy_gg/" target="_blank">Steam</a>
-        <a href="https://www.youtube.com/@NoxyRJ" target="_blank">Youtube</a>
+        <a href="https://open.spotify.com/user/7ybhk69ilst4jfm3a24n6npzb" target="_blank" rel="noopener noreferrer">
+          <img src="https://cdn.simpleicons.org/spotify/1DB954" alt="Spotify" class="link-icon" />
+          Spotify
+        </a>
+        <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
+          <img src="https://cdn.simpleicons.org/discord/5865F2" alt="Discord" class="link-icon" />
+          Discord
+        </a>
+        <a href="https://www.roblox.com/pt/users/315909186/profile" target="_blank" rel="noopener noreferrer">
+          <img src="https://cdn.simpleicons.org/roblox/E00E1A" alt="Roblox" class="link-icon" />
+          Roblox
+        </a>
+        <a href="https://www.instagram.com/pvd.thsc_rj/?next=%2F" target="_blank" rel="noopener noreferrer">
+          <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram" class="link-icon" />
+          Instagram
+        </a>
+        <a href="https://www.tiktok.com/@noxy.gg" target="_blank" rel="noopener noreferrer">
+          <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" class="link-icon" />
+          TikTok
+        </a>
+        <a href="https://steamcommunity.com/id/Noxy_gg/" target="_blank" rel="noopener noreferrer">
+          <img src="https://cdn.simpleicons.org/steam/171A21" alt="Steam" class="link-icon" />
+          Steam
+        </a>
+        <a href="https://www.youtube.com/@NoxyRJ" target="_blank" rel="noopener noreferrer">
+          <img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube" class="link-icon" />
+          YouTube
+        </a>
       </div>
 
       <div class="volume-control">

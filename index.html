@@ -43,7 +43,6 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
     }
 
     .content {
@@ -120,7 +119,7 @@
       font-size: 1.1rem;
     }
 
-    /* Modal */
+    /* Modal de início */
     #audio-modal {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -128,36 +127,40 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      color: white;
-      font-size: 1.3rem;
       z-index: 100;
       flex-direction: column;
       padding: 20px;
     }
 
-    .intro-text {
-      font-size: 5rem; /* ← AUMENTE O TAMANHO AQUI */
-      font-weight: bold;
-      text-align: center;
+    /* Imagem no centro da tela inicial */
+    .intro-logo {
+      width: 280px;
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     #audio-modal button {
-      margin-top: 20px;
+      margin-top: 240px;
       padding: 12px 24px;
       font-size: 1.2rem;
       cursor: pointer;
       border: none;
       border-radius: 8px;
-      background-color: red; /* Botão vermelho */
+      background-color: red;
       color: #fff;
       font-weight: bold;
       transition: background-color 0.3s;
+      position: relative;
+      z-index: 1;
     }
 
     #audio-modal button:hover {
       background-color: #cc0000;
     }
 
+    /* Animação ao revelar */
     .show {
       opacity: 1 !important;
     }
@@ -170,7 +173,7 @@
     <source src="bg.mp4" type="video/mp4" />
   </video>
 
-  <!-- 🔳 Overlay preta -->
+  <!-- 🔳 Overlay central escura -->
   <div class="overlay" id="overlay"></div>
 
   <!-- 🎯 Conteúdo principal -->
@@ -208,13 +211,13 @@
     <source src="music.mp3" type="audio/mp3" />
   </audio>
 
-  <!-- Modal de início -->
+  <!-- 🔴 Modal de início -->
   <div id="audio-modal">
-    <div class="intro-text">Noxy7</div>
+    <img src="logo.png" alt="Logo" class="intro-logo" />
     <button id="btn-play">Clique aqui</button>
   </div>
 
-  <!-- Script -->
+  <!-- JavaScript -->
   <script>
     const music = document.getElementById("bg-music");
     const volumeBtn = document.getElementById("volume");
@@ -224,11 +227,11 @@
     const mainContent = document.getElementById("main-content");
     const overlay = document.getElementById("overlay");
 
-    // volume inicial
+    // Volume inicial
     music.volume = 0.75;
     volumeSlider.value = 0.75;
 
-    // clique no botão inicial
+    // Botão de início
     btnPlay.addEventListener("click", () => {
       music.play().then(() => {
         audioModal.style.display = "none";
@@ -236,11 +239,11 @@
         mainContent.classList.add("show");
         overlay.classList.add("show");
       }).catch(() => {
-        alert("Não foi possível iniciar o áudio automaticamente.");
+        alert("Clique permitido, mas o áudio não pôde ser iniciado automaticamente.");
       });
     });
 
-    // botão de volume
+    // Botão volume
     volumeBtn.addEventListener("click", () => {
       if (music.paused) {
         music.play();
@@ -255,19 +258,18 @@
       }
     });
 
-    // controle de volume
+    // Slider volume
     volumeSlider.addEventListener("input", () => {
       music.volume = volumeSlider.value;
       volumeBtn.textContent = music.volume == 0 ? "🔇" : "🔊";
       if (music.paused) music.play();
     });
 
-    // contador de visitas
+    // Contador de visitas
     let count = localStorage.getItem("visitas") || 0;
     count++;
     localStorage.setItem("visitas", count);
     document.getElementById("count").textContent = count;
   </script>
-
 </body>
 </html>

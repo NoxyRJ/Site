@@ -38,10 +38,6 @@
       transition: opacity 1s ease;
     }
 
-    .overlay.show {
-      opacity: 1;
-    }
-
     body {
       display: flex;
       align-items: center;
@@ -61,10 +57,6 @@
       box-sizing: border-box;
       opacity: 0;
       transition: opacity 1s ease;
-    }
-
-    .content.show {
-      opacity: 1;
     }
 
     .avatar {
@@ -128,7 +120,7 @@
       font-size: 1.1rem;
     }
 
-    /* Modal escuro */
+    /* Modal */
     #audio-modal {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -143,6 +135,12 @@
       padding: 20px;
     }
 
+    .intro-text {
+      font-size: 3rem; /* ← AUMENTE O TAMANHO AQUI */
+      font-weight: bold;
+      text-align: center;
+    }
+
     #audio-modal button {
       margin-top: 20px;
       padding: 12px 24px;
@@ -150,25 +148,32 @@
       cursor: pointer;
       border: none;
       border-radius: 8px;
-      background-color: red;
+      background-color: red; /* Botão vermelho */
       color: #fff;
       font-weight: bold;
       transition: background-color 0.3s;
     }
 
     #audio-modal button:hover {
-      background-color: darkred;
+      background-color: #cc0000;
+    }
+
+    .show {
+      opacity: 1 !important;
     }
   </style>
 </head>
 <body>
 
+  <!-- 🎬 Vídeo de fundo -->
   <video autoplay muted loop id="bg-video">
     <source src="bg.mp4" type="video/mp4" />
   </video>
 
+  <!-- 🔳 Overlay preta -->
   <div class="overlay" id="overlay"></div>
 
+  <!-- 🎯 Conteúdo principal -->
   <div class="content" id="main-content">
     <img src="avatar.jpg" alt="Avatar" class="avatar" />
     <h1>Noxy7</h1>
@@ -198,15 +203,18 @@
     <p id="visitas">👁️ Visitantes: <span id="count">0</span></p>
   </div>
 
+  <!-- 🎵 Música -->
   <audio id="bg-music" loop>
     <source src="music.mp3" type="audio/mp3" />
   </audio>
 
+  <!-- Modal de início -->
   <div id="audio-modal">
-    <div>Noxy7</div>
+    <div class="intro-text">Noxy7</div>
     <button id="btn-play">Clique aqui</button>
   </div>
 
+  <!-- Script -->
   <script>
     const music = document.getElementById("bg-music");
     const volumeBtn = document.getElementById("volume");
@@ -216,9 +224,11 @@
     const mainContent = document.getElementById("main-content");
     const overlay = document.getElementById("overlay");
 
+    // volume inicial
     music.volume = 0.75;
     volumeSlider.value = 0.75;
 
+    // clique no botão inicial
     btnPlay.addEventListener("click", () => {
       music.play().then(() => {
         audioModal.style.display = "none";
@@ -226,10 +236,11 @@
         mainContent.classList.add("show");
         overlay.classList.add("show");
       }).catch(() => {
-        alert("Não foi possível abrir o áudio.");
+        alert("Não foi possível iniciar o áudio automaticamente.");
       });
     });
 
+    // botão de volume
     volumeBtn.addEventListener("click", () => {
       if (music.paused) {
         music.play();
@@ -244,12 +255,14 @@
       }
     });
 
+    // controle de volume
     volumeSlider.addEventListener("input", () => {
       music.volume = volumeSlider.value;
       volumeBtn.textContent = music.volume == 0 ? "🔇" : "🔊";
       if (music.paused) music.play();
     });
 
+    // contador de visitas
     let count = localStorage.getItem("visitas") || 0;
     count++;
     localStorage.setItem("visitas", count);

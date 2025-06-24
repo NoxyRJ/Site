@@ -5,13 +5,59 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Noxy7</title>
   <style>
-    /* Estilos básicos para o botão e slider */
+    /* Vídeo de fundo estilo fullscreen atrás do conteúdo */
+    #bg-video {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    /* Conteúdo principal por cima do vídeo */
+    .content {
+      position: relative;
+      z-index: 1;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Estilos do avatar */
+    .avatar {
+      width: 150px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+
+    /* Tags */
+    .tags span {
+      margin: 0 8px;
+      font-size: 1.1rem;
+    }
+
+    /* Links */
+    .links a {
+      display: inline-block;
+      margin: 10px 10px 0 10px;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .links a:hover {
+      text-decoration: underline;
+    }
+
+    /* Botão volume e slider alinhados */
     #volume {
       font-size: 24px;
       cursor: pointer;
       vertical-align: middle;
     }
-
     #volume-slider {
       vertical-align: middle;
       margin-left: 8px;
@@ -19,28 +65,60 @@
       cursor: pointer;
     }
 
-    .content {
-      position: relative;
-      z-index: 1; /* Para ficar sobre o vídeo ou fundo */
-      color: white;
-      text-align: center;
-      padding: 20px;
-      font-family: Arial, sans-serif;
+    /* Container do controle de volume para alinhar horizontalmente */
+    .volume-control {
+      margin-top: 20px;
+    }
+
+    /* Contador visitas */
+    #visitas {
+      margin-top: 15px;
+      font-size: 1.1rem;
     }
   </style>
 </head>
 <body>
 
+  <!-- Vídeo de fundo -->
+  <video autoplay muted loop id="bg-video">
+    <source src="bg.mp4" type="video/mp4" />
+    Seu navegador não suporta vídeo.
+  </video>
+
+  <!-- Conteúdo principal -->
+  <div class="content">
+    <img src="avatar.png" alt="Avatar" class="avatar" />
+    <h1>Noxy7</h1>
+    <p>* Eu não te conheço, então não entrosa. *</p>
+    <div class="tags">
+      <span>👨‍💻 Programador</span>
+      <span>🧊 Frio</span>
+      <span>☠️ Tóxico(a)</span>
+      <span>🌙 Insônia</span>
+    </div>
+
+    <div class="links">
+      <a href="https://spotify.com" target="_blank">🎵 Spotify</a>
+      <a href="https://discord.com" target="_blank">💬 Discord</a>
+      <a href="https://instagram.com" target="_blank">📸 Instagram</a>
+      <a href="https://www.tiktok.com/@noxy.gg" target="_blank">🎥 TikTok</a>
+    </div>
+
+    <!-- Controle de volume: botão + slider -->
+    <div class="volume-control">
+      <button id="volume">🔊</button>
+      <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" />
+    </div>
+
+    <!-- Contador de visitas -->
+    <p id="visitas">👁️ Visitantes: <span id="count">0</span></p>
+  </div>
+
+  <!-- Áudio de fundo -->
   <audio id="bg-music" autoplay loop>
     <source src="music.mp3" type="audio/mp3" />
     Seu navegador não suporta áudio.
   </audio>
-
-  <div class="content">
-    <button id="volume">🔊</button>
-    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" />
-    <p id="visitas">👁️ Visitantes: <span id="count">0</span></p>
-  </div>
 
   <script>
     const music = document.getElementById("bg-music");
@@ -50,12 +128,11 @@
     // Inicializa volume do áudio com o valor do slider
     music.volume = volumeSlider.value;
 
-    // Controla play/pause pelo botão
+    // Play/pause pelo botão
     volumeBtn.addEventListener("click", () => {
       if (music.paused) {
         music.play();
         volumeBtn.textContent = "🔊";
-        // Se slider estiver em zero, ajusta para meio volume para poder ouvir
         if (volumeSlider.value == 0) {
           volumeSlider.value = 0.5;
           music.volume = 0.5;
@@ -74,12 +151,11 @@
         volumeBtn.textContent = "🔇";
       } else {
         volumeBtn.textContent = "🔊";
-        // Se a música estiver pausada e volume subir, toca a música
         if (music.paused) music.play();
       }
     });
 
-    // Contador de visitas local (não compartilhado entre dispositivos)
+    // Contador local de visitas (no navegador)
     let count = localStorage.getItem("visitas") || 0;
     count++;
     localStorage.setItem("visitas", count);

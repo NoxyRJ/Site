@@ -14,7 +14,6 @@
       overflow: hidden;
     }
 
-    /* 🎥 Vídeo de fundo */
     #bg-video {
       position: fixed;
       right: 0;
@@ -25,7 +24,6 @@
       z-index: -2;
     }
 
-    /* 🔳 Overlay preta transparente e centralizada */
     .overlay {
       position: fixed;
       top: 50%;
@@ -38,7 +36,6 @@
       z-index: 0;
     }
 
-    /* 🌐 Conteúdo centralizado flex */
     body {
       display: flex;
       align-items: center;
@@ -56,6 +53,8 @@
       max-width: 600px;
       width: 90%;
       box-sizing: border-box;
+      opacity: 0;
+      transition: opacity 1s ease;
     }
 
     .avatar {
@@ -119,11 +118,11 @@
       font-size: 1.1rem;
     }
 
-    /* Modal para pedir ativação do áudio */
+    /* Modal escuro */
     #audio-modal {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.85);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -150,21 +149,21 @@
     #audio-modal button:hover {
       background-color: #00cccc;
     }
+
+    .show {
+      opacity: 1 !important;
+    }
   </style>
 </head>
 <body>
 
-  <!-- 🎬 Vídeo de fundo -->
   <video autoplay muted loop id="bg-video">
     <source src="bg.mp4" type="video/mp4" />
-    Seu navegador não suporta vídeo.
   </video>
 
-  <!-- 🔳 Overlay preta transparente -->
   <div class="overlay"></div>
 
-  <!-- 🎯 Conteúdo -->
-  <div class="content">
+  <div class="content" id="main-content">
     <img src="avatar.jpg" alt="Avatar" class="avatar" />
     <h1>Noxy7</h1>
     <p>* Eu não te conheço, então não entrosa. *</p>
@@ -193,16 +192,13 @@
     <p id="visitas">👁️ Visitantes: <span id="count">0</span></p>
   </div>
 
-  <!-- 🎵 Música -->
   <audio id="bg-music" loop>
     <source src="music.mp3" type="audio/mp3" />
-    Seu navegador não suporta áudio.
   </audio>
 
-  <!-- Modal -->
   <div id="audio-modal">
-    <div>Clique para ativar a música de fundo 🎵</div>
-    <button id="btn-play">Tocar Música</button>
+    <div>Ativar som</div>
+    <button id="btn-play">Clique aqui</button>
   </div>
 
   <script>
@@ -211,22 +207,21 @@
     const volumeSlider = document.getElementById("volume-slider");
     const audioModal = document.getElementById("audio-modal");
     const btnPlay = document.getElementById("btn-play");
+    const mainContent = document.getElementById("main-content");
 
-    // Define volume inicial
     music.volume = 0.75;
     volumeSlider.value = 0.75;
 
-    // Quando o usuário clicar para tocar a música:
     btnPlay.addEventListener("click", () => {
       music.play().then(() => {
-        audioModal.style.display = "none"; // esconde modal
+        audioModal.style.display = "none";
         volumeBtn.textContent = "🔊";
+        mainContent.classList.add("show");
       }).catch(() => {
-        alert("Não foi possível tocar a música.");
+        alert("Não foi possível iniciar o áudio.");
       });
     });
 
-    // Botão volume play/pause
     volumeBtn.addEventListener("click", () => {
       if (music.paused) {
         music.play();
@@ -241,18 +236,12 @@
       }
     });
 
-    // Slider controla volume
     volumeSlider.addEventListener("input", () => {
       music.volume = volumeSlider.value;
-      if (music.volume == 0) {
-        volumeBtn.textContent = "🔇";
-      } else {
-        volumeBtn.textContent = "🔊";
-        if (music.paused) music.play();
-      }
+      volumeBtn.textContent = music.volume == 0 ? "🔇" : "🔊";
+      if (music.paused) music.play();
     });
 
-    // Contador de visitas simples
     let count = localStorage.getItem("visitas") || 0;
     count++;
     localStorage.setItem("visitas", count);

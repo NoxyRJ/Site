@@ -119,6 +119,22 @@
       border-radius: 12px;
     }
 
+    /* Animação para todos os links e playlist */
+    @keyframes pulseGlow {
+      0% {
+        box-shadow: 0 0 4px rgba(29, 185, 84, 0.7);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 10px rgba(29, 185, 84, 1);
+        transform: scale(1.03);
+      }
+      100% {
+        box-shadow: 0 0 4px rgba(29, 185, 84, 0.7);
+        transform: scale(1);
+      }
+    }
+
     .links {
       display: flex;
       flex-wrap: wrap;
@@ -138,18 +154,72 @@
       padding: 0.5rem 1rem;
       border-radius: 8px;
       background: rgba(255, 255, 255, 0.1);
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      cursor: pointer;
     }
 
     .links a:hover {
       text-decoration: underline;
       background: rgba(255, 255, 255, 0.2);
+      animation: pulseGlow 1.5s infinite;
     }
 
     .link-icon {
       width: 20px;
       height: 20px;
       flex-shrink: 0;
+    }
+
+    /* Playlist bonitinho */
+    .playlist-card {
+      background: rgba(30, 215, 96, 0.15);
+      border-radius: 16px;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+      max-width: 400px;
+      margin: 0 auto 1rem;
+    }
+    .playlist-card:hover {
+      background: rgba(30, 215, 96, 0.3);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #1DB954;
+      animation: pulseGlow 1.5s infinite;
+    }
+    .playlist-cover {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      object-fit: cover;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .playlist-info {
+      flex-grow: 1;
+      text-align: left;
+      color: white;
+      user-select: none;
+    }
+    .playlist-info h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+    .listen-btn {
+      background-color: #1DB954;
+      border: none;
+      padding: 0.5rem 1rem;
+      color: white;
+      font-weight: 600;
+      border-radius: 9999px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .listen-btn:hover {
+      background-color: #17a84b;
     }
 
     iframe {
@@ -226,53 +296,6 @@
     .show {
       opacity: 1 !important;
     }
-
-    /* Playlist bonitinho */
-    .playlist-card {
-      background: rgba(30, 215, 96, 0.15);
-      border-radius: 16px;
-      padding: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
-      max-width: 400px;
-      margin: 0 auto 1rem;
-    }
-    .playlist-card:hover {
-      background: rgba(30, 215, 96, 0.3);
-      transform: scale(1.05);
-    }
-    .playlist-cover {
-      width: 80px;
-      height: 80px;
-      border-radius: 12px;
-      object-fit: cover;
-    }
-    .playlist-info {
-      flex-grow: 1;
-      text-align: left;
-      color: white;
-    }
-    .playlist-info h3 {
-      margin-bottom: 0.5rem;
-      font-size: 1.3rem;
-    }
-    .listen-btn {
-      background-color: #1DB954;
-      border: none;
-      padding: 0.5rem 1rem;
-      color: white;
-      font-weight: 600;
-      border-radius: 9999px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .listen-btn:hover {
-      background-color: #17a84b;
-    }
   </style>
 </head>
 <body>
@@ -343,8 +366,8 @@
             class="playlist-cover"
           />
           <div class="playlist-info">
-            <h3>Minha Playlist Favorita</h3>
-            <button class="listen-btn">Ouvir no Spotify ▶️</button>
+            <h3>Minha Playlist</h3>
+            <button class="listen-btn">Ouvir no Spotify</button>
           </div>
         </div>
       </div>

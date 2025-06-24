@@ -119,18 +119,18 @@
       border-radius: 12px;
     }
 
-    /* Animação para todos os links e playlist */
-    @keyframes pulseGlow {
+    /* Animação branca para todos os links e playlist */
+    @keyframes pulseGlowWhite {
       0% {
-        box-shadow: 0 0 4px rgba(29, 185, 84, 0.7);
+        box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
         transform: scale(1);
       }
       50% {
-        box-shadow: 0 0 10px rgba(29, 185, 84, 1);
-        transform: scale(1.03);
+        box-shadow: 0 0 12px rgba(255, 255, 255, 1);
+        transform: scale(1.05);
       }
       100% {
-        box-shadow: 0 0 4px rgba(29, 185, 84, 0.7);
+        box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
         transform: scale(1);
       }
     }
@@ -161,18 +161,19 @@
     .links a:hover {
       text-decoration: underline;
       background: rgba(255, 255, 255, 0.2);
-      animation: pulseGlow 1.5s infinite;
+      animation: pulseGlowWhite 1.5s infinite;
     }
 
     .link-icon {
       width: 20px;
       height: 20px;
       flex-shrink: 0;
+      user-select: none;
     }
 
     /* Playlist bonitinho */
     .playlist-card {
-      background: rgba(30, 215, 96, 0.15);
+      background: rgba(255, 255, 255, 0.15);
       border-radius: 16px;
       padding: 1rem;
       display: flex;
@@ -184,10 +185,10 @@
       margin: 0 auto 1rem;
     }
     .playlist-card:hover {
-      background: rgba(30, 215, 96, 0.3);
+      background: rgba(255, 255, 255, 0.3);
       transform: scale(1.05);
-      box-shadow: 0 0 15px #1DB954;
-      animation: pulseGlow 1.5s infinite;
+      box-shadow: 0 0 15px #fff;
+      animation: pulseGlowWhite 1.5s infinite;
     }
     .playlist-cover {
       width: 80px;
@@ -208,10 +209,10 @@
       font-size: 1.3rem;
     }
     .listen-btn {
-      background-color: #1DB954;
+      background-color: #ffffffcc;
       border: none;
       padding: 0.5rem 1rem;
-      color: white;
+      color: black;
       font-weight: 600;
       border-radius: 9999px;
       font-size: 1rem;
@@ -219,7 +220,7 @@
       transition: background-color 0.3s;
     }
     .listen-btn:hover {
-      background-color: #17a84b;
+      background-color: #ffffff;
     }
 
     iframe {
@@ -327,7 +328,7 @@
         <h2>Links</h2>
         <div class="links">
           <a href="https://open.spotify.com/user/7ybhk69ilst4jfm3a24n6npzb" target="_blank" rel="noopener noreferrer">
-            <img src="https://cdn.simpleicons.org/spotify/1DB954" alt="Spotify" class="link-icon" />
+            <img src="spotify-white.png" alt="Spotify" class="link-icon" />
             Spotify
           </a>
           <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
@@ -361,7 +362,7 @@
         <h2>Playlist Spotify</h2>
         <div class="playlist-card" onclick="window.open('https://open.spotify.com/playlist/1O4sTRPvEHAIvvFjHIQPfR', '_blank')">
           <img
-            src="https://i.scdn.co/image/ab67706f000000027f38f8ef1762c0898d3be46e"
+            src="Capa spotify.jpg"
             alt="Capa Playlist Spotify"
             class="playlist-cover"
           />
@@ -440,11 +441,20 @@
       if (music.paused) music.play();
     });
 
-    // Contador de visitas
-    let count = localStorage.getItem("visitas") || 0;
-    count++;
-    localStorage.setItem("visitas", count);
-    document.getElementById("count").textContent = count;
+    // Contador de visitas sem contar reloads repetidos
+    const visitKey = "visitedAlready";
+
+    function updateVisitCount() {
+      let count = localStorage.getItem("visitas") || 0;
+      if (!localStorage.getItem(visitKey)) {
+        count = Number(count) + 1;
+        localStorage.setItem("visitas", count);
+        localStorage.setItem(visitKey, "true");
+      }
+      document.getElementById("count").textContent = count;
+    }
+
+    updateVisitCount();
   </script>
 
 </body>

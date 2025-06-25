@@ -366,8 +366,15 @@
       <!-- Imagem extra que será trocada para GIF -->
       <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra" />
 
-<!-- Discord perfil bonito com círculo de status no avatar -->
+<!-- Discord perfil bonito com nome de exibição + círculo de status no avatar -->
 <div id="discord-status" style="text-align: center; margin: 2rem 0; color: white; font-family: Arial, sans-serif; position: relative;">
+
+  <!-- Nome de exibição fixo -->
+  <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem;">
+    Noxy7
+  </div>
+
+  <!-- Avatar com círculo de status -->
   <div style="position: relative; display: inline-block;">
     <img
       id="discord-avatar"
@@ -391,12 +398,13 @@
     ></span>
   </div>
 
-  <div style="margin-top: 10px; font-size: 1.4rem; font-weight: bold;">
-    <span id="discord-username"></span>
-    <span id="discord-discriminator" style="opacity: 0.6; font-size: 1rem;"></span>
+  <!-- @nome#tag -->
+  <div style="margin-top: 10px; font-size: 1.2rem; font-weight: normal; opacity: 0.8;">
+    <span id="discord-username">@</span><span id="discord-discriminator"></span>
   </div>
 </div>
 
+<!-- Script para buscar o status -->
 <script>
   async function fetchDiscordStatus() {
     const userId = "278691315594559489"; // seu ID Discord
@@ -409,31 +417,28 @@
       if (!data.data) throw new Error("Dados inválidos");
 
       const user = data.data.discord_user;
-      const status = data.data.discord_status; // online, offline, idle, dnd
+      const status = data.data.discord_status;
 
       // Atualiza avatar
       const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
       document.getElementById("discord-avatar").src = avatarUrl;
 
-      // Atualiza nome + #
-      document.getElementById("discord-username").textContent = user.username;
+      // Atualiza nome
+      document.getElementById("discord-username").textContent = "@" + user.username;
       document.getElementById("discord-discriminator").textContent = "#" + user.discriminator;
 
-      // Atualiza status visual
+      // Círculo de status
       const statusCircle = document.getElementById("discord-status-circle");
 
       let color = "gray"; // padrão
       let statusText = "Offline";
 
       if (status === "online") {
-        color = "#43B581";
-        statusText = "Online";
+        color = "#43B581"; statusText = "Online";
       } else if (status === "idle") {
-        color = "#FAA61A";
-        statusText = "Ausente";
+        color = "#FAA61A"; statusText = "Ausente";
       } else if (status === "dnd") {
-        color = "#F04747";
-        statusText = "Não perturbe";
+        color = "#F04747"; statusText = "Não perturbe";
       }
 
       statusCircle.style.backgroundColor = color;
@@ -447,8 +452,9 @@
   }
 
   fetchDiscordStatus();
-  setInterval(fetchDiscordStatus, 30000); // Atualiza a cada 30 segundos
-</script>           
+  setInterval(fetchDiscordStatus, 30000); // Atualiza a cada 30s
+</script>
+          
 
       <div class="tags-section">
         <h2>𝑻𝒂𝒈𝒔</h2>

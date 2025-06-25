@@ -497,13 +497,15 @@
 
     updateVisitCount();
 
-    // TROCAR A IMAGEM EXTRA POR GIF QUANDO A PÁGINA CARREGAR
-    document.addEventListener("DOMContentLoaded", () => {
-      const imagemExtra = document.querySelector(".imagem-extra");
-      // Troque "media/animacao.gif" pelo caminho do seu gif
-      imagemExtra.src = "media/Extra";
-      imagemExtra.alt = "GIF animado extra";
-    });
+// TROCAR A IMAGEM EXTRA POR GIF QUANDO A PÁGINA CARREGAR
+document.addEventListener("DOMContentLoaded", () => {
+  const imagemExtra = document.querySelector(".imagem-extra");
+  if (imagemExtra) {
+    // Troque "media/Extra.gif" pelo caminho correto do seu gif
+    imagemExtra.src = "media/Extra.gif";
+    imagemExtra.alt = "GIF animado extra";
+  }
+});
   </script>
 
 </body>

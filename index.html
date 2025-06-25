@@ -593,15 +593,33 @@
   const likeBtn = document.getElementById("like-btn");
   const likeCount = document.getElementById("like-count");
 
-  let likes = 0;
+  // Pega os dados salvos no navegador
+  let likes = parseInt(localStorage.getItem("likeCount")) || 0;
+  const alreadyLiked = localStorage.getItem("alreadyLiked");
 
-  likeBtn.addEventListener("click", () => {
-    likes++;
+  // Atualiza o contador
+  function updateLikeDisplay() {
     likeCount.textContent = `${likes} like${likes === 1 ? '' : 's'}`;
-    likeBtn.disabled = true;
-    likeBtn.textContent = "✅ Obrigado!";
+    if (alreadyLiked) {
+      likeBtn.disabled = true;
+      likeBtn.textContent = "✅ Obrigado!";
+    }
+  }
+
+  updateLikeDisplay();
+
+  // Ao clicar
+  likeBtn.addEventListener("click", () => {
+    if (alreadyLiked) return;
+
+    likes++;
+    localStorage.setItem("likeCount", likes);
+    localStorage.setItem("alreadyLiked", true);
+
+    updateLikeDisplay();
   });
 </script>
+
 
 </body>
 </html>

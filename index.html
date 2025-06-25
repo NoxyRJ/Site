@@ -98,6 +98,7 @@
       max-width: 90%;
       border-radius: 12px;
       margin: 1rem auto;
+      display: block;
     }
 
     .tags-section, .links-section, .playlist-section {
@@ -338,7 +339,9 @@
       <img src="media/perfil.gif" alt="Avatar" class="avatar" />
       <h1>𝑵𝒐𝒙𝒚7</h1>
       <p>* Eu não te conheço, então não entrosa. *</p>
+      <!-- Aqui começa a imagem extra que será trocada para GIF -->
       <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra" />
+      <!-- Aqui termina -->
 
       <div class="tags-section">
         <h2>Tags</h2>
@@ -493,6 +496,14 @@
     }
 
     updateVisitCount();
+
+    // TROCAR A IMAGEM EXTRA POR GIF QUANDO A PÁGINA CARREGAR
+    document.addEventListener("DOMContentLoaded", () => {
+      const imagemExtra = document.querySelector(".imagem-extra");
+      // Troque "media/animacao.gif" pelo caminho do seu gif
+      imagemExtra.src = "media/animacao.gif";
+      imagemExtra.alt = "GIF animado extra";
+    });
   </script>
 
 </body>

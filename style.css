@@ -80,3 +80,25 @@ body, html {
       0 0 16px #fff;
   }
 }
+
+/* Para navegadores baseados em WebKit (Chrome, Edge, Safari) */
+.overlay::-webkit-scrollbar {
+  width: 8px;               /* largura da barra de rolagem */
+  background: transparent;  /* fundo transparente */
+}
+
+.overlay::-webkit-scrollbar-track {
+  background: transparent;  /* fundo transparente da track */
+}
+
+.overlay::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2); /* thumb semitransparente */
+  border-radius: 10px;
+  border: 2px solid transparent; /* deixa espaçamento limpo */
+}
+
+/* Para Firefox */
+.overlay {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+}

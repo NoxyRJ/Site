@@ -524,5 +524,35 @@
     });
   </script>
 
+<script>
+  const fullTitle = "𝑵𝒐𝒙𝒚7";
+  let titleIndex = 0;
+  let isDeletingTitle = false;
+
+  function animateTitle() {
+    document.title = fullTitle.substring(0, titleIndex);
+
+    if (!isDeletingTitle) {
+      if (titleIndex < fullTitle.length) {
+        titleIndex++;
+      } else {
+        isDeletingTitle = true;
+        setTimeout(animateTitle, 1000); // Espera 1s antes de apagar
+        return;
+      }
+    } else {
+      if (titleIndex > 0) {
+        titleIndex--;
+      } else {
+        isDeletingTitle = false;
+      }
+    }
+
+    setTimeout(animateTitle, 200);
+  }
+
+  document.addEventListener("DOMContentLoaded", animateTitle);
+</script>
+
 </body>
 </html>

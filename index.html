@@ -439,11 +439,24 @@
     <source src="media/music.mp3" type="audio/mp3" />
   </audio>
 
-  <!-- Modal -->
-  <div id="audio-modal">
-    <img src="media/png inicial.png" alt="Logo" class="intro-logo" />
-    <button id="btn-play">Clique aqui</button>
-  </div>
+<!-- Modal -->
+<div id="audio-modal">
+  <img src="media/png inicial.png" alt="Logo" class="intro-logo" />
+  <button id="btn-play">Clique aqui</button>
+
+  <!-- Texto reposicionável -->
+  <p style="
+    position: absolute;
+    bottom: 20px;  /* distância do fundo da tela */
+    left: 50%;     /* centraliza horizontalmente */
+    transform: translateX(-50%);
+    color: white;
+    font-size: 1.2rem;
+    margin: 0;
+  ">
+    Site feito por: Noxy.
+  </p>
+</div>
 
   <!-- Script -->
   <script>

@@ -80,24 +80,3 @@ body, html {
       0 0 16px #fff;
   }
 }
-
-#like-btn {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  background-color: #e63946; /* vermelho */
-  border: none;
-  color: white;
-  font-weight: bold;
-  transition: background-color 0.3s;
-}
-
-#like-btn:hover {
-  background-color: #cc0000;
-}
-
-#like-btn:disabled {
-  cursor: default;
-  background-color: #8c1f28;
-}

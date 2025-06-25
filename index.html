@@ -530,7 +530,9 @@
   let isDeletingTitle = false;
 
   function animateTitle() {
-    document.title = fullTitle.substring(0, titleIndex);
+    // Garante que nunca fique vazio
+    const currentText = fullTitle.substring(0, titleIndex) || "\u200B";
+    document.title = currentText;
 
     if (!isDeletingTitle) {
       if (titleIndex < fullTitle.length) {
@@ -548,7 +550,7 @@
       }
     }
 
-    setTimeout(animateTitle, 500);
+    setTimeout(animateTitle, 300); // Velocidade de animação
   }
 
   document.addEventListener("DOMContentLoaded", animateTitle);

@@ -347,7 +347,7 @@
         <h2>Tags</h2>
         <div class="tags">
           <span>👨‍💻 Programador</span>
-          <span>☠️ Tóxico(a)</span>
+          <span>☠️ Tóxico</span>
           <span>🌙 Insônia</span>
         </div>
       </div>
@@ -480,21 +480,6 @@
       volumeBtn.textContent = music.volume == 0 ? "🔇" : "🔊";
       if (music.paused) music.play();
     });
-
-    // Contador de visitas sem contar reloads repetidos no mesmo navegador
-    const visitKey = "visitedAlready";
-
-    function updateVisitCount() {
-      let count = localStorage.getItem("visitas") || 0;
-      if (!localStorage.getItem(visitKey)) {
-        count = Number(count) + 1;
-        localStorage.setItem("visitas", count);
-        localStorage.setItem(visitKey, "true");
-      }
-      document.getElementById("count").textContent = count;
-    }
-
-    updateVisitCount();
 
 // TROCAR A IMAGEM EXTRA POR GIF QUANDO A PÁGINA CARREGAR
 document.addEventListener("DOMContentLoaded", () => {

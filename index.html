@@ -374,6 +374,33 @@
         <div id="discord-presence" style="margin-top: 8px; font-size: 1.2rem;"></div>
       </div>
       
+      <div id="discord-status" style="text-align:center; margin: 2rem 0; color: white; font-family: Arial, sans-serif;">
+        <img
+          id="discord-avatar"
+          src=""
+          alt="Avatar Discord"
+          style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.5);"
+        />
+        <div style="font-size: 1.6rem; font-weight: 700;">
+          <span id="discord-username"></span>
+          <span id="discord-discriminator" style="opacity: 0.7; font-weight: 400; font-size: 1.2rem;"></span>
+          <span id="discord-status-circle" 
+            style="
+              display: inline-block;
+              width: 16px;
+              height: 16px;
+              border-radius: 50%;
+              margin-left: 12px;
+              vertical-align: middle;
+              box-shadow: 0 0 8px rgba(0,0,0,0.5);
+              background-color: gray;
+              transition: background-color 0.3s ease;
+            "
+            title="Status"
+          ></span>
+        </div>
+      </div>
+      
       <script>
         async function fetchDiscordStatus() {
           const userId = "278691315594559489"; // seu ID Discord
@@ -386,7 +413,7 @@
             if (!data.data) throw new Error("Dados inválidos");
       
             const user = data.data.discord_user;
-            const status = data.data.discord_status; // online, offline, idle, Ocudado
+            const status = data.data.discord_status; // online, offline, idle, dnd
       
             // Atualizar avatar
             const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
@@ -396,17 +423,25 @@
             document.getElementById("discord-username").textContent = user.username;
             document.getElementById("discord-discriminator").textContent = "#" + user.discriminator;
       
-            // Status com cor
-            const presenceEl = document.getElementById("discord-presence");
-            presenceEl.textContent = status.toUpperCase();
+            // Status com círculo colorido
+            const statusCircle = document.getElementById("discord-status-circle");
       
-            let color = "gray";
-            if (status === "online") color = "#43B581";      // verde
-            else if (status === "Ausente") color = "#FAA61A";  // amarelo
-            else if (status === "Ocudado") color = "#F04747";   // vermelho
-            else if (status === "offline") color = "gray";
+            let color = "gray"; // offline
+            let statusText = "Offline";
       
-            presenceEl.style.color = color;
+            if (status === "online") {
+              color = "#43B581";  // verde
+              statusText = "Online";
+            } else if (status === "idle") {
+              color = "#FAA61A";  // amarelo
+              statusText = "Ausente";
+            } else if (status === "dnd") {
+              color = "#F04747";  // vermelho
+              statusText = "Não perturbe";
+            }
+      
+            statusCircle.style.backgroundColor = color;
+            statusCircle.title = statusText;
       
           } catch (error) {
             console.error("Erro ao buscar status Discord:", error);
@@ -418,7 +453,7 @@
       
         // Atualizar a cada 30s para ficar em tempo real
         setInterval(fetchDiscordStatus, 30000);
-      </script>         
+      </script>             
 
       <div class="tags-section">
         <h2>𝑻𝒂𝒈𝒔</h2>

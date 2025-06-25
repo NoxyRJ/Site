@@ -369,11 +369,6 @@
 <!-- Discord perfil bonito com nome de exibição + círculo de status no avatar -->
 <div id="discord-status" style="text-align: center; margin: 2rem 0; color: white; font-family: Arial, sans-serif; position: relative;">
 
-  <!-- Nome de exibição fixo -->
-  <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem;">
-    Noxy7
-  </div>
-
   <!-- Avatar com círculo de status -->
   <div style="position: relative; display: inline-block;">
     <img
@@ -398,13 +393,18 @@
     ></span>
   </div>
 
-  <!-- @nome#tag -->
-  <div style="margin-top: 10px; font-size: 1.2rem; font-weight: normal; opacity: 0.8;">
+  <!-- Nome de exibição -->
+  <div style="margin-top: 10px; font-size: 1.6rem; font-weight: bold;" id="display-name">
+    Noxy7
+  </div>
+
+  <!-- @username#tag -->
+  <div style="font-size: 1.1rem; opacity: 0.8;">
     <span id="discord-username">@</span><span id="discord-discriminator"></span>
   </div>
 </div>
 
-<!-- Script para buscar o status -->
+<!-- Script para buscar o status do Discord -->
 <script>
   async function fetchDiscordStatus() {
     const userId = "278691315594559489"; // seu ID Discord
@@ -423,11 +423,11 @@
       const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
       document.getElementById("discord-avatar").src = avatarUrl;
 
-      // Atualiza nome
+      // Atualiza @username e #tag
       document.getElementById("discord-username").textContent = "@" + user.username;
       document.getElementById("discord-discriminator").textContent = "#" + user.discriminator;
 
-      // Círculo de status
+      // Círculo de status com cor
       const statusCircle = document.getElementById("discord-status-circle");
 
       let color = "gray"; // padrão
@@ -452,8 +452,9 @@
   }
 
   fetchDiscordStatus();
-  setInterval(fetchDiscordStatus, 30000); // Atualiza a cada 30s
+  setInterval(fetchDiscordStatus, 30000); // Atualiza a cada 30 segundos
 </script>
+
           
 
       <div class="tags-section">

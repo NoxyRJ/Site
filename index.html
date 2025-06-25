@@ -333,34 +333,6 @@
     .show {
       opacity: 1 !important;
     }
-
-    /* Estilo do botão de like */
-    #like-section {
-      margin-top: 15px;
-    }
-
-    #like-btn {
-      padding: 10px 20px;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #1DB954;
-      border: none;
-      color: white;
-      font-weight: bold;
-      transition: background-color 0.3s;
-    }
-
-    #like-btn:disabled {
-      cursor: default;
-      background-color: #128C3E;
-    }
-
-    #like-count {
-      margin-top: 10px;
-      font-size: 1.2rem;
-      color: white;
-    }
   </style>
 </head>
 <body>
@@ -380,13 +352,6 @@
       
       <h1>𝑵𝒐𝒙𝒚7</h1>
       <p>* Eu não te conheço, então não entrosa. *</p>
-
-      <!-- Botão de Like -->
-      <div id="like-section">
-        <button id="like-btn">👍 Gostei!</button>
-        <p id="like-count">0 likes</p>
-      </div>
-
       <!-- Aqui começa a imagem extra que será trocada para GIF -->
       <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra" />
       <!-- Aqui termina -->
@@ -465,6 +430,8 @@
         <button id="volume">🔊</button>
         <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.75" />
       </div>
+
+
     </div>
   </div>
 

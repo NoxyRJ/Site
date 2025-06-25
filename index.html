@@ -455,9 +455,9 @@
     const mainContent = document.getElementById("main-content");
     const overlay = document.getElementById("overlay");
   
-    // Volume inicial em 60%
-    music.volume = 0.6;
-    volumeSlider.value = 0.6;
+    // Volume inicial em 50%
+    music.volume = 0.5;
+    volumeSlider.value = 0.5;
   
     // Botão de início
     btnPlay.addEventListener("click", () => {
@@ -477,8 +477,8 @@
         music.play();
         volumeBtn.textContent = "🔊";
         if (volumeSlider.value == 0) {
-          volumeSlider.value = 0.6;
-          music.volume = 0.6;
+          volumeSlider.value = 0.5;
+          music.volume = 0.5;
         }
       } else {
         music.pause();

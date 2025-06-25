@@ -589,5 +589,19 @@
   document.addEventListener("DOMContentLoaded", animateTitle);
 </script>
 
+<script>
+  const likeBtn = document.getElementById("like-btn");
+  const likeCount = document.getElementById("like-count");
+
+  let likes = 0;
+
+  likeBtn.addEventListener("click", () => {
+    likes++;
+    likeCount.textContent = `${likes} like${likes === 1 ? '' : 's'}`;
+    likeBtn.disabled = true;
+    likeBtn.textContent = "✅ Obrigado!";
+  });
+</script>
+
 </body>
 </html>

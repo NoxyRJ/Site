@@ -324,6 +324,39 @@
     .show {
       opacity: 1 !important;
     }
+
+    /* Discord info styles */
+    #discord-login {
+      display: inline-block;
+      margin: 1rem auto 2rem auto;
+      color: white;
+      font-weight: bold;
+      background-color: #7289da;
+      padding: 10px 25px;
+      border-radius: 12px;
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+
+    #discord-login:hover {
+      background-color: #5b6eae;
+    }
+
+    #discord-info {
+      margin-top: 1.5rem;
+      color: white;
+      display: none;
+      text-align: center;
+    }
+
+    #discord-info img {
+      width: 80px;
+      border-radius: 50%;
+      margin-top: 0.5rem;
+      user-select: none;
+    }
   </style>
 </head>
 <body>
@@ -411,6 +444,20 @@
             <button class="listen-btn">Ouvir no Spotify</button>
           </div>
         </div>
+      </div>
+
+      <!-- Botão para conectar com Discord -->
+      <a
+        href="https://discord.com/api/oauth2/authorize?client_id=SEU_CLIENT_ID_AQUI&redirect_uri=REDIRECT_URI_ENCODED&response_type=token&scope=identify"
+        id="discord-login"
+      >
+        Conectar com Discord
+      </a>
+
+      <!-- Área onde mostraremos as informações do usuário -->
+      <div id="discord-info">
+        <p>Usuário Discord: <span id="discord-username"></span></p>
+        <img id="discord-avatar" alt="Avatar Discord" />
       </div>
 
       <div class="volume-control">

@@ -386,7 +386,7 @@
             if (!data.data) throw new Error("Dados inválidos");
       
             const user = data.data.discord_user;
-            const status = data.data.discord_status; // online, offline, idle, dnd
+            const status = data.data.discord_status; // online, offline, idle, Ocudado
       
             // Atualizar avatar
             const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
@@ -402,8 +402,8 @@
       
             let color = "gray";
             if (status === "online") color = "#43B581";      // verde
-            else if (status === "idle") color = "#FAA61A";  // amarelo
-            else if (status === "dnd") color = "#F04747";   // vermelho
+            else if (status === "Ausente") color = "#FAA61A";  // amarelo
+            else if (status === "Ocudado") color = "#F04747";   // vermelho
             else if (status === "offline") color = "gray";
       
             presenceEl.style.color = color;

@@ -91,6 +91,34 @@
       width: clamp(100px, 30vw, 150px);
       border-radius: 50%;
       margin-bottom: 15px;
+      z-index: 1;
+      position: relative;
+    }
+
+    /* ⚡ Efeito neon branco girando */
+    .avatar-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 15px;
+    }
+
+    .avatar-border {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 170%;
+      height: 170%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(rgba(255,255,255,0.15), transparent);
+      box-shadow: 0 0 15px white, 0 0 30px white, 0 0 60px white;
+      animation: rotateNeon 4s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes rotateNeon {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
     .imagem-extra {
@@ -316,7 +344,11 @@
   <!-- Overlay CONTENDO o conteúdo -->
   <div class="overlay" id="overlay">
     <div class="content" id="main-content">
-      <img src="media/perfil.gif" alt="Avatar" class="avatar" />
+      <div class="avatar-wrapper">
+        <div class="avatar-border"></div>
+        <img src="media/perfil.gif" alt="Avatar" class="avatar" />
+      </div>
+      
       <h1>𝑵𝒐𝒙𝒚7</h1>
       <p>* Eu não te conheço, então não entrosa. *</p>
       <!-- Aqui começa a imagem extra que será trocada para GIF -->

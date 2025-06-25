@@ -454,11 +454,11 @@
     const btnPlay = document.getElementById("btn-play");
     const mainContent = document.getElementById("main-content");
     const overlay = document.getElementById("overlay");
-
-    // Volume inicial
-    music.volume = 0.50;
-    volumeSlider.value = 0.55;
-
+  
+    // Volume inicial em 60%
+    music.volume = 0.6;
+    volumeSlider.value = 0.6;
+  
     // Botão de início
     btnPlay.addEventListener("click", () => {
       music.play().then(() => {
@@ -470,38 +470,37 @@
         alert("Clique permitido, mas o áudio não pôde ser iniciado automaticamente.");
       });
     });
-
+  
     // Botão de volume
     volumeBtn.addEventListener("click", () => {
       if (music.paused) {
         music.play();
         volumeBtn.textContent = "🔊";
         if (volumeSlider.value == 0) {
-          volumeSlider.value = 0.5;
-          music.volume = 0.5;
+          volumeSlider.value = 0.6;
+          music.volume = 0.6;
         }
       } else {
         music.pause();
         volumeBtn.textContent = "🔇";
       }
     });
-
+  
     // Slider de volume
     volumeSlider.addEventListener("input", () => {
       music.volume = volumeSlider.value;
       volumeBtn.textContent = music.volume == 0 ? "🔇" : "🔊";
       if (music.paused) music.play();
     });
-
-// TROCAR A IMAGEM EXTRA POR GIF QUANDO A PÁGINA CARREGAR
-document.addEventListener("DOMContentLoaded", () => {
-  const imagemExtra = document.querySelector(".imagem-extra");
-  if (imagemExtra) {
-    // Troque "media/Extra.gif" pelo caminho correto do seu gif
-    imagemExtra.src = "media/Extra.gif";
-    imagemExtra.alt = "GIF animado extra";
-  }
-});
+  
+    // Trocar imagem extra por GIF
+    document.addEventListener("DOMContentLoaded", () => {
+      const imagemExtra = document.querySelector(".imagem-extra");
+      if (imagemExtra) {
+        imagemExtra.src = "media/Extra.gif";
+        imagemExtra.alt = "GIF animado extra";
+      }
+    });
   </script>
 
 </body>

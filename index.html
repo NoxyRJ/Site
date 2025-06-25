@@ -119,48 +119,47 @@
       border-radius: 12px;
     }
 
-/* Animação branca para os links */
-@keyframes pulseGlowWhite {
-  0% {
-    box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 12px rgba(255, 255, 255, 1);
-    transform: scale(1.05);
-  }
-  100% {
-    box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
-    transform: scale(1);
-  }
-}
+    /* Animação branca para os links */
+    @keyframes pulseGlowWhite {
+      0% {
+        box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 12px rgba(255, 255, 255, 1);
+        transform: scale(1.05);
+      }
+      100% {
+        box-shadow: 0 0 4px rgba(255, 255, 255, 0.7);
+        transform: scale(1);
+      }
+    }
 
-/* Animação verde Spotify para playlist */
-@keyframes pulseGlowGreen {
-  0% {
-    box-shadow: 0 0 4px rgba(30, 215, 96, 0.7);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 0 12px rgba(30, 215, 96, 1);
-    transform: scale(1.05);
-  }
-  100% {
-    box-shadow: 0 0 4px rgba(30, 215, 96, 0.7);
-    transform: scale(1);
-  }
-}
+    /* Animação verde Spotify para playlist */
+    @keyframes pulseGlowGreen {
+      0% {
+        box-shadow: 0 0 4px rgba(30, 215, 96, 0.7);
+        transform: scale(1);
+      }
+      50% {
+        box-shadow: 0 0 12px rgba(30, 215, 96, 1);
+        transform: scale(1.05);
+      }
+      100% {
+        box-shadow: 0 0 4px rgba(30, 215, 96, 0.7);
+        transform: scale(1);
+      }
+    }
 
-/* Usar a animação branca só nos links */
-.links a:hover {
-  animation: pulseGlowWhite 1.5s infinite;
-}
+    /* Usar a animação branca só nos links */
+    .links a:hover {
+      animation: pulseGlowWhite 1.5s infinite;
+    }
 
-/* Usar a animação verde só na playlist */
-.playlist-card:hover {
-  animation: pulseGlowGreen 1.5s infinite;
-}
-
+    /* Usar a animação verde só na playlist */
+    .playlist-card:hover {
+      animation: pulseGlowGreen 1.5s infinite;
+    }
 
     .links {
       display: flex;
@@ -188,7 +187,6 @@
     .links a:hover {
       text-decoration: underline;
       background: rgba(255, 255, 255, 0.2);
-      animation: pulseGlowWhite 1.5s infinite;
     }
 
     .link-icon {
@@ -216,7 +214,7 @@
       background: rgba(30, 215, 96, 0.3);
       transform: scale(1.05);
       box-shadow: 0 0 20px #1DB954;
-      animation: pulseGlowWhite 1.5s infinite;
+      animation: pulseGlowGreen 1.5s infinite;
     }
     .playlist-cover {
       width: 80px;

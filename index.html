@@ -366,94 +366,89 @@
       <!-- Imagem extra que será trocada para GIF -->
       <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra" />
 
-            <!-- Discord perfil -->
-      <div id="discord-status" style="text-align:center; margin: 2rem 0; color: white;">
-        <img id="discord-avatar" src="" alt="Avatar Discord" style="width:100px; border-radius:50%; margin-bottom: 10px;" />
-        <div id="discord-username" style="font-size:1.3rem; font-weight:bold;"></div>
-        <div id="discord-discriminator" style="font-size:1rem; opacity:0.7;"></div>
-        <div id="discord-presence" style="margin-top: 8px; font-size: 1.2rem;"></div>
-      </div>
-      
-      <div id="discord-status" style="text-align:center; margin: 2rem 0; color: white; font-family: Arial, sans-serif;">
-        <img
-          id="discord-avatar"
-          src=""
-          alt="Avatar Discord"
-          style="width: 120px; height: 120px; border-radius: 50%; margin-bottom: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.5);"
-        />
-        <div style="font-size: 1.6rem; font-weight: 700;">
-          <span id="discord-username"></span>
-          <span id="discord-discriminator" style="opacity: 0.7; font-weight: 400; font-size: 1.2rem;"></span>
-          <span id="discord-status-circle" 
-            style="
-              display: inline-block;
-              width: 16px;
-              height: 16px;
-              border-radius: 50%;
-              margin-left: 12px;
-              vertical-align: middle;
-              box-shadow: 0 0 8px rgba(0,0,0,0.5);
-              background-color: gray;
-              transition: background-color 0.3s ease;
-            "
-            title="Status"
-          ></span>
-        </div>
-      </div>
-      
-      <script>
-        async function fetchDiscordStatus() {
-          const userId = "278691315594559489"; // seu ID Discord
-      
-          try {
-            const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`);
-            if (!response.ok) throw new Error("Erro na API Lanyard");
-      
-            const data = await response.json();
-            if (!data.data) throw new Error("Dados inválidos");
-      
-            const user = data.data.discord_user;
-            const status = data.data.discord_status; // online, offline, idle, dnd
-      
-            // Atualizar avatar
-            const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
-            document.getElementById("discord-avatar").src = avatarUrl;
-      
-            // Nome + discriminator
-            document.getElementById("discord-username").textContent = user.username;
-            document.getElementById("discord-discriminator").textContent = "#" + user.discriminator;
-      
-            // Status com círculo colorido
-            const statusCircle = document.getElementById("discord-status-circle");
-      
-            let color = "gray"; // offline
-            let statusText = "Offline";
-      
-            if (status === "online") {
-              color = "#43B581";  // verde
-              statusText = "Online";
-            } else if (status === "idle") {
-              color = "#FAA61A";  // amarelo
-              statusText = "Ausente";
-            } else if (status === "dnd") {
-              color = "#F04747";  // vermelho
-              statusText = "Não perturbe";
-            }
-      
-            statusCircle.style.backgroundColor = color;
-            statusCircle.title = statusText;
-      
-          } catch (error) {
-            console.error("Erro ao buscar status Discord:", error);
-            document.getElementById("discord-status").textContent = "Status Discord indisponível";
-          }
-        }
-      
-        fetchDiscordStatus();
-      
-        // Atualizar a cada 30s para ficar em tempo real
-        setInterval(fetchDiscordStatus, 30000);
-      </script>             
+<!-- Discord perfil bonito com círculo de status no avatar -->
+<div id="discord-status" style="text-align: center; margin: 2rem 0; color: white; font-family: Arial, sans-serif; position: relative;">
+  <div style="position: relative; display: inline-block;">
+    <img
+      id="discord-avatar"
+      src=""
+      alt="Avatar Discord"
+      style="width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.5);"
+    />
+    <span id="discord-status-circle"
+      style="
+        position: absolute;
+        bottom: 6px;
+        right: 6px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 3px solid #1a1a1a;
+        background-color: gray;
+        box-shadow: 0 0 6px rgba(0,0,0,0.5);
+      "
+      title="Status"
+    ></span>
+  </div>
+
+  <div style="margin-top: 10px; font-size: 1.4rem; font-weight: bold;">
+    <span id="discord-username"></span>
+    <span id="discord-discriminator" style="opacity: 0.6; font-size: 1rem;"></span>
+  </div>
+</div>
+
+<script>
+  async function fetchDiscordStatus() {
+    const userId = "278691315594559489"; // seu ID Discord
+
+    try {
+      const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`);
+      if (!response.ok) throw new Error("Erro na API Lanyard");
+
+      const data = await response.json();
+      if (!data.data) throw new Error("Dados inválidos");
+
+      const user = data.data.discord_user;
+      const status = data.data.discord_status; // online, offline, idle, dnd
+
+      // Atualiza avatar
+      const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
+      document.getElementById("discord-avatar").src = avatarUrl;
+
+      // Atualiza nome + #
+      document.getElementById("discord-username").textContent = user.username;
+      document.getElementById("discord-discriminator").textContent = "#" + user.discriminator;
+
+      // Atualiza status visual
+      const statusCircle = document.getElementById("discord-status-circle");
+
+      let color = "gray"; // padrão
+      let statusText = "Offline";
+
+      if (status === "online") {
+        color = "#43B581";
+        statusText = "Online";
+      } else if (status === "idle") {
+        color = "#FAA61A";
+        statusText = "Ausente";
+      } else if (status === "dnd") {
+        color = "#F04747";
+        statusText = "Não perturbe";
+      }
+
+      statusCircle.style.backgroundColor = color;
+      statusCircle.title = statusText;
+
+    } catch (error) {
+      console.error("Erro ao buscar status Discord:", error);
+      const box = document.getElementById("discord-status");
+      box.innerHTML = `<p style="color:red;">Status Discord indisponível</p>`;
+    }
+  }
+
+  fetchDiscordStatus();
+  setInterval(fetchDiscordStatus, 30000); // Atualiza a cada 30 segundos
+</script>           
 
       <div class="tags-section">
         <h2>𝑻𝒂𝒈𝒔</h2>

@@ -371,12 +371,17 @@
 
   <!-- Avatar com círculo de status -->
   <div style="position: relative; display: inline-block;">
-    <img
-      id="discord-avatar"
-      src=""
-      alt="Avatar Discord"
-      style="width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.5);"
-    />
+    <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
+      <img
+        id="discord-avatar"
+        src=""
+        alt="Avatar Discord"
+        style="width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.5); transition: transform 0.3s;"
+        onmouseover="this.style.transform='scale(1.05)'" 
+        onmouseout="this.style.transform='scale(1)'"
+      />
+    </a>
+    
     <span id="discord-status-circle"
       style="
         position: absolute;
@@ -398,16 +403,16 @@
     Noxy7
   </div>
 
-  <!-- @username#tag -->
+  <!-- @username e #tag -->
   <div style="font-size: 1.1rem; opacity: 0.8;">
-    <span id="discord-username">@</span><span id="discord-discriminator"></span>
+    <span id="discord-username"></span><span id="discord-discriminator"></span>
   </div>
 </div>
 
 <!-- Script para buscar o status do Discord -->
 <script>
   async function fetchDiscordStatus() {
-    const userId = "278691315594559489"; // seu ID Discord
+    const userId = "278691315594559489"; // seu ID do Discord
 
     try {
       const response = await fetch(`https://api.lanyard.rest/v1/users/${userId}`);
@@ -423,30 +428,32 @@
       const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
       document.getElementById("discord-avatar").src = avatarUrl;
 
-// Atualiza @username e #tag
-document.getElementById("discord-username").textContent = "@" + user.username;
+      // Atualiza @username
+      document.getElementById("discord-username").textContent = "@" + user.username;
 
-// Se o discriminator for diferente de "0", mostra ele
-const discriminatorEl = document.getElementById("discord-discriminator");
-if (user.discriminator !== "0") {
-  discriminatorEl.textContent = "#" + user.discriminator;
-  discriminatorEl.style.display = "inline";
-} else {
-  discriminatorEl.style.display = "none";
-}
+      // Mostra #tag apenas se for diferente de "0"
+      const discriminatorEl = document.getElementById("discord-discriminator");
+      if (user.discriminator !== "0") {
+        discriminatorEl.textContent = "#" + user.discriminator;
+        discriminatorEl.style.display = "inline";
+      } else {
+        discriminatorEl.style.display = "none";
+      }
 
-      // Círculo de status com cor
+      // Atualiza cor do status
       const statusCircle = document.getElementById("discord-status-circle");
-
-      let color = "gray"; // padrão
+      let color = "gray";
       let statusText = "Offline";
 
       if (status === "online") {
-        color = "#43B581"; statusText = "Online";
+        color = "#43B581";
+        statusText = "Online";
       } else if (status === "idle") {
-        color = "#FAA61A"; statusText = "Ausente";
+        color = "#FAA61A";
+        statusText = "Ausente";
       } else if (status === "dnd") {
-        color = "#F04747"; statusText = "Não perturbe";
+        color = "#F04747";
+        statusText = "Não perturbe";
       }
 
       statusCircle.style.backgroundColor = color;
@@ -462,8 +469,6 @@ if (user.discriminator !== "0") {
   fetchDiscordStatus();
   setInterval(fetchDiscordStatus, 30000); // Atualiza a cada 30 segundos
 </script>
-
-          
 
       <div class="tags-section">
         <h2>𝑻𝒂𝒈𝒔</h2>

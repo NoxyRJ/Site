@@ -423,9 +423,17 @@
       const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
       document.getElementById("discord-avatar").src = avatarUrl;
 
-      // Atualiza @username e #tag
-      document.getElementById("discord-username").textContent = "@" + user.username;
-      document.getElementById("discord-discriminator").textContent = "#" + user.discriminator;
+// Atualiza @username e #tag
+document.getElementById("discord-username").textContent = "@" + user.username;
+
+// Se o discriminator for diferente de "0", mostra ele
+const discriminatorEl = document.getElementById("discord-discriminator");
+if (user.discriminator !== "0") {
+  discriminatorEl.textContent = "#" + user.discriminator;
+  discriminatorEl.style.display = "inline";
+} else {
+  discriminatorEl.style.display = "none";
+}
 
       // Círculo de status com cor
       const statusCircle = document.getElementById("discord-status-circle");

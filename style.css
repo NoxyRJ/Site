@@ -80,3 +80,7 @@ body, html {
       0 0 16px #fff;
   }
 }
+
+body {
+  cursor: url('media/cursor.cur'), auto;
+}

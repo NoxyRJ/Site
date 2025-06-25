@@ -171,9 +171,9 @@
       user-select: none;
     }
 
-    /* Playlist bonitinho */
+    /* Playlist verde Spotify original */
     .playlist-card {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(30, 215, 96, 0.15);
       border-radius: 16px;
       padding: 1rem;
       display: flex;
@@ -185,9 +185,9 @@
       margin: 0 auto 1rem;
     }
     .playlist-card:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(30, 215, 96, 0.3);
       transform: scale(1.05);
-      box-shadow: 0 0 15px #fff;
+      box-shadow: 0 0 15px #1DB954;
       animation: pulseGlowWhite 1.5s infinite;
     }
     .playlist-cover {
@@ -328,7 +328,7 @@
         <h2>Links</h2>
         <div class="links">
           <a href="https://open.spotify.com/user/7ybhk69ilst4jfm3a24n6npzb" target="_blank" rel="noopener noreferrer">
-            <img src="spotify-white.png" alt="Spotify" class="link-icon" />
+            <img src="https://cdn.simpleicons.org/spotify/FFFFFF" alt="Spotify" class="link-icon" />
             Spotify
           </a>
           <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
@@ -441,7 +441,7 @@
       if (music.paused) music.play();
     });
 
-    // Contador de visitas sem contar reloads repetidos
+    // Contador de visitas sem contar reloads repetidos no mesmo navegador
     const visitKey = "visitedAlready";
 
     function updateVisitCount() {

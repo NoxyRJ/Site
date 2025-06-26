@@ -373,18 +373,20 @@
 </head>
 <body>
 
-    <!-- Contador de visitantes -->
-    <div class="view-box" id="view-counter" style="
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    color: white;
-    font-size: 18px;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 5px 10px;
-    border-radius: 10px;
-    font-family: sans-serif;
-  ">👁️ Carregando...</div>
+<!-- Contador de visitantes -->
+<div class="view-box" id="view-counter" style="
+  display: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  font-size: 18px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-family: sans-serif;
+  box-shadow: 0 0 8px #000, 0 0 16px #000, 0 0 24px #000;
+">👁️ Carregando...</div>
 
   <!-- Vídeo de fundo -->
   <video autoplay muted loop id="bg-video">
@@ -705,9 +707,9 @@
   document.addEventListener("DOMContentLoaded", animateTitle);
 </script>
 
-<script>
-  const BIN_ID = "685cb3a58a456b7966b5ccfb"; // substitua pelo ID do seu bin
-  const API_KEY = "$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW"; // substitua pela sua chave
+  <script>
+  const BIN_ID = "685cb3a58a456b7966b5ccfb"; // ← Substitua aqui
+  const API_KEY = "$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW"; // ← Substitua aqui
   const binUrl = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
   const hasVisited = localStorage.getItem("siteVisited");
@@ -741,8 +743,13 @@
     document.getElementById("view-counter").textContent = `👁️ ${views} visitantes`;
   }
 
-  updateViews();
+  // Aguarda o botão do modal vermelho ser clicado
+  document.querySelector("#audio-modal button").addEventListener("click", () => {
+    document.getElementById("view-counter").style.display = "block";
+    updateViews();
+  });
 </script>
+
 
 
 </body>

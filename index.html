@@ -694,5 +694,28 @@
   document.addEventListener("DOMContentLoaded", animateTitle);
 </script>
 
+<div id="visitas">👁️ Total de visitas: <span id="visit-count">Carregando...</span></div>
+
+<script>
+  const VISIT_KEY = 'noxy7-visit-once';
+
+  async function contarVisita() {
+    const alreadyVisited = localStorage.getItem(VISIT_KEY);
+
+    if (!alreadyVisited) {
+      // Primeira visita real do usuário (não em refresh)
+      await fetch('https://api.countapi.xyz/hit/noxy7/visitas');
+      localStorage.setItem(VISIT_KEY, 'true');
+    }
+
+    // Sempre mostra o total (visível a todos)
+    const res = await fetch('https://api.countapi.xyz/get/noxy7/visitas');
+    const data = await res.json();
+    document.getElementById("visit-count").textContent = data.value;
+  }
+
+  contarVisita();
+</script>
+
 </body>
 </html>

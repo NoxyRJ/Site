@@ -619,114 +619,35 @@
     </p>
   </div>
 
-  <!-- Scripts -->
-  <script>
-    const music = document.getElementById("bg-music");
-    const volumeBtn = document.getElementById("volume");
-    const volumeSlider = document.getElementById("volume-slider");
-    const audioModal = document.getElementById("audio-modal");
-    const btnPlay = document.getElementById("btn-play");
-    const mainContent = document.getElementById("main-content");
-    const overlay = document.getElementById("overlay");
-  
-    // Volume inicial em 50%
-    music.volume = 0.5;
-    volumeSlider.value = 0.5;
-  
-    // Botão de início
-    btnPlay.addEventListener("click", () => {
-      music.play().then(() => {
-        audioModal.style.display = "none";
-        volumeBtn.textContent = "🔊";
-        mainContent.classList.add("show");
-        overlay.classList.add("show");
-      }).catch(() => {
-        alert("Clique permitido, mas o áudio não pôde ser iniciado automaticamente.");
-      });
-    });
-  
-    // Botão de volume
-    volumeBtn.addEventListener("click", () => {
-      if (music.paused) {
-        music.play();
-        volumeBtn.textContent = "🔊";
-        if (volumeSlider.value == 0) {
-          volumeSlider.value = 0.5;
-          music.volume = 0.5;
-        }
-      } else {
-        music.pause();
-        volumeBtn.textContent = "🔇";
-      }
-    });
-  
-    // Slider de volume
-    volumeSlider.addEventListener("input", () => {
-      music.volume = volumeSlider.value;
-      volumeBtn.textContent = music.volume == 0 ? "🔇" : "🔊";
-      if (music.paused) music.play();
-    });
-  
-    // Trocar imagem extra por GIF
-    document.addEventListener("DOMContentLoaded", () => {
-      const imagemExtra = document.querySelector(".imagem-extra");
-      if (imagemExtra) {
-        imagemExtra.src = "media/Extra.gif";
-        imagemExtra.alt = "GIF animado extra";
-      }
-    });
-  </script>
-
+<!-- Scripts -->
 <script>
-  const fullTitle = "Noxy7";
-  let titleIndex = 0;
-  let isDeletingTitle = false;
+  const music = document.getElementById("bg-music");
+  const volumeBtn = document.getElementById("volume");
+  const volumeSlider = document.getElementById("volume-slider");
+  const audioModal = document.getElementById("audio-modal");
+  const btnPlay = document.getElementById("btn-play");
+  const mainContent = document.getElementById("main-content");
+  const overlay = document.getElementById("overlay");
 
-  function animateTitle() {
-    // Garante que nunca fique vazio
-    const currentText = fullTitle.substring(0, titleIndex) || "\u200B";
-    document.title = currentText;
-
-    if (!isDeletingTitle) {
-      if (titleIndex < fullTitle.length) {
-        titleIndex++;
-      } else {
-        isDeletingTitle = true;
-        setTimeout(animateTitle, 2000); // Espera 1s antes de apagar
-        return;
-      }
-    } else {
-      if (titleIndex > 0) {
-        titleIndex--;
-      } else {
-        isDeletingTitle = false;
-      }
-    }
-
-    setTimeout(animateTitle, 500); // Velocidade de animação
-  }
-
-  document.addEventListener("DOMContentLoaded", animateTitle);
-</script>
-
-  <script>
-  const BIN_ID = "685cb3a58a456b7966b5ccfb"; // ← Substitua aqui
-  const API_KEY = "$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW"; // ← Substitua aqui
+  const BIN_ID = "685cb3a58a456b7966b5ccfb"; // Seu bin ID
+  const API_KEY = "$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW"; // Sua API Key
   const binUrl = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-  const hasVisited = localStorage.getItem("siteVisited");
+  // Volume inicial em 50%
+  music.volume = 0.5;
+  volumeSlider.value = 0.5;
 
+  // Funções para o contador de visitas
   async function getViews() {
     const res = await fetch(binUrl, {
-      headers: {
-        "X-Master-Key": API_KEY
-      }
+      headers: { "X-Master-Key": API_KEY }
     });
     const data = await res.json();
     return data.record.views;
   }
 
   async function updateViews() {
+    const hasVisited = localStorage.getItem("siteVisited");
     let views = await getViews();
 
     if (!hasVisited) {
@@ -745,11 +666,86 @@
     document.getElementById("view-counter").textContent = `👁️ ${views} visitantes`;
   }
 
-  // Aguarda o botão do modal vermelho ser clicado
-  document.querySelector("#audio-modal button").addEventListener("click", () => {
-    document.getElementById("view-counter").style.display = "block";
-    updateViews();
+  // Botão de início - ao clicar, toca música, mostra overlay e volume/contador
+  btnPlay.addEventListener("click", () => {
+    music.play().then(() => {
+      audioModal.style.display = "none";
+      volumeBtn.textContent = "🔊";
+      mainContent.classList.add("show");
+      overlay.classList.add("show");
+
+      // Mostrar contador e controle de volume
+      document.getElementById("view-counter").style.display = "block";
+      document.getElementById("volume-control").style.display = "flex";
+
+      updateViews();
+    }).catch(() => {
+      alert("Clique permitido, mas o áudio não pôde ser iniciado automaticamente.");
+    });
   });
+
+  // Botão de volume - play/pause música e muda ícone
+  volumeBtn.addEventListener("click", () => {
+    if (music.paused) {
+      music.play();
+      volumeBtn.textContent = "🔊";
+      if (volumeSlider.value == 0) {
+        volumeSlider.value = 0.5;
+        music.volume = 0.5;
+      }
+    } else {
+      music.pause();
+      volumeBtn.textContent = "🔇";
+    }
+  });
+
+  // Slider de volume - controla volume e toca música se pausada
+  volumeSlider.addEventListener("input", () => {
+    music.volume = volumeSlider.value;
+    volumeBtn.textContent = music.volume == 0 ? "🔇" : "🔊";
+    if (music.paused) music.play();
+  });
+
+  // Trocar imagem extra por GIF
+  document.addEventListener("DOMContentLoaded", () => {
+    const imagemExtra = document.querySelector(".imagem-extra");
+    if (imagemExtra) {
+      imagemExtra.src = "media/Extra.gif";
+      imagemExtra.alt = "GIF animado extra";
+    }
+  });
+</script>
+
+<script>
+  // Título animado que escreve e apaga "Noxy7"
+  const fullTitle = "Noxy7";
+  let titleIndex = 0;
+  let isDeletingTitle = false;
+
+  function animateTitle() {
+    const currentText = fullTitle.substring(0, titleIndex) || "\u200B";
+    document.title = currentText;
+
+    if (!isDeletingTitle) {
+      if (titleIndex < fullTitle.length) {
+        titleIndex++;
+      } else {
+        isDeletingTitle = true;
+        setTimeout(animateTitle, 2000);
+        return;
+      }
+    } else {
+      if (titleIndex > 0) {
+        titleIndex--;
+      } else {
+        isDeletingTitle = false;
+      }
+    }
+
+    setTimeout(animateTitle, 500);
+  }
+
+  document.addEventListener("DOMContentLoaded", animateTitle);
 </script>
 
 <script>
@@ -769,6 +765,3 @@
     }
   });
 </script>
-
-</body>
-</html>

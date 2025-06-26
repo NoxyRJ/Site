@@ -11,9 +11,3 @@ volumeBtn.addEventListener("click", () => {
     volumeBtn.textContent = "🔇";
   }
 });
-
-// Simples contador de visitas local (não funciona entre dispositivos)
-let count = localStorage.getItem("visitas") || 0;
-count++;
-localStorage.setItem("visitas", count);
-document.getElementById("count").textContent = count;

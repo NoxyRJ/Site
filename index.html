@@ -752,7 +752,23 @@
   });
 </script>
 
+<script>
+  // Bloqueia clique direito
+  document.addEventListener("contextmenu", event => event.preventDefault());
+</script>
 
+<script>
+  // Bloqueia F12, Ctrl+Shift+I e Ctrl+U
+  document.addEventListener("keydown", function (e) {
+    if (
+      e.key === "F12" ||
+      (e.ctrlKey && e.shiftKey && e.key === "I") ||
+      (e.ctrlKey && e.key === "U")
+    ) {
+      e.preventDefault();
+    }
+  });
+</script>
 
 </body>
 </html>

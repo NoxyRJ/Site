@@ -678,78 +678,52 @@
   </script>
 
 <script>
-  const fullTitle = "Noxy7";
-  let titleIndex = 0;
-  let isDeletingTitle = false;
-
-  function animateTitle() {
-    // Garante que nunca fique vazio
-    const currentText = fullTitle.substring(0, titleIndex) || "\u200B";
-    document.title = currentText;
-
-    if (!isDeletingTitle) {
-      if (titleIndex < fullTitle.length) {
-        titleIndex++;
-      } else {
-        isDeletingTitle = true;
-        setTimeout(animateTitle, 2000); // Espera 1s antes de apagar
-        return;
-      }
-    } else {
-      if (titleIndex > 0) {
-        titleIndex--;
-      } else {
-        isDeletingTitle = false;
-      }
-    }
-
-    setTimeout(animateTitle, 500); // Velocidade de animação
+  const t = "Noxy7";
+  let i = 0, del = false;
+  function anim() {
+    document.title = t.slice(0, i) || "\u200B";
+    if (!del) i < t.length ? i++ : (del = true, setTimeout(anim, 2000));
+    else i > 0 ? i-- : del = false;
+    setTimeout(anim, 500);
   }
-
-  document.addEventListener("DOMContentLoaded", animateTitle);
+  document.addEventListener("DOMContentLoaded", anim);
 </script>
 
-  <script>
-  const BIN_ID = "685cb3a58a456b7966b5ccfb"; // ← Substitua aqui
-  const API_KEY = "$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW"; // ← Substitua aqui
-  const binUrl = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-
-  const hasVisited = localStorage.getItem("siteVisited");
-
-  async function getViews() {
-    const res = await fetch(binUrl, {
-      headers: {
-        "X-Master-Key": API_KEY
-      }
-    });
-    const data = await res.json();
-    return data.record.views;
-  }
+<script>
+  const BIN_ID = "685cb3a58a456b7966b5ccfb";
+  const API_KEY = "$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW";
+  const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+  const visited = localStorage.getItem("siteVisited");
 
   async function updateViews() {
-    let views = await getViews();
+    try {
+      const res = await fetch(URL, { headers: { "X-Master-Key": API_KEY } });
+      const { record } = await res.json();
+      let views = record.views;
 
-    if (!hasVisited) {
-      views++;
-      await fetch(binUrl, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Master-Key": API_KEY
-        },
-        body: JSON.stringify({ views })
-      });
-      localStorage.setItem("siteVisited", "true");
+      if (!visited) {
+        views++;
+        await fetch(URL, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": API_KEY
+          },
+          body: JSON.stringify({ views })
+        });
+        localStorage.setItem("siteVisited", "true");
+      }
+
+      document.getElementById("view-counter").textContent = `👁️ ${views} visitantes`;
+    } catch (e) {
+      console.error("Erro ao atualizar visitas:", e);
     }
-
-    document.getElementById("view-counter").textContent = `👁️ ${views} visitantes`;
   }
 
-  // Aguarda o botão do modal vermelho ser clicado
-  document.querySelector("#audio-modal button").addEventListener("click", () => {
+  document.querySelector("#audio-modal button").onclick = () => {
     document.getElementById("view-counter").style.display = "block";
     updateViews();
-  });
+  };
 </script>
 
 </body>

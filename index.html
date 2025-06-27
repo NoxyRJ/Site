@@ -1,9 +1,19 @@
-<!DOCTYPE html>
-<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Noxy7</title>
+
+  <!-- Metadados para SEO e redes sociais -->
+  <meta name="description" content="Perfil interativo de Noxy7 com links, status do Discord e música de fundo.">
+  <meta name="keywords" content="Noxy7, Discord, Perfil, Links, Spotify, TikTok, Steam">
+  <meta name="author" content="Noxy.gg">
+  <meta property="og:title" content="Noxy7" />
+  <meta property="og:description" content="Conheça o perfil interativo de Noxy7 com música, links e muito mais!" />
+  <meta property="og:image" content="https://github.com/NoxyRJ/1/blob/main/media/perfil.gif" />
+  <meta property="og:url" content="https://noxyrj.github.io/1/" />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#000000">
+
   <link rel="icon" type="image/png" href="media/icon.png" />
 
   <!-- AOS CSS -->
@@ -206,6 +216,30 @@
   </style>  
 </head>
 <body>
+
+<!-- Volume no canto superior esquerdo -->
+<div id="volume-box" style="
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: white;
+  font-size: 18px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-family: sans-serif;
+  box-shadow:
+    0 0 8px 2px rgba(0, 0, 0, 0.9),
+    inset 0 0 15px 3px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+">
+  <button id="volume" aria-label="Toggle volume" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">🔊</button>
+  <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" style="width: 100px;" aria-label="Volume slider" />
+</div>
+
 
 <!-- Contador de visitantes -->
 <div class="view-box" id="view-counter" style="
@@ -415,12 +449,6 @@
           </div>
         </div>
       </div>
-
-      <div class="volume-control">
-        <button id="volume" aria-label="Toggle volume">🔊</button>
-        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" aria-label="Volume slider" />
-      </div>
-
     </div>
   </div>
 

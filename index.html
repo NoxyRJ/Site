@@ -518,7 +518,7 @@
     document.title = t.slice(0, i) || "\u200B";
     if (!del) i < t.length ? i++ : (del = true, setTimeout(anim, 2000));
     else i > 0 ? i-- : del = false;
-    setTimeout(anim, 200);
+    setTimeout(anim, 800);
   }
   document.addEventListener("DOMContentLoaded", anim);
 </script>

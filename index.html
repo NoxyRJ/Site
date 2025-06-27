@@ -482,51 +482,43 @@
 
   <!-- Scripts -->
   <script>
-    const music = document.getElementById("bg-music");
-    const volumeBtn = document.getElementById("volume");
-    const volumeSlider = document.getElementById("volume-slider");
-    const audioModal = document.getElementById("audio-modal");
-    const btnPlay = document.getElementById("btn-play");
-    const mainContent = document.getElementById("main-content");
     const overlay = document.getElementById("overlay");
-  
-    // Volume inicial em 50%
-    music.volume = 0.5;
-    volumeSlider.value = 0.5;
-  
-    // Botão de início
-    btnPlay.addEventListener("click", () => {
-      music.play().then(() => {
-        audioModal.style.display = "none";
-        volumeBtn.textContent = "🔊";
-        mainContent.classList.add("show");
-        overlay.classList.add("show");
-      }).catch(() => {
-        alert("Clique permitido, mas o áudio não pôde ser iniciado automaticamente.");
-      });
-    });
-  
-    // Botão de volume
-    volumeBtn.addEventListener("click", () => {
-      if (music.paused) {
-        music.play();
-        volumeBtn.textContent = "🔊";
-        if (volumeSlider.value == 0) {
-          volumeSlider.value = 0.5;
-          music.volume = 0.5;
-        }
-      } else {
-        music.pause();
-        volumeBtn.textContent = "🔇";
-      }
-    });
-  
-    // Slider de volume
-    volumeSlider.addEventListener("input", () => {
-      music.volume = volumeSlider.value;
-      volumeBtn.textContent = music.volume == 0 ? "🔇" : "🔊";
-      if (music.paused) music.play();
-    });
+    const audioModal = document.getElementById('audio-modal');
+    const btnPlay = document.getElementById('btn-play');
+    const volumeBox = document.getElementById('volume-box');
+    const music = document.getElementById('bg-music');
+    const volumeBtn = document.getElementById('volume');
+    const volumeSlider = document.getElementById('volume-slider');
+
+music.volume = 0.5;
+
+btnPlay.addEventListener('click', () => {
+  music.play().then(() => {
+    audioModal.style.display = 'none';  // Esconde o modal
+    volumeBox.style.display = 'flex';   // Mostra o controle de volume
+  }).catch(() => {
+    alert('Não foi possível iniciar o áudio automaticamente.');
+  });
+});
+
+// Botão para ligar/desligar som
+volumeBtn.addEventListener('click', () => {
+  if (music.paused) {
+    music.play();
+    volumeBtn.textContent = '🔊';
+  } else {
+    music.pause();
+    volumeBtn.textContent = '🔇';
+  }
+});
+
+// Slider de volume
+volumeSlider.addEventListener('input', () => {
+  music.volume = volumeSlider.value;
+  volumeBtn.textContent = music.volume == 0 ? '🔇' : '🔊';
+  if (music.paused && music.volume > 0) music.play();
+});
+
   
     // Trocar imagem extra por GIF
     document.addEventListener("DOMContentLoaded", () => {

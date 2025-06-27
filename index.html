@@ -494,8 +494,10 @@ music.volume = 0.5;
 
 btnPlay.addEventListener('click', () => {
   music.play().then(() => {
-    audioModal.style.display = 'none';  // Esconde o modal
-    volumeBox.style.display = 'flex';   // Mostra o controle de volume
+    audioModal.style.display = 'none';      // Esconde o modal
+    volumeBox.style.display = 'flex';       // Mostra o volume
+    overlay.classList.add("show");          // <-- Adiciona classe para mostrar o overlay
+    document.getElementById("main-content").classList.add("show"); // Também mostra o conteúdo
   }).catch(() => {
     alert('Não foi possível iniciar o áudio automaticamente.');
   });

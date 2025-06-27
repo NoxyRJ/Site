@@ -10,135 +10,63 @@
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
 
   <style>
-    /* Seu CSS original */
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+      margin: 0; padding: 0; box-sizing: border-box;
     }
-
     html, body {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%; min-height: 100vh;
       font-family: Arial, sans-serif;
-      overflow-x: hidden;
       background: transparent;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      padding: 1rem;
+      display: flex; justify-content: center; align-items: center;
+      overflow-x: hidden; padding: 1rem;
     }
-
     #bg-video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      min-width: 100%;
-      min-height: 100%;
-      object-fit: cover;
-      z-index: -2;
+      position: fixed; top: 0; left: 0;
+      min-width: 100%; min-height: 100%;
+      object-fit: cover; z-index: -2;
     }
-
     .overlay {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 100%;
-      max-width: 550px;
-      height: 88%;
-      max-height: 99vh;
+      position: fixed; top: 50%; left: 50%;
+      width: 100%; max-width: 550px;
+      height: 88%; max-height: 99vh;
       transform: translate(-50%, -50%);
-      background-color: rgba(0, 0, 0, 0.3);
-      border-radius: 16px;
-      z-index: 0;
-      opacity: 0;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 16px; opacity: 0;
       transition: opacity 1s ease;
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-      overflow-y: auto;
+      display: flex; flex-direction: column;
+      padding: 20px; overflow-y: auto;
+      box-shadow: 0 0 8px 2px rgba(0,0,0,.9), inset 0 0 15px 3px rgba(0,0,0,.8);
+      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.2) transparent;
       -webkit-overflow-scrolling: touch;
-      box-shadow:
-        0 0 8px 2px rgba(0, 0, 0, 0.9),
-        inset 0 0 15px 3px rgba(0, 0, 0, 0.8);
-
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255,255,255,0.2) transparent;
     }
-
-    .overlay::-webkit-scrollbar {
-      width: 8px;
-      background: transparent;
-    }
-
-    .overlay::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
+    .overlay::-webkit-scrollbar { width: 8px; background: transparent; }
+    .overlay::-webkit-scrollbar-track { background: transparent; }
     .overlay::-webkit-scrollbar-thumb {
-      background-color: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      border: 2px solid transparent;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px; border: 2px solid transparent;
     }
-
-    .overlay.show {
-      opacity: 1;
-    }
-
+    .overlay.show { opacity: 1; }
     .content {
-      flex: 1 1 auto;
-      color: white;
-      text-align: center;
-      max-width: 100%;
-      width: 100%;
-      opacity: 0;
-      transition: opacity 1s ease;
+      flex: 1; width: 100%; max-width: 100%;
+      color: white; text-align: center;
+      opacity: 0; transition: opacity 1s ease;
     }
-
-    .content.show {
-      opacity: 1;
+    .content.show { opacity: 1; }
+    h1 { font-size: clamp(1.8rem, 5vw, 3rem); margin: 10px 0; }
+    h2, p {
+      text-align: center; color: white;
+      font-size: clamp(1rem, 2.5vw, 1.5rem); margin-bottom: 1rem;
     }
-
-    h1 {
-      font-size: clamp(1.8rem, 5vw, 3rem);
-      margin: 10px 0;
-    }
-    
-    h2 {
-      color: white;
-      font-size: clamp(1.2rem, 3vw, 1.5rem);
-      margin-bottom: 0.5rem;
-      text-align: center;
-      font-weight: 600;
-    }
-
-    p {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      margin-bottom: 1rem;
-    }
-
-    .avatar-wrapper {
-      position: relative;
-      display: inline-block;
-      margin-bottom: 15px;
-    }
-
+    h2 { font-weight: 600; }
+    .avatar-wrapper { position: relative; display: inline-block; margin-bottom: 15px; }
     .avatar {
       width: clamp(100px, 30vw, 150px);
-      border-radius: 50%;
-      z-index: 1;
-      position: relative;
-      display: block;
-      margin: 0 auto 15px auto;
+      border-radius: 50%; display: block;
+      margin: 0 auto 15px; z-index: 1; position: relative;
     }
-
     .avatar-border {
-      position: absolute;
-      top: 46%;
-      left: 50%;
-      width: 110%;
-      height: 110%;
+      position: absolute; top: 46%; left: 50%;
+      width: 110%; height: 110%;
       transform: translate(-50%, -50%);
       border-radius: 50%;
       background: radial-gradient(rgba(255,255,255,0.15), transparent);
@@ -146,230 +74,126 @@
       animation: rotateNeon 4s linear infinite;
       z-index: 0;
     }
-
     @keyframes rotateNeon {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      0% { transform: translate(-50%, -50%) rotate(0); }
       100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
-
     .imagem-extra {
-      width: 100%;
-      max-width: 90%;
-      border-radius: 12px;
-      margin: 1rem auto;
-      display: block;
+      width: 90%; border-radius: 12px;
+      margin: 1rem auto; display: block;
     }
-
-    .tags-section, .links-section, .playlist-section {
-      margin-bottom: 1.5rem;
-    }
-
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.5rem;
+    .tags-section, .links-section, .playlist-section { margin-bottom: 1.5rem; }
+    .tags, .links {
+      display: flex; flex-wrap: wrap;
+      justify-content: center; gap: 0.5rem;
       margin-bottom: 1rem;
     }
-
-    .tags span {
-      font-size: clamp(0.9rem, 1.2vw, 1.1rem);
-      background-color: rgba(255,255,255,0.1);
-      padding: 0.4rem 0.7rem;
-      border-radius: 12px;
-    }
-
-    @keyframes pulseGlowWhite {
-      0% { box-shadow: 0 0 4px rgba(255, 255, 255, 0.7); transform: scale(1); }
-      50% { box-shadow: 0 0 12px rgba(255, 255, 255, 1); transform: scale(1.05); }
-      100% { box-shadow: 0 0 4px rgba(255, 255, 255, 0.7); transform: scale(1); }
-    }
-
-    @keyframes pulseGlowGreen {
-      0% { box-shadow: 0 0 4px rgba(30, 215, 96, 0.7); transform: scale(1); }
-      50% { box-shadow: 0 0 12px rgba(30, 215, 96, 1); transform: scale(1.05); }
-      100% { box-shadow: 0 0 4px rgba(30, 215, 96, 0.7); transform: scale(1); }
-    }
-
-    .links a:hover { animation: pulseGlowWhite 1.5s infinite; }
-    .playlist-card:hover { animation: pulseGlowGreen 1.5s infinite; }
-
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .links a {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      color: white;
+    .tags span, .links a {
+      background: rgba(255,255,255,0.1);
+      border-radius: 12px; padding: 0.4rem 0.7rem;
+      font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+      color: white; text-decoration: none;
       font-weight: bold;
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.1);
-      transition: background-color 0.3s, box-shadow 0.3s, transform 0.3s;
-      cursor: pointer;
+      display: flex; align-items: center;
+      gap: 8px; cursor: pointer;
+      transition: 0.3s;
     }
-
     .links a:hover {
+      background: rgba(255,255,255,0.2);
       text-decoration: underline;
-      background: rgba(255, 255, 255, 0.2);
+      animation: pulseGlowWhite 1.5s infinite;
     }
-
-    .link-icon {
-      width: 20px;
-      height: 20px;
-      flex-shrink: 0;
-      user-select: none;
-    }
-
     .playlist-card {
-      background: rgba(30, 215, 96, 0.15);
-      border-radius: 16px;
-      padding: 1rem;
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-      max-width: 400px;
-      margin: 0 auto 1rem;
+      background: rgba(30,215,96,0.15);
+      border-radius: 16px; padding: 1rem;
+      display: flex; align-items: center;
+      gap: 1rem; cursor: pointer;
+      max-width: 400px; margin: 0 auto 1rem;
       box-shadow: 0 0 8px #1DB95488;
+      position: relative;
+      transition: 0.3s;
     }
-
+    .playlist-card:hover { animation: pulseGlowGreen 1.5s infinite; }
     .playlist-card::before {
       content: url("https://cdn.simpleicons.org/spotify/1DB954");
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 24px;
-      height: 24px;
+      position: absolute; top: 10px; right: 10px;
+      width: 24px; height: 24px;
     }
-
     .playlist-cover {
-      width: 80px;
-      height: 80px;
-      border-radius: 12px;
-      object-fit: cover;
+      width: 80px; height: 80px;
+      border-radius: 12px; object-fit: cover;
       flex-shrink: 0;
-      user-select: none;
     }
-
     .playlist-info {
-      flex-grow: 1;
+      color: white; flex-grow: 1;
       text-align: left;
-      color: white;
-      user-select: none;
     }
-
     .playlist-info h3 {
       margin-bottom: 0.5rem;
       font-size: 1.3rem;
     }
-
     .listen-btn {
-      background-color: #ffffffcc;
-      border: none;
       padding: 0.5rem 1rem;
-      color: black;
-      font-weight: 600;
-      border-radius: 9999px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
+      background: #ffffffcc; color: black;
+      font-weight: 600; border: none;
+      border-radius: 9999px; font-size: 1rem;
+      cursor: pointer; transition: 0.3s;
     }
-
-    .listen-btn:hover {
-      background-color: #ffffff;
-    }
-
+    .listen-btn:hover { background: #fff; }
     iframe {
-      border-radius: 16px;
-      border: none;
-      width: 100%;
-      height: 380px;
+      width: 100%; height: 380px;
+      border-radius: 16px; border: none;
     }
-
     .volume-control {
       margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
+      display: flex; justify-content: center;
+      align-items: center; gap: 10px; flex-wrap: wrap;
     }
-
     #volume {
-      font-size: 1.5rem;
-      background: none;
-      border: none;
-      color: white;
+      font-size: 1.5rem; background: none;
+      border: none; color: white;
       cursor: pointer;
-      user-select: none;
     }
-
     #volume-slider {
-      width: 150px;
-      max-width: 80%;
+      width: 150px; max-width: 80%;
     }
-
     #visitas {
       margin-top: 15px;
       font-size: clamp(1rem, 2vw, 1.2rem);
-      color: white;
-      text-align: center;
+      color: white; text-align: center;
     }
-
     #audio-modal {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.85);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      z-index: 100;
-      text-align: center;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      z-index: 100; text-align: center;
       padding: 1.5rem;
     }
-
     .intro-logo {
-      width: 80%;
-      max-width: 600px;
-      height: auto;
+      width: 80%; max-width: 600px;
       margin-bottom: 2rem;
-      opacity: 1;
     }
-
     #audio-modal button {
       padding: 12px 24px;
       font-size: clamp(1rem, 2.5vw, 1.2rem);
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
-      background-color: red;
-      color: white;
-      font-weight: bold;
-      transition: background 0.3s;
+      background: red; color: white;
+      border: none; border-radius: 8px;
+      font-weight: bold; cursor: pointer;
+      transition: 0.3s;
     }
-
-    #audio-modal button:hover {
-      background-color: #cc0000;
+    #audio-modal button:hover { background: #cc0000; }
+    @keyframes pulseGlowWhite {
+      0% { box-shadow: 0 0 4px rgba(255,255,255,.7); transform: scale(1); }
+      50% { box-shadow: 0 0 12px rgba(255,255,255,1); transform: scale(1.05); }
+      100% { box-shadow: 0 0 4px rgba(255,255,255,.7); transform: scale(1); }
     }
-
-    /* Neon blink animation */
-    @keyframes blinkNeon {
-      0% { text-shadow: 0 0 8px #fff, 0 0 16px #fff, 0 0 24px #fff; }
-      100% { text-shadow: 0 0 4px #fff, 0 0 8px #fff, 0 0 12px #fff; }
+    @keyframes pulseGlowGreen {
+      0% { box-shadow: 0 0 4px rgba(30,215,96,.7); transform: scale(1); }
+      50% { box-shadow: 0 0 12px rgba(30,215,96,1); transform: scale(1.05); }
+      100% { box-shadow: 0 0 4px rgba(30,215,96,.7); transform: scale(1); }
     }
-  </style>
+  </style>  
 </head>
 <body>
 

@@ -278,54 +278,71 @@
       <!-- Imagem extra que será trocada para GIF -->
       <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra" />
 
-<!-- Discord perfil bonito com nome de exibição + círculo de status no avatar -->
-<div id="discord-status" style="text-align: center; margin: 2rem 0; color: white; font-family: Arial, sans-serif; position: relative;">
+<!-- Fonte Poppins -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
-  <!-- Título "Discord" -->
+<!-- Estilo adicional -->
+<style>
+  .avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    padding: 5px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,0,0,0.6) 40%, transparent 100%);
+    box-shadow:
+      0 0 5px #000,
+      0 0 10px #000,
+      0 0 15px rgba(67, 181, 129, 0.5),
+      0 0 20px rgba(67, 181, 129, 0.2);
+    transition: transform 0.3s;
+  }
+
+  .avatar-wrapper:hover {
+    transform: scale(1.05);
+  }
+
+  .avatar-wrapper img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  #discord-status-circle {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid #1a1a1a;
+    background-color: gray;
+    box-shadow: 0 0 6px rgba(0,0,0,0.5);
+  }
+</style>
+
+<!-- Card do Discord -->
+<div id="discord-status" style="text-align: center; margin: 2rem 0; color: white; font-family: 'Poppins', sans-serif;">
+
   <div style="font-size: 1.4rem; font-weight: bold; margin-bottom: 10px;">𝑫𝒊𝒔𝒄𝒐𝒓𝒅</div>
 
-  <!-- Avatar com círculo de status -->
-  <div style="position: relative; display: inline-block;">
+  <!-- Avatar com neon e status -->
+  <div class="avatar-wrapper">
     <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
-      <img
-        id="discord-avatar"
-        src=""
-        alt="Avatar Discord"
-        style="width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 0 10px rgba(0,0,0,0.5); transition: transform 0.3s;"
-        onmouseover="this.style.transform='scale(1.05)'" 
-        onmouseout="this.style.transform='scale(1)'"
-      />
+      <img id="discord-avatar" src="" alt="Avatar Discord" />
     </a>
-
-    <span id="discord-status-circle"
-      style="
-        position: absolute;
-        bottom: 6px;
-        right: 6px;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        border: 3px solid #1a1a1a;
-        background-color: gray;
-        box-shadow: 0 0 6px rgba(0,0,0,0.5);
-      "
-      title="Status"
-    ></span>
+    <span id="discord-status-circle" title="Status"></span>
   </div>
 
-  <!-- Nome de exibição -->
-  <div style="margin-top: 10px; font-size: 1.6rem; font-weight: bold;" id="display-name">
-    <!-- Esse nome será atualizado pelo script -->
-    Noxy7
-  </div>
-
-  <!-- @username e #tag -->
+  <!-- Nome e @ -->
+  <div style="margin-top: 12px; font-size: 1.6rem; font-weight: bold;" id="display-name">Noxy7</div>
   <div style="font-size: 1.1rem; opacity: 0.8;">
     <span id="discord-username">@</span><span id="discord-discriminator"></span>
   </div>
 </div>
 
-
+<!-- Script de status -->
 <script>
   async function fetchDiscordStatus() {
     const userId = "278691315594559489";
@@ -340,34 +357,21 @@
       const user = data.data.discord_user;
       const status = data.data.discord_status;
 
-      // Avatar
+      // Atualiza avatar
       const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
-      const avatarEl = document.getElementById("discord-avatar");
-      if (avatarEl && avatarEl.src !== avatarUrl) {
-        avatarEl.src = avatarUrl;
-      }
+      document.getElementById("discord-avatar").src = avatarUrl;
 
       // Nome de exibição
-      const displayNameEl = document.getElementById("display-name");
-      if (displayNameEl) {
-        displayNameEl.textContent = user.global_name || user.username;
-      }
+      document.getElementById("display-name").textContent = user.global_name || user.username;
 
-      // Username com @
-      const usernameEl = document.getElementById("discord-username");
-      if (usernameEl) {
-        usernameEl.textContent = "@" + user.username;
-      }
-
-      // Discriminador (caso ainda use #0000)
-      const discriminatorEl = document.getElementById("discord-discriminator");
-      if (discriminatorEl) {
-        if (user.discriminator !== "0") {
-          discriminatorEl.textContent = "#" + user.discriminator;
-          discriminatorEl.style.display = "inline";
-        } else {
-          discriminatorEl.style.display = "none";
-        }
+      // Username + tag
+      document.getElementById("discord-username").textContent = "@" + user.username;
+      const discriminator = document.getElementById("discord-discriminator");
+      if (user.discriminator !== "0") {
+        discriminator.textContent = "#" + user.discriminator;
+        discriminator.style.display = "inline";
+      } else {
+        discriminator.style.display = "none";
       }
 
       // Status
@@ -376,43 +380,25 @@
       let statusText = "Offline";
 
       switch (status) {
-        case "online":
-          color = "#43B581";
-          statusText = "Online";
-          break;
-        case "idle":
-          color = "#FAA61A";
-          statusText = "Ausente";
-          break;
-        case "dnd":
-          color = "#F04747";
-          statusText = "Não perturbe";
-          break;
-        case "offline":
-        default:
-          color = "gray";
-          statusText = "Offline";
-          break;
+        case "online": color = "#43B581"; statusText = "Online"; break;
+        case "idle": color = "#FAA61A"; statusText = "Ausente"; break;
+        case "dnd": color = "#F04747"; statusText = "Não perturbe"; break;
+        case "offline": default: color = "gray"; statusText = "Offline"; break;
       }
 
-      if (statusCircle) {
-        statusCircle.style.backgroundColor = color;
-        statusCircle.title = statusText;
-      }
+      statusCircle.style.backgroundColor = color;
+      statusCircle.title = statusText;
 
     } catch (error) {
       console.error("Erro ao buscar status do Discord:", error);
-      const statusEl = document.getElementById("discord-status");
-      if (statusEl) {
-        statusEl.innerHTML = `<p style="color:red;">Status Discord indisponível</p>`;
-      }
+      document.getElementById("discord-status").innerHTML = `<p style="color:red;">Status Discord indisponível</p>`;
     }
   }
 
-  // Inicia e atualiza a cada 5 segundos
   fetchDiscordStatus();
   setInterval(fetchDiscordStatus, 5000);
 </script>
+
 
 <div class="tags-section" style="pointer-events: none; user-select: none;">
   <h2>𝑻𝒂𝒈𝒔</h2>

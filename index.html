@@ -175,6 +175,20 @@
       0%, 100% { box-shadow: 0 0 4px rgba(30,215,96,.7); transform: scale(1); }
       50% { box-shadow: 0 0 12px rgba(30,215,96,1); transform: scale(1.05); }
     }
+    @keyframes pulseNeon {
+  0% {
+    box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 20px #ff3333, 0 0 40px #ff3333;
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+    transform: scale(1);
+  }
+}
   </style>  
 
 <!-- Volume no canto superior esquerdo -->
@@ -475,11 +489,28 @@
     <source src="media/music.mp3" type="audio/mp3" />
   </audio>
 
-  <!-- Modal para iniciar áudio -->
-  <div id="audio-modal">
-    <img src="media/png inicial.png" alt="Logo" class="intro-logo"
+<!-- Modal para iniciar áudio -->
+<div id="audio-modal">
+  <img src="media/png inicial.png" alt="Logo" class="intro-logo"
     style="user-select: none; -webkit-user-drag: none;" draggable="false" />
-    <button style="user-select: none;" id="btn-play" aria-label="Clique para iniciar áudio">𝗖𝗹𝗶𝗾𝘂𝗲 𝗮𝗾𝘂𝗶</button>
+
+  <button id="btn-play" aria-label="Clique para iniciar áudio"
+    style="
+      user-select: none;
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: white;
+      background-color: #ff0000;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+      animation: pulseNeon 1.5s infinite;
+      cursor: pointer;
+    ">
+    𝗖𝗹𝗶𝗾𝘂𝗲 𝗮𝗾𝘂𝗶
+  </button>
+</div>
 
     <p style="
       user-select: none;

@@ -485,8 +485,8 @@
     <source src="media/music.mp3" type="audio/mp3" />
   </audio>
 
-<!-- Modal para iniciar áudio -->
-<div id="audio-modal">
+<!-- Modal para iniciar áudio e tela inicial -->
+<div id="audio-modal" style="position: relative; z-index: 10;">
   <img src="media/png inicial.png" alt="Logo" class="intro-logo"
     style="user-select: none; -webkit-user-drag: none;" draggable="false" />
 
@@ -506,27 +506,29 @@
     ">
     𝗖𝗹𝗶𝗾𝘂𝗲 𝗮𝗾𝘂𝗶
   </button>
+
+  <!-- Texto dentro do modal -->
+  <p id="credit-text" style="
+    user-select: none;
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 1.2rem;
+    margin: 0;
+    text-shadow:
+      0 0 4px #fff,
+      0 0 8px #fff,
+      0 0 16px #fff,
+      0 0 32px #fff;
+    animation: blinkNeon 1.5s infinite alternate;
+    z-index: 20;
+  ">
+    𝐒𝐢𝐭𝐞 𝐟𝐞𝐢𝐭𝐨 𝐩𝐨𝐫: 𝐍𝐨𝐱𝐲.𝐠𝐠
+  </p>
 </div>
 
-<p style="
-  user-select: none;
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: white;
-  font-size: 1.2rem;
-  margin: 0;
-  text-shadow:
-    0 0 4px #fff,
-    0 0 8px #fff,
-    0 0 16px #fff,
-    0 0 32px #fff;
-  animation: blinkNeon 1.5s infinite alternate;
-">
-  𝐒𝐢𝐭𝐞 𝐟𝐞𝐢𝐭𝐨 𝐩𝐨𝐫: 𝐍𝐨𝐱𝐲.𝐠𝐠
-</p>
-</div>
 
   <!-- Scripts -->
   <script>

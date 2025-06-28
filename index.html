@@ -281,68 +281,66 @@
 <!-- Fonte Poppins -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
-<!-- Estilo adicional -->
 <style>
-  .avatar-wrapper {
+  .avatar-container {
     position: relative;
     display: inline-block;
-    padding: 5px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(0,0,0,0.6) 40%, transparent 100%);
-    box-shadow:
-      0 0 5px #000,
-      0 0 10px #000,
-      0 0 15px rgba(67, 181, 129, 0.5),
-      0 0 20px rgba(67, 181, 129, 0.2);
-    transition: transform 0.3s;
-  }
-
-  .avatar-wrapper:hover {
-    transform: scale(1.05);
-  }
-
-  .avatar-wrapper img {
     width: 120px;
     height: 120px;
     border-radius: 50%;
+    overflow: hidden;
+    box-shadow:
+      0 0 8px #000,
+      0 0 12px #000,
+      0 0 16px #000;
+    transition: transform 0.3s ease;
+  }
+
+  .avatar-container:hover {
+    transform: scale(1.05);
+  }
+
+  #discord-avatar {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    border-radius: 50%;
     display: block;
   }
 
   #discord-status-circle {
     position: absolute;
-    bottom: 5px;
-    right: 5px;
+    bottom: 4px;
+    right: 4px;
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    border: 3px solid #1a1a1a;
     background-color: gray;
-    box-shadow: 0 0 6px rgba(0,0,0,0.5);
+    border: 3px solid #1a1a1a;
+    box-shadow: 0 0 5px rgba(0,0,0,0.8);
   }
 </style>
 
-<!-- Card do Discord -->
-<div id="discord-status" style="text-align: center; margin: 2rem 0; color: white; font-family: 'Poppins', sans-serif;">
+<!-- CARD DO DISCORD -->
+<div style="text-align: center; margin-top: 2rem; color: white; font-family: 'Poppins', sans-serif;">
+  <div style="font-size: 1.5rem; font-weight: 600; margin-bottom: 12px;">𝑫𝒊𝒔𝒄𝒐𝒓𝒅</div>
 
-  <div style="font-size: 1.4rem; font-weight: bold; margin-bottom: 10px;">𝑫𝒊𝒔𝒄𝒐𝒓𝒅</div>
-
-  <!-- Avatar com neon e status -->
-  <div class="avatar-wrapper">
+  <!-- Avatar + Status -->
+  <div class="avatar-container">
     <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
       <img id="discord-avatar" src="" alt="Avatar Discord" />
+      <span id="discord-status-circle" title="Status"></span>
     </a>
-    <span id="discord-status-circle" title="Status"></span>
   </div>
 
-  <!-- Nome e @ -->
-  <div style="margin-top: 12px; font-size: 1.6rem; font-weight: bold;" id="display-name">Noxy7</div>
+  <!-- Nome e Username -->
+  <div style="margin-top: 14px; font-size: 1.4rem; font-weight: bold;" id="display-name">Noxy7</div>
   <div style="font-size: 1.1rem; opacity: 0.8;">
     <span id="discord-username">@</span><span id="discord-discriminator"></span>
   </div>
 </div>
 
-<!-- Script de status -->
+<!-- SCRIPT -->
 <script>
   async function fetchDiscordStatus() {
     const userId = "278691315594559489";
@@ -357,15 +355,17 @@
       const user = data.data.discord_user;
       const status = data.data.discord_status;
 
-      // Atualiza avatar
+      // Avatar
       const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
       document.getElementById("discord-avatar").src = avatarUrl;
 
-      // Nome de exibição
+      // Nome
       document.getElementById("display-name").textContent = user.global_name || user.username;
 
-      // Username + tag
+      // @username
       document.getElementById("discord-username").textContent = "@" + user.username;
+
+      // Discriminador
       const discriminator = document.getElementById("discord-discriminator");
       if (user.discriminator !== "0") {
         discriminator.textContent = "#" + user.discriminator;
@@ -383,15 +383,15 @@
         case "online": color = "#43B581"; statusText = "Online"; break;
         case "idle": color = "#FAA61A"; statusText = "Ausente"; break;
         case "dnd": color = "#F04747"; statusText = "Não perturbe"; break;
-        case "offline": default: color = "gray"; statusText = "Offline"; break;
+        case "offline":
+        default: color = "gray"; statusText = "Offline"; break;
       }
 
       statusCircle.style.backgroundColor = color;
       statusCircle.title = statusText;
 
-    } catch (error) {
-      console.error("Erro ao buscar status do Discord:", error);
-      document.getElementById("discord-status").innerHTML = `<p style="color:red;">Status Discord indisponível</p>`;
+    } catch (err) {
+      console.error("Erro ao buscar dados do Discord:", err);
     }
   }
 

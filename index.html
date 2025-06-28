@@ -278,35 +278,59 @@
       <!-- Imagem extra que será trocada para GIF -->
       <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra" />
 
+<!-- Animação Neon Preta -->
+<style>
+  @keyframes pulseNeonBlack {
+    0%, 100% {
+      box-shadow:
+        0 0 5px #000,
+        0 0 10px #000,
+        0 0 15px #000;
+    }
+    50% {
+      box-shadow:
+        0 0 2px #000,
+        0 0 6px #000,
+        0 0 10px #000;
+    }
+  }
+
+  .neon-avatar {
+    animation: pulseNeonBlack 2s infinite;
+  }
+
+  .neon-status {
+    animation: pulseNeonBlack 2s infinite;
+  }
+</style>
+
 <!-- Discord perfil bonito com nome de exibição + círculo de status no avatar -->
 <div id="discord-status" style="text-align: center; margin: 2rem 0; color: white; font-family: Arial, sans-serif; position: relative;">
 
-  <!-- Título "Discord" -->
+  <!-- Título -->
   <div style="font-size: 1.4rem; font-weight: bold; margin-bottom: 10px;">𝑫𝒊𝒔𝒄𝒐𝒓𝒅</div>
 
-  <!-- Avatar com círculo de status -->
+  <!-- Avatar + status -->
   <div style="position: relative; display: inline-block;">
     <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
       <img
         id="discord-avatar"
+        class="neon-avatar"
         src=""
         alt="Avatar Discord"
         style="
           width: 120px;
           height: 120px;
           border-radius: 50%;
-          box-shadow:
-            0 0 5px #000,
-            0 0 10px #000,
-            0 0 15px #000;
           transition: transform 0.3s;
         "
-        onmouseover="this.style.transform='scale(1.05)'" 
+        onmouseover="this.style.transform='scale(1.05)'"
         onmouseout="this.style.transform='scale(1)'"
       />
     </a>
 
     <span id="discord-status-circle"
+      class="neon-status"
       style="
         position: absolute;
         bottom: 6px;
@@ -316,17 +340,13 @@
         border-radius: 50%;
         border: 3px solid #1a1a1a;
         background-color: gray;
-        box-shadow:
-          0 0 3px #000,
-          0 0 6px #000,
-          0 0 9px #000;
       "
       title="Status"
     ></span>
   </div>
 
-  <!-- Nome de exibição -->
-  <div style="margin-top: 10px; font-size: 1.6rem; font-weight: bold;" id="display-name">
+  <!-- Nome -->
+  <div id="display-name" style="margin-top: 10px; font-size: 1.6rem; font-weight: bold;">
     Noxy7
   </div>
 
@@ -357,13 +377,13 @@
         avatarEl.src = avatarUrl;
       }
 
-      // Nome de exibição
+      // Nome
       const displayNameEl = document.getElementById("display-name");
       if (displayNameEl) {
         displayNameEl.textContent = user.global_name || user.username;
       }
 
-      // Username com @
+      // @username
       const usernameEl = document.getElementById("discord-username");
       if (usernameEl) {
         usernameEl.textContent = "@" + user.username;
@@ -386,11 +406,15 @@
       let statusText = "Offline";
 
       switch (status) {
-        case "online": color = "#43B581"; statusText = "Online"; break;
-        case "idle": color = "#FAA61A"; statusText = "Ausente"; break;
-        case "dnd": color = "#F04747"; statusText = "Não perturbe"; break;
+        case "online":
+          color = "#43B581"; statusText = "Online"; break;
+        case "idle":
+          color = "#FAA61A"; statusText = "Ausente"; break;
+        case "dnd":
+          color = "#F04747"; statusText = "Não perturbe"; break;
         case "offline":
-        default: color = "gray"; statusText = "Offline"; break;
+        default:
+          color = "gray"; statusText = "Offline"; break;
       }
 
       if (statusCircle) {

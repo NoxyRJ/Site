@@ -282,87 +282,79 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
 <!-- Container centralizado -->
-<div style="display: flex; flex-direction: column; align-items: center; font-family: 'Poppins', sans-serif; color: white; margin-top: 3rem;">
+<div style="display: flex; flex-direction: column; align-items: center; font-family: 'Poppins', sans-serif; color: white; margin-top: 3rem; gap: 16px;">
 
   <!-- Card Discord -->
   <div id="discord-card" style="
-    background: linear-gradient(135deg, #2a2c39, #1c1d26);
+    background: rgba(67, 181, 129, 0.15);
     border-radius: 16px;
     width: 320px;
-    padding: 24px 30px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-    position: relative;
-    overflow: hidden;
-    text-align: center;
+    padding: 14px 20px;
+    box-shadow: 0 0 15px rgba(67,181,129,0.35);
+    display: flex;
+    align-items: center;
+    gap: 18px;
   ">
-
-    <!-- Ícone Discord topo direito -->
-    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord" style="
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 26px;
-      height: 26px;
-      opacity: 0.7;
-      filter: drop-shadow(0 0 1px rgba(0,0,0,0.7));
-    ">
-
-    <!-- Avatar + Status -->
-    <div style="position: relative; display: inline-block; margin-bottom: 18px;">
-      <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer" style="display: block; border-radius: 50%; overflow: hidden; width: 120px; height: 120px; box-shadow: 0 0 20px rgba(0,0,0,0.6);">
-        <img
-          id="discord-avatar"
-          src=""
-          alt="Avatar Discord"
-          style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; transition: transform 0.3s ease;"
-          onmouseover="this.style.transform='scale(1.07)'"
-          onmouseout="this.style.transform='scale(1)'"
-        />
-      </a>
+    <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer" style="display: block; border-radius: 50%; overflow: hidden; width: 70px; height: 70px; flex-shrink: 0; box-shadow: 0 0 10px rgba(0,0,0,0.5);">
+      <img
+        id="discord-avatar"
+        src=""
+        alt="Avatar Discord"
+        style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%; transition: transform 0.3s ease;"
+        onmouseover="this.style.transform='scale(1.07)'"
+        onmouseout="this.style.transform='scale(1)'"
+      />
       <span id="discord-status-circle" style="
         position: absolute;
-        bottom: 10px;
-        right: 10px;
-        width: 22px;
-        height: 22px;
+        bottom: 6px;
+        right: 6px;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
-        border: 3px solid #1c1d26;
+        border: 2.5px solid rgba(67, 181, 129, 0.15);
         background-color: gray;
-        box-shadow: 0 0 8px rgba(0,0,0,0.7);
+        box-shadow: 0 0 6px rgba(0,0,0,0.5);
         transition: background-color 0.3s ease;
       " title="Status"></span>
-    </div>
+    </a>
 
-    <!-- Nome do usuário -->
-    <div id="display-name" style="font-size: 1.5rem; font-weight: 700; margin-bottom: 4px;"></div>
-
-    <!-- Username + discriminador -->
-    <div style="font-size: 1.1rem; opacity: 0.7; margin-bottom: 14px;">
-      <span id="discord-username"></span><span id="discord-discriminator"></span>
-    </div>
-
-    <!-- Status Spotify -->
-    <div id="spotify-status" style="
-      margin-top: 10px;
-      padding: 14px 18px;
-      background: rgba(67, 181, 129, 0.15);
-      border-radius: 16px;
-      box-shadow: 0 0 15px rgba(67,181,129,0.35);
-      max-width: 280px;
-      margin-left: auto;
-      margin-right: auto;
-      display: none;
-      align-items: center;
-      font-weight: 600;
-      font-size: 1rem;
-      color: #43B581;
-      user-select: none;
-    ">
-      <img id="spotify-album-art" src="" alt="Álbum Spotify" style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover; margin-right: 16px;">
-      <div style="flex: 1; text-align: left;">
-        <div id="spotify-song" style="font-weight: 700;"></div>
-        <div id="spotify-artist" style="font-weight: 400; opacity: 0.85; font-size: 0.95rem; color: #2f6d45;"></div>
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+      <div id="display-name" style="font-weight: 600; font-size: 1.15rem; line-height: 1.2;"></div>
+      <div style="font-weight: 400; opacity: 0.75; font-size: 0.95rem; margin-top: 2px;">
+        <span id="discord-username"></span><span id="discord-discriminator"></span>
       </div>
+    </div>
+
+    <!-- Ícone Discord no canto direito -->
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord" style="
+      width: 24px;
+      height: 24px;
+      opacity: 0.7;
+      filter: drop-shadow(0 0 1px rgba(0,0,0,0.5));
+      flex-shrink: 0;
+    ">
+  </div>
+
+  <!-- Card Spotify -->
+  <div id="spotify-status" style="
+    background: rgba(67, 181, 129, 0.15);
+    border-radius: 16px;
+    width: 320px;
+    padding: 14px 20px;
+    box-shadow: 0 0 15px rgba(67,181,129,0.35);
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #43B581;
+    user-select: none;
+    justify-content: flex-start;
+  ">
+    <img id="spotify-album-art" src="" alt="Álbum Spotify" style="width: 70px; height: 70px; border-radius: 12px; object-fit: cover; flex-shrink: 0;">
+    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; text-align: left;">
+      <div id="spotify-song" style="font-weight: 700;"></div>
+      <div id="spotify-artist" style="font-weight: 400; opacity: 0.85; font-size: 0.95rem; color: #2f6d45;"></div>
     </div>
   </div>
 
@@ -447,6 +439,7 @@
   fetchDiscordStatus();
   setInterval(fetchDiscordStatus, 5000);
 </script>
+
 
 
 <div class="tags-section" style="pointer-events: none; user-select: none;">

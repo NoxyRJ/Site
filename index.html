@@ -234,7 +234,8 @@
       <p style="user-select: none;">* Eu não te conheço, então não entrosa. *</p>
       
       <!-- Imagem extra que será trocada para GIF -->
-      <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra" />
+      <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra"
+        style="user-select: none; -webkit-user-drag: none;" draggable="false" />
 
 <!-- Estilo do Neon Preta Pulsante -->
 <style>
@@ -460,7 +461,7 @@
           />
           <div class="playlist-info">
             <h3 style="user-select: none;">Minha Playlist</h3>
-            <button class="listen-btn">Ouvir no Spotify</button>
+            <button style="user-select: none;" class="listen-btn">Ouvir no Spotify</button>
           </div>
         </div>
       </div>
@@ -477,7 +478,7 @@
     <img src="media/png inicial.png" alt="Logo" class="intro-logo" />
     <button id="btn-play" aria-label="Clique para iniciar áudio">𝗖𝗹𝗶𝗾𝘂𝗲 𝗮𝗾𝘂𝗶</button>
 
-    <p style="
+    <p style="user-select: none;" style="
       position: absolute;
       bottom: 20px;
       left: 50%;
@@ -510,16 +511,15 @@ music.volume = 0.5;
 
 btnPlay.addEventListener('click', () => {
   music.play().then(() => {
-    audioModal.style.display = 'none';      // Esconde o modal
-    volumeBox.style.display = 'flex';       // Mostra o volume
-    overlay.classList.add("show");          // <-- Adiciona classe para mostrar o overlay
-    document.getElementById("main-content").classList.add("show"); // Também mostra o conteúdo
+    audioModal.style.display = 'none';
+    volumeBox.style.display = 'flex';
+    overlay.classList.add("show");
+    document.getElementById("main-content").classList.add("show");
   }).catch(() => {
     alert('Não foi possível iniciar o áudio automaticamente.');
   });
 });
 
-// Botão para ligar/desligar som
 volumeBtn.addEventListener('click', () => {
   if (music.paused) {
     music.play();

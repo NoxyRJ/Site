@@ -486,13 +486,14 @@
   </audio>
 
 <!-- Modal para iniciar áudio -->
-<div id="audio-modal" style="position: relative; z-index: 10;">
+<div id="audio-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
   <img src="media/png inicial.png" alt="Logo" class="intro-logo"
     style="user-select: none; -webkit-user-drag: none;" draggable="false" />
 
   <button id="btn-play" aria-label="Clique para iniciar áudio"
     style="
       user-select: none;
+      margin-top: 20px;
       padding: 12px 20px;
       font-size: 1rem;
       font-weight: bold;
@@ -523,28 +524,27 @@
       0 0 16px #fff,
       0 0 32px #fff;
     animation: blinkNeon 1.5s infinite alternate;
-    z-index: 20;
   ">
     𝐒𝐢𝐭𝐞 𝐟𝐞𝐢𝐭𝐨 𝐩𝐨𝐫: 𝐍𝐨𝐱𝐲.𝐠𝐠
   </p>
 </div>
 
-<!-- Áudio (opcional) -->
 <audio id="background-audio" src="media/seu-audio.mp3" preload="auto"></audio>
 
 <script>
-  const btnPlay = document.getElementById('btn-play');
-  const creditText = document.getElementById('credit-text');
-  const audio = document.getElementById('background-audio');
+  window.addEventListener("DOMContentLoaded", () => {
+    const btnPlay = document.getElementById('btn-play');
+    const modal = document.getElementById('audio-modal');
+    const audio = document.getElementById('background-audio');
 
-  btnPlay.addEventListener('click', () => {
-    // Esconde o botão e o texto juntos
-    btnPlay.style.display = 'none';
-    creditText.style.display = 'none';
+    btnPlay.addEventListener('click', () => {
+      // Oculta todo o overlay com botão + texto juntos
+      modal.style.display = 'none';
 
-    // Inicia o áudio
-    audio.play().catch(e => {
-      console.warn("Erro ao iniciar áudio:", e);
+      // Inicia o áudio
+      audio.play().catch(err => {
+        console.warn("Erro ao iniciar áudio:", err);
+      });
     });
   });
 </script>

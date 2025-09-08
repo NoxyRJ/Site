@@ -676,16 +676,22 @@ volumeSlider.addEventListener('input', () => {
             const musicDiv = document.createElement("div");
             musicDiv.id = "musicInfo";
             musicDiv.style.display = "flex";
-            musicDiv.style.flexDirection = "column"; // imagem em cima, texto embaixo
-            musicDiv.style.alignItems = "center"; // centraliza
+            musicDiv.style.flexDirection = "column"; // título em cima, depois imagem e textos
+            musicDiv.style.alignItems = "center"; 
             musicDiv.style.justifyContent = "center";
             musicDiv.style.marginTop = "20px";
             musicDiv.style.textAlign = "center";
-            musicDiv.style.color = "white"; // fonte branca
+            musicDiv.style.color = "white"; 
   
             musicDiv.innerHTML = `
+              <!-- Título -->
+              <div style="font-size: 1.4rem; user-select: none; font-weight: bold; margin-bottom: 10px;">
+                𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
+              </div>
+  
               <img src="${data.thumbnail_url}" alt="Capa da música" 
                 style="width:150px; height:150px; border-radius:12px; margin-bottom:10px;">
+  
               <div class="music-data">
                 <div style="font-size:18px; font-weight:bold; color:white;">${data.title}</div>
                 <div style="font-size:14px; color:white; opacity:0.8;">${data.author_name}</div>
@@ -712,7 +718,6 @@ volumeSlider.addEventListener('input', () => {
     });
   })();
   </script>
-  
 
 
 </body>

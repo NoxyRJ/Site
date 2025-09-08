@@ -663,7 +663,7 @@ volumeSlider.addEventListener('input', () => {
 <script>
   (function() {
     // 🔹 Coloque aqui o link da música do Spotify
-    const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=48f8b33ae11f4262";
+    const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7861af7accc04585";
   
     function loadSpotifySong(url) {
       try {
@@ -676,15 +676,19 @@ volumeSlider.addEventListener('input', () => {
             const musicDiv = document.createElement("div");
             musicDiv.id = "musicInfo";
             musicDiv.style.display = "flex";
-            musicDiv.style.alignItems = "center";
-            musicDiv.style.gap = "12px";
-            musicDiv.style.marginTop = "10px"; // espaço abaixo dos outros itens
+            musicDiv.style.flexDirection = "column"; // imagem em cima, texto embaixo
+            musicDiv.style.alignItems = "center"; // centraliza
+            musicDiv.style.justifyContent = "center";
+            musicDiv.style.marginTop = "20px";
+            musicDiv.style.textAlign = "center";
+            musicDiv.style.color = "white"; // fonte branca
   
             musicDiv.innerHTML = `
-              <img src="${data.thumbnail_url}" alt="Capa da música" style="width:60px; height:60px; border-radius:8px;">
+              <img src="${data.thumbnail_url}" alt="Capa da música" 
+                style="width:150px; height:150px; border-radius:12px; margin-bottom:10px;">
               <div class="music-data">
-                <div style="font-size:16px; font-weight:bold;">${data.title}</div>
-                <div style="font-size:14px; color:#bbb;">${data.author_name}</div>
+                <div style="font-size:18px; font-weight:bold; color:white;">${data.title}</div>
+                <div style="font-size:14px; color:white; opacity:0.8;">${data.author_name}</div>
               </div>
             `;
   
@@ -707,7 +711,8 @@ volumeSlider.addEventListener('input', () => {
       loadSpotifySong(spotifyUrl);
     });
   })();
-  </script>  
+  </script>
+  
 
 
 </body>

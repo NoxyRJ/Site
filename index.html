@@ -693,34 +693,66 @@ function getDominantColor(img, callback) {
   callback(`rgb(${r}, ${g}, ${b})`);
 }
 
-// Supondo que a imagem já esteja carregada
-const profileImg = document.querySelector("#musicInfo img"); // ou outra imagem
+function getDominantColor(img, callback) {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = img.naturalWidth;
+  canvas.height = img.naturalHeight;
+  ctx.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+  let r = 0, g = 0, b = 0, count = 0;
+  for (let i = 0; i < imageData.length; i += 4) {
+    r += imageData[i];
+    g += imageData[i + 1];
+    b += imageData[i + 2];
+    count++;
+  }
+  r = Math.round(r / count);
+  g = Math.round(g / count);
+  b = Math.round(b / count);
+
+  callback(`rgb(${r}, ${g}, ${b})`);
+}
+
+// Seleciona a imagem que você quer usar como base para a cor
+const profileImg = document.querySelector("#musicInfo img"); 
+
 if (profileImg) {
-  profileImg.addEventListener("load", () => {
-    getDominantColor(profileImg, (color) => {
-      const neonStyle = document.createElement("style");
-      neonStyle.innerHTML = `
-        @keyframes pulseNeonDynamic {
-          0%, 100% {
-            box-shadow:
-              0 0 8px ${color},
-              0 0 16px ${color},
-              0 0 24px ${color};
-          }
-          50% {
-            box-shadow:
-              0 0 4px ${color},
-              0 0 10px ${color},
-              0 0 15px ${color};
-          }
-        }
-        .neon-sync {
-          animation: pulseNeonDynamic 2s infinite ease-in-out;
-        }
-      `;
-      document.head.appendChild(neonStyle);
-      profileImg.classList.add("neon-sync"); // aplica a animação
+  if (profileImg.complete) {
+    // se a imagem já carregou
+    applyNeon(profileImg);
+  } else {
+    profileImg.addEventListener("load", () => {
+      applyNeon(profileImg);
     });
+  }
+}
+
+function applyNeon(img) {
+  getDominantColor(img, (color) => {
+    const neonStyle = document.createElement("style");
+    neonStyle.innerHTML = `
+      @keyframes pulseNeonDynamic {
+        0%, 100% {
+          box-shadow:
+            0 0 8px ${color},
+            0 0 16px ${color},
+            0 0 24px ${color};
+        }
+        50% {
+          box-shadow:
+            0 0 4px ${color},
+            0 0 10px ${color},
+            0 0 15px ${color};
+        }
+      }
+      .neon-sync {
+        animation: pulseNeonDynamic 2s infinite ease-in-out;
+      }
+    `;
+    document.head.appendChild(neonStyle);
+    img.classList.add("neon-sync"); // aplica a animação
   });
 }
 

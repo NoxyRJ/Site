@@ -675,7 +675,7 @@ volumeSlider.addEventListener('input', () => {
         fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
           .then(res => res.json())
           .then(data => {
-
+  
             const title = data.title || "Música desconhecida";
             const artist = (data.author_name && data.author_name.trim() !== "") 
               ? data.author_name 
@@ -691,14 +691,17 @@ volumeSlider.addEventListener('input', () => {
             musicDiv.style.textAlign = "center";
             musicDiv.style.color = "white"; 
   
+            // Envolvendo a imagem em um link
             musicDiv.innerHTML = `
               <!-- Título -->
               <div style="font-size: 1.4rem; user-select: none; font-weight: bold; margin-bottom: 10px;">
                 𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
               </div>
   
-              <img src="${data.thumbnail_url}" alt="Capa da música" 
-                style="width:150px; height:150px; border-radius:12px; margin-bottom:10px;">
+              <a href="${spotifyUrl}" target="_blank" rel="noopener noreferrer">
+                <img src="${data.thumbnail_url}" alt="Capa da música" 
+                  style="width:150px; height:150px; border-radius:12px; margin-bottom:10px; cursor:pointer;">
+              </a>
   
               <div class="music-data">
                 <div style="font-size:18px; font-weight:bold; color:white;">${title}</div>

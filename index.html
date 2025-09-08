@@ -660,44 +660,54 @@ volumeSlider.addEventListener('input', () => {
   };
 </script>
 
-<!-- Dentro do overlay principal -->
-<div id="musicInfo" style="display:none; align-items:center; gap:12px;">
-  <img id="cover" src="" alt="Capa da música" style="width:60px; height:60px; border-radius:8px;">
-  <div class="music-data">
-    <div id="title" style="font-size:16px; font-weight:bold;">Título da Música</div>
-    <div id="artist" style="font-size:14px; color:#bbb;">Artista</div>
-  </div>
-</div>
-
 <script>
-(function() {
-  // 🔹 Coloque aqui o link da música do Spotify
-  const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7ff8e4d75c1b4c94";
-
-  function loadSpotifySong(url) {
-    try {
-      const trackId = url.split("/track/")[1].split("?")[0];
-
-      fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("cover").src = data.thumbnail_url;
-          document.getElementById("title").textContent = data.title;
-          document.getElementById("artist").textContent = data.author_name;
-          document.getElementById("musicInfo").style.display = "flex"; // exibe o bloco
-        })
-        .catch(err => console.error("Erro ao buscar música:", err));
-    } catch (e) {
-      console.error("Link inválido:", e);
+  (function() {
+    // 🔹 Coloque aqui o link da música do Spotify
+    const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=48f8b33ae11f4262";
+  
+    function loadSpotifySong(url) {
+      try {
+        const trackId = url.split("/track/")[1].split("?")[0];
+  
+        fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
+          .then(res => res.json())
+          .then(data => {
+            // cria o bloco de música
+            const musicDiv = document.createElement("div");
+            musicDiv.id = "musicInfo";
+            musicDiv.style.display = "flex";
+            musicDiv.style.alignItems = "center";
+            musicDiv.style.gap = "12px";
+            musicDiv.style.marginTop = "10px"; // espaço abaixo dos outros itens
+  
+            musicDiv.innerHTML = `
+              <img src="${data.thumbnail_url}" alt="Capa da música" style="width:60px; height:60px; border-radius:8px;">
+              <div class="music-data">
+                <div style="font-size:16px; font-weight:bold;">${data.title}</div>
+                <div style="font-size:14px; color:#bbb;">${data.author_name}</div>
+              </div>
+            `;
+  
+            // insere dentro do overlay principal
+            const overlay = document.getElementById("overlay");
+            if (overlay) {
+              overlay.appendChild(musicDiv);
+            } else {
+              console.error("Overlay principal não encontrado! Verifique o id.");
+            }
+          })
+          .catch(err => console.error("Erro ao buscar música:", err));
+      } catch (e) {
+        console.error("Link inválido:", e);
+      }
     }
-  }
-
-  // Executa assim que o site carregar
-  document.addEventListener("DOMContentLoaded", () => {
-    loadSpotifySong(spotifyUrl);
-  });
-})();
-</script>
+  
+    // Executa assim que o site carregar
+    document.addEventListener("DOMContentLoaded", () => {
+      loadSpotifySong(spotifyUrl);
+    });
+  })();
+  </script>  
 
 
 </body>

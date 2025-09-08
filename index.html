@@ -666,7 +666,7 @@ volumeSlider.addEventListener('input', () => {
     const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7861af7accc04585";
   
     // 🔹 Se o Spotify não retornar o artista, você pode definir manualmente aqui:
-    const manualArtist = "Matue"; // << coloque o nome que quiser
+    const manualArtist = "isotopxs";
   
     function loadSpotifySong(url) {
       try {
@@ -675,11 +675,11 @@ volumeSlider.addEventListener('input', () => {
         fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
           .then(res => res.json())
           .then(data => {
-            // pega os dados
+
             const title = data.title || "Música desconhecida";
             const artist = (data.author_name && data.author_name.trim() !== "") 
               ? data.author_name 
-              : manualArtist; // usa o manual se não tiver artista
+              : manualArtist;
   
             const musicDiv = document.createElement("div");
             musicDiv.id = "musicInfo";

@@ -36,10 +36,11 @@
     }
     .overlay {
   position: fixed;
-  inset: 0;
-  margin: auto;
+  top: 20px; /* distância do topo da tela */
+  left: 50%;
+  transform: translateX(-50%); /* centraliza horizontalmente */
   max-width: 550px;
-  max-height: 80vh; /* reduz a altura do overlay para 80% da tela */
+  max-height: 80vh; /* altura máxima */
   background: rgba(0,0,0,0.3);
   border-radius: 16px;
   opacity: 0;
@@ -51,8 +52,9 @@
   box-shadow: 0 0 8px rgba(0,0,0,.9), inset 0 0 15px rgba(0,0,0,.8);
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,.2) transparent;
-  z-index: 5; /* mantém abaixo de volume/visitas */
+  z-index: 5;
 }
+e qual
 
     .overlay::-webkit-scrollbar {
       width: 8px;

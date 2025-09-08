@@ -660,100 +660,97 @@ volumeSlider.addEventListener('input', () => {
   };
 </script>
 
-<script>
-  (function() {
-  
-    const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7861af7accc04585";
-  
-    // 🔹 Se o Spotify não retornar o artista, você pode definir manualmente aqui:
-    const manualArtist = "isotopxs";
-  
-    // Adiciona estilo do Neon Branco Pulsante + pulsar pra frente
-    const neonStyle = document.createElement("style");
-    neonStyle.innerHTML = `
-      @keyframes pulseNeonWhite {
-        0%, 100% {
-          box-shadow:
-            0 0 8px #fff,
-            0 0 16px #fff,
-            0 0 24px #fff;
-          transform: scale(1);
-        }
-        50% {
-          box-shadow:
-            0 0 4px #fff,
-            0 0 10px #fff,
-            0 0 15px #fff;
-          transform: scale(1.1);
-        }
-      }
-      .neon-sync {
-        animation: pulseNeonWhite 2s infinite ease-in-out;
-        border-radius: 12px;
-      }
-    `;
-    document.head.appendChild(neonStyle);
-  
-    function loadSpotifySong(url) {
-      try {
-        const trackId = url.split("/track/")[1].split("?")[0];
-  
-        fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
-          .then(res => res.json())
-          .then(data => {
-  
-            const title = data.title || "Música desconhecida";
-            const artist = (data.author_name && data.author_name.trim() !== "") 
-              ? data.author_name 
-              : manualArtist;
-  
-            const musicDiv = document.createElement("div");
-            musicDiv.id = "musicInfo";
-            musicDiv.style.display = "flex";
-            musicDiv.style.flexDirection = "column";
-            musicDiv.style.alignItems = "center"; 
-            musicDiv.style.justifyContent = "center";
-            musicDiv.style.marginTop = "20px";
-            musicDiv.style.textAlign = "center";
-            musicDiv.style.color = "white"; 
-  
-            // Envolvendo a imagem em um link e adicionando classe neon-sync
-            musicDiv.innerHTML = `
-              <!-- Título -->
-              <div style="font-size: 1.4rem; user-select: none; font-weight: bold; margin-bottom: 10px;">
-                𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
-              </div>
-  
-              <a href="${spotifyUrl}" target="_blank" rel="noopener noreferrer">
-                <img src="${data.thumbnail_url}" alt="Capa da música" class="neon-sync"
-                  style="width:150px; height:150px; margin-bottom:10px; cursor:pointer;">
-              </a>
-  
-              <div class="music-data">
-                <div style="font-size:18px; font-weight:bold; color:white;">${title}</div>
-                <div style="font-size:14px; color:white; opacity:0.8;">${artist}</div>
-              </div>
-            `;
-  
-            const overlay = document.getElementById("overlay");
-            if (overlay) {
-              overlay.appendChild(musicDiv);
-            } else {
-              console.error("Overlay principal não encontrado! Verifique o id.");
-            }
-          })
-          .catch(err => console.error("Erro ao buscar música:", err));
-      } catch (e) {
-        console.error("Link inválido:", e);
-      }
+<!-- Estilo do Neon Preto Pulsante -->
+<style>
+  @keyframes pulseNeonBlack {
+    0%, 100% {
+      box-shadow:
+        0 0 8px #000,
+        0 0 16px #000,
+        0 0 24px #000;
     }
-  
-    document.addEventListener("DOMContentLoaded", () => {
-      loadSpotifySong(spotifyUrl);
-    });
-  })();
-  </script>
-  
+    50% {
+      box-shadow:
+        0 0 4px #000,
+        0 0 10px #000,
+        0 0 15px #000;
+    }
+  }
+
+  .neon-sync {
+    animation: pulseNeonBlack 2s infinite ease-in-out;
+    border-radius: 12px; /* mantém o arredondado */
+  }
+</style>
+
+<script>
+(function() {
+
+  const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7861af7accc04585";
+
+  // 🔹 Se o Spotify não retornar o artista, você pode definir manualmente aqui:
+  const manualArtist = "isotopxs";
+
+  function loadSpotifySong(url) {
+    try {
+      const trackId = url.split("/track/")[1].split("?")[0];
+
+      fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
+        .then(res => res.json())
+        .then(data => {
+
+          const title = data.title || "Música desconhecida";
+          const artist = (data.author_name && data.author_name.trim() !== "") 
+            ? data.author_name 
+            : manualArtist;
+
+          const musicDiv = document.createElement("div");
+          musicDiv.id = "musicInfo";
+          musicDiv.style.display = "flex";
+          musicDiv.style.flexDirection = "column";
+          musicDiv.style.alignItems = "center"; 
+          musicDiv.style.justifyContent = "center";
+          musicDiv.style.marginTop = "20px";
+          musicDiv.style.textAlign = "center";
+          musicDiv.style.color = "white"; 
+
+          // Envolvendo a imagem em um link e adicionando a classe neon-sync
+          musicDiv.innerHTML = `
+            <!-- Título -->
+            <div style="font-size: 1.4rem; user-select: none; font-weight: bold; margin-bottom: 10px;">
+              𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
+            </div>
+
+            <a href="${spotifyUrl}" target="_blank" rel="noopener noreferrer">
+              <img src="${data.thumbnail_url}" alt="Capa da música" class="neon-sync"
+                style="width:150px; height:150px; margin-bottom:10px; cursor:pointer;">
+            </a>
+
+            <div class="music-data">
+              <div style="font-size:18px; font-weight:bold; color:white;">${title}</div>
+              <div style="font-size:14px; color:white; opacity:0.8;">${artist}</div>
+            </div>
+          `;
+
+          const overlay = document.getElementById("overlay");
+          if (overlay) {
+            overlay.appendChild(musicDiv);
+          } else {
+            console.error("Overlay principal não encontrado! Verifique o id.");
+          }
+        })
+        .catch(err => console.error("Erro ao buscar música:", err));
+    } catch (e) {
+      console.error("Link inválido:", e);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadSpotifySong(spotifyUrl);
+  });
+})();
+</script>
+
 
 
 </body>

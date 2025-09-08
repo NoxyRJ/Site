@@ -660,5 +660,83 @@ volumeSlider.addEventListener('input', () => {
   };
 </script>
 
+<!-- Overlay da Música -->
+<div class="music-overlay" id="musicOverlay" style="display:none;">
+  <img id="cover" src="" alt="Capa da música">
+  <div class="music-info">
+    <div class="title" id="title">Título da Música</div>
+    <div class="artist" id="artist">Artista</div>
+  </div>
+</div>
+
+<style>
+  .music-overlay {
+    position: absolute;
+    top: 60px; /* abaixo do controle de volume */
+    left: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0,0,0,0.6);
+    padding: 10px 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    color: white;
+    font-family: Arial, sans-serif;
+    z-index: 10000; /* sempre na frente */
+  }
+
+  .music-overlay img {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+  }
+
+  .music-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .music-info .title {
+    font-size: 16px;
+    font-weight: bold;
+  }
+
+  .music-info .artist {
+    font-size: 14px;
+    color: #bbb;
+  }
+</style>
+
+<script>
+(function() {
+  // 🔹 Coloque aqui o link da música do Spotify
+  const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7ff8e4d75c1b4c94";
+
+  function loadSpotifySong(url) {
+    try {
+      const trackId = url.split("/track/")[1].split("?")[0];
+
+      fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("cover").src = data.thumbnail_url;
+          document.getElementById("title").textContent = data.title;
+          document.getElementById("artist").textContent = data.author_name;
+          document.getElementById("musicOverlay").style.display = "flex";
+        })
+        .catch(err => console.error("Erro ao buscar música:", err));
+    } catch (e) {
+      console.error("Link inválido:", e);
+    }
+  }
+
+  // Executa assim que o site carregar
+  document.addEventListener("DOMContentLoaded", () => {
+    loadSpotifySong(spotifyUrl);
+  });
+})();
+</script>
+
 </body>
 </html>

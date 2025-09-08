@@ -660,53 +660,14 @@ volumeSlider.addEventListener('input', () => {
   };
 </script>
 
-<!-- Overlay da Música -->
-<div class="music-overlay" id="musicOverlay" style="display:none;">
-  <img id="cover" src="" alt="Capa da música">
-  <div class="music-info">
-    <div class="title" id="title">Título da Música</div>
-    <div class="artist" id="artist">Artista</div>
+<!-- Dentro do overlay principal -->
+<div id="musicInfo" style="display:none; align-items:center; gap:12px;">
+  <img id="cover" src="" alt="Capa da música" style="width:60px; height:60px; border-radius:8px;">
+  <div class="music-data">
+    <div id="title" style="font-size:16px; font-weight:bold;">Título da Música</div>
+    <div id="artist" style="font-size:14px; color:#bbb;">Artista</div>
   </div>
 </div>
-
-<style>
-  .music-overlay {
-    position: absolute;
-    top: 60px; /* abaixo do controle de volume */
-    left: 10px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(0,0,0,0.6);
-    padding: 10px 15px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-    color: white;
-    font-family: Arial, sans-serif;
-    z-index: 10000; /* sempre na frente */
-  }
-
-  .music-overlay img {
-    width: 60px;
-    height: 60px;
-    border-radius: 8px;
-  }
-
-  .music-info {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .music-info .title {
-    font-size: 16px;
-    font-weight: bold;
-  }
-
-  .music-info .artist {
-    font-size: 14px;
-    color: #bbb;
-  }
-</style>
 
 <script>
 (function() {
@@ -723,7 +684,7 @@ volumeSlider.addEventListener('input', () => {
           document.getElementById("cover").src = data.thumbnail_url;
           document.getElementById("title").textContent = data.title;
           document.getElementById("artist").textContent = data.author_name;
-          document.getElementById("musicOverlay").style.display = "flex";
+          document.getElementById("musicInfo").style.display = "flex"; // exibe o bloco
         })
         .catch(err => console.error("Erro ao buscar música:", err));
     } catch (e) {
@@ -737,6 +698,7 @@ volumeSlider.addEventListener('input', () => {
   });
 })();
 </script>
+
 
 </body>
 </html>

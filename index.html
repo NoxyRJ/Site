@@ -668,28 +668,61 @@ volumeSlider.addEventListener('input', () => {
     // 🔹 Se o Spotify não retornar o artista, você pode definir manualmente aqui:
     const manualArtist = "isotopxs";
   
-// Adiciona estilo do Neon Branco Pulsante dinamicamente
-const neonStyle = document.createElement("style");
-neonStyle.innerHTML = `
-  @keyframes pulseNeonWhite {
-    0%, 100% {
-      box-shadow:
-        0 0 8px #fff,
-        0 0 16px #fff,
-        0 0 24px #fff;
-    }
-    50% {
-      box-shadow:
-        0 0 4px #fff,
-        0 0 10px #fff,
-        0 0 15px #fff;
-    }
+// Função para extrair a cor dominante de uma imagem
+function getDominantColor(img, callback) {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = img.width;
+  canvas.height = img.height;
+  ctx.drawImage(img, 0, 0, img.width, img.height);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+  let r = 0, g = 0, b = 0, count = 0;
+
+  for (let i = 0; i < imageData.length; i += 4) {
+    r += imageData[i];
+    g += imageData[i + 1];
+    b += imageData[i + 2];
+    count++;
   }
-  .neon-sync {
-    animation: pulseNeonWhite 2s infinite ease-in-out;
-  }
-`;
-document.head.appendChild(neonStyle);
+
+  r = Math.round(r / count);
+  g = Math.round(g / count);
+  b = Math.round(b / count);
+
+  callback(`rgb(${r}, ${g}, ${b})`);
+}
+
+// Supondo que a imagem já esteja carregada
+const profileImg = document.querySelector("#musicInfo img"); // ou outra imagem
+if (profileImg) {
+  profileImg.addEventListener("load", () => {
+    getDominantColor(profileImg, (color) => {
+      const neonStyle = document.createElement("style");
+      neonStyle.innerHTML = `
+        @keyframes pulseNeonDynamic {
+          0%, 100% {
+            box-shadow:
+              0 0 8px ${color},
+              0 0 16px ${color},
+              0 0 24px ${color};
+          }
+          50% {
+            box-shadow:
+              0 0 4px ${color},
+              0 0 10px ${color},
+              0 0 15px ${color};
+          }
+        }
+        .neon-sync {
+          animation: pulseNeonDynamic 2s infinite ease-in-out;
+        }
+      `;
+      document.head.appendChild(neonStyle);
+      profileImg.classList.add("neon-sync"); // aplica a animação
+    });
+  });
+}
 
   
     function loadSpotifySong(url) {

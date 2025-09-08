@@ -661,96 +661,43 @@ volumeSlider.addEventListener('input', () => {
 </script>
 
 <script>
-(function() {
+  (function() {
+  
+    const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7861af7accc04585";
+  
+    // 🔹 Se o Spotify não retornar o artista, você pode definir manualmente aqui:
+    const manualArtist = "isotopxs";
+  
+// Função para extrair a cor dominante de uma imagem
+function getDominantColor(img, callback) {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = img.width;
+  canvas.height = img.height;
+  ctx.drawImage(img, 0, 0, img.width, img.height);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
-  const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7861af7accc04585";
-  const manualArtist = "isotopxs"; // caso o Spotify não retorne o artista
+  let r = 0, g = 0, b = 0, count = 0;
 
-  function loadSpotifySong(url) {
-    try {
-      const trackId = url.split("/track/")[1].split("?")[0];
-
-      fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
-        .then(res => res.json())
-        .then(data => {
-
-          const title = data.title || "Música desconhecida";
-          const artist = (data.author_name && data.author_name.trim() !== "") ? data.author_name : manualArtist;
-
-          const musicDiv = document.createElement("div");
-          musicDiv.id = "musicInfo";
-          musicDiv.style.display = "flex";
-          musicDiv.style.flexDirection = "column";
-          musicDiv.style.alignItems = "center"; 
-          musicDiv.style.justifyContent = "center";
-          musicDiv.style.marginTop = "20px";
-          musicDiv.style.textAlign = "center";
-          musicDiv.style.color = "white"; 
-
-          musicDiv.innerHTML = `
-            <!-- Título -->
-            <div style="font-size: 1.4rem; user-select: none; font-weight: bold; margin-bottom: 10px;">
-              𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
-            </div>
-
-            <a href="${spotifyUrl}" target="_blank" rel="noopener noreferrer">
-              <img id="coverImg" src="${data.thumbnail_url}" alt="Capa da música" 
-                style="width:150px; height:150px; border-radius:12px; margin-bottom:10px; cursor:pointer;">
-            </a>
-
-            <div class="music-data">
-              <div style="font-size:18px; font-weight:bold; color:white;">${title}</div>
-              <div style="font-size:14px; color:white; opacity:0.8;">${artist}</div>
-            </div>
-          `;
-
-          const overlay = document.getElementById("overlay");
-          if (overlay) {
-            overlay.appendChild(musicDiv);
-
-            // depois que a imagem estiver carregada, adiciona o neon pulsante
-            const img = document.getElementById("coverImg");
-            img.addEventListener("load", () => {
-              addPulsingNeon(img);
-            });
-
-          } else {
-            console.error("Overlay principal não encontrado! Verifique o id.");
-          }
-
-        })
-        .catch(err => console.error("Erro ao buscar música:", err));
-    } catch (e) {
-      console.error("Link inválido:", e);
-    }
+  for (let i = 0; i < imageData.length; i += 4) {
+    r += imageData[i];
+    g += imageData[i + 1];
+    b += imageData[i + 2];
+    count++;
   }
 
-  // função para extrair cor dominante
-  function getDominantColor(img, callback) {
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-    canvas.width = img.width;
-    canvas.height = img.height;
-    ctx.drawImage(img, 0, 0, img.width, img.height);
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+  r = Math.round(r / count);
+  g = Math.round(g / count);
+  b = Math.round(b / count);
 
-    let r = 0, g = 0, b = 0, count = 0;
-    for (let i = 0; i < imageData.length; i += 4) {
-      r += imageData[i];
-      g += imageData[i + 1];
-      b += imageData[i + 2];
-      count++;
-    }
-    r = Math.round(r / count);
-    g = Math.round(g / count);
-    b = Math.round(b / count);
+  callback(`rgb(${r}, ${g}, ${b})`);
+}
 
-    callback(`rgb(${r}, ${g}, ${b})`);
-  }
-
-  // adiciona neon pulsante
-  function addPulsingNeon(img) {
-    getDominantColor(img, (color) => {
+// Supondo que a imagem já esteja carregada
+const profileImg = document.querySelector("#musicInfo img"); // ou outra imagem
+if (profileImg) {
+  profileImg.addEventListener("load", () => {
+    getDominantColor(profileImg, (color) => {
       const neonStyle = document.createElement("style");
       neonStyle.innerHTML = `
         @keyframes pulseNeonDynamic {
@@ -772,17 +719,71 @@ volumeSlider.addEventListener('input', () => {
         }
       `;
       document.head.appendChild(neonStyle);
-      img.classList.add("neon-sync");
+      profileImg.classList.add("neon-sync"); // aplica a animação
     });
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    loadSpotifySong(spotifyUrl);
   });
+}
 
-})();
-</script>
-
+  
+    function loadSpotifySong(url) {
+      try {
+        const trackId = url.split("/track/")[1].split("?")[0];
+  
+        fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
+          .then(res => res.json())
+          .then(data => {
+  
+            const title = data.title || "Música desconhecida";
+            const artist = (data.author_name && data.author_name.trim() !== "") 
+              ? data.author_name 
+              : manualArtist;
+  
+            const musicDiv = document.createElement("div");
+            musicDiv.id = "musicInfo";
+            musicDiv.style.display = "flex";
+            musicDiv.style.flexDirection = "column";
+            musicDiv.style.alignItems = "center"; 
+            musicDiv.style.justifyContent = "center";
+            musicDiv.style.marginTop = "20px";
+            musicDiv.style.textAlign = "center";
+            musicDiv.style.color = "white"; 
+  
+            // Envolvendo a imagem em um link e adicionando a classe neon-sync
+            musicDiv.innerHTML = `
+              <!-- Título -->
+              <div style="font-size: 1.4rem; user-select: none; font-weight: bold; margin-bottom: 10px;">
+                𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
+              </div>
+  
+              <a href="${spotifyUrl}" target="_blank" rel="noopener noreferrer">
+                <img src="${data.thumbnail_url}" alt="Capa da música" class="neon-sync"
+                  style="width:150px; height:150px; border-radius:12px; margin-bottom:10px; cursor:pointer;">
+              </a>
+  
+              <div class="music-data">
+                <div style="font-size:18px; font-weight:bold; color:white;">${title}</div>
+                <div style="font-size:14px; color:white; opacity:0.8;">${artist}</div>
+              </div>
+            `;
+  
+            const overlay = document.getElementById("overlay");
+            if (overlay) {
+              overlay.appendChild(musicDiv);
+            } else {
+              console.error("Overlay principal não encontrado! Verifique o id.");
+            }
+          })
+          .catch(err => console.error("Erro ao buscar música:", err));
+      } catch (e) {
+        console.error("Link inválido:", e);
+      }
+    }
+  
+    document.addEventListener("DOMContentLoaded", () => {
+      loadSpotifySong(spotifyUrl);
+    });
+  })();
+  </script>
   
 
 

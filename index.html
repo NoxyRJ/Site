@@ -490,6 +490,87 @@
     </div>
   </div>
 
+  <!DOCTYPE html>
+  <html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Música no Overlay</title>
+    <style>
+      body {
+        margin: 0;
+        background: black;
+        color: white;
+        font-family: Arial, sans-serif;
+      }
+  
+      .overlay {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: rgba(0,0,0,0.6);
+        padding: 10px 15px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+      }
+  
+      .overlay img {
+        width: 60px;
+        height: 60px;
+        border-radius: 8px;
+      }
+  
+      .music-info {
+        display: flex;
+        flex-direction: column;
+      }
+  
+      .music-info .title {
+        font-size: 16px;
+        font-weight: bold;
+      }
+  
+      .music-info .artist {
+        font-size: 14px;
+        color: #bbb;
+      }
+    </style>
+  </head>
+  <body>
+  
+    <div class="overlay" id="musicOverlay">
+      <img id="cover" src="" alt="Capa">
+      <div class="music-info">
+        <div class="title" id="title">Título da Música</div>
+        <div class="artist" id="artist">Artista</div>
+      </div>
+    </div>
+  
+    <script>
+      // 🔹 Insira o link de uma música do Spotify aqui:
+      const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=36018d46c007494f";
+  
+      // Pega o ID da música do link
+      const trackId = spotifyUrl.split("/track/")[1].split("?")[0];
+  
+      // Usa a API pública do Spotify (sem login) via oEmbed
+      fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("cover").src = data.thumbnail_url;
+          document.getElementById("title").textContent = data.title;
+          document.getElementById("artist").textContent = data.author_name;
+        })
+        .catch(err => console.error("Erro ao buscar música:", err));
+    </script>
+  
+  </body>
+  </html>
+  
+
   <!-- Música -->
   <audio id="bg-music" loop>
     <source src="media/music.mp3" type="audio/mp3" />

@@ -662,8 +662,11 @@ volumeSlider.addEventListener('input', () => {
 
 <script>
   (function() {
-    // 🔹 Coloque aqui o link da música do Spotify
+  
     const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7861af7accc04585";
+  
+    // 🔹 Se o Spotify não retornar o artista, você pode definir manualmente aqui:
+    const manualArtist = "Matue"; // << coloque o nome que quiser
   
     function loadSpotifySong(url) {
       try {
@@ -672,11 +675,16 @@ volumeSlider.addEventListener('input', () => {
         fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
           .then(res => res.json())
           .then(data => {
-            // cria o bloco de música
+            // pega os dados
+            const title = data.title || "Música desconhecida";
+            const artist = (data.author_name && data.author_name.trim() !== "") 
+              ? data.author_name 
+              : manualArtist; // usa o manual se não tiver artista
+  
             const musicDiv = document.createElement("div");
             musicDiv.id = "musicInfo";
             musicDiv.style.display = "flex";
-            musicDiv.style.flexDirection = "column"; // título em cima, depois imagem e textos
+            musicDiv.style.flexDirection = "column";
             musicDiv.style.alignItems = "center"; 
             musicDiv.style.justifyContent = "center";
             musicDiv.style.marginTop = "20px";
@@ -693,12 +701,11 @@ volumeSlider.addEventListener('input', () => {
                 style="width:150px; height:150px; border-radius:12px; margin-bottom:10px;">
   
               <div class="music-data">
-                <div style="font-size:18px; font-weight:bold; color:white;">${data.title}</div>
-                <div style="font-size:14px; color:white; opacity:0.8;">${data.author_name}</div>
+                <div style="font-size:18px; font-weight:bold; color:white;">${title}</div>
+                <div style="font-size:14px; color:white; opacity:0.8;">${artist}</div>
               </div>
             `;
   
-            // insere dentro do overlay principal
             const overlay = document.getElementById("overlay");
             if (overlay) {
               overlay.appendChild(musicDiv);
@@ -712,12 +719,11 @@ volumeSlider.addEventListener('input', () => {
       }
     }
   
-    // Executa assim que o site carregar
     document.addEventListener("DOMContentLoaded", () => {
       loadSpotifySong(spotifyUrl);
     });
   })();
-  </script>
+  </script>  
 
 
 </body>

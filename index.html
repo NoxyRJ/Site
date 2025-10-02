@@ -29,7 +29,7 @@
       display: flex; justify-content: center; align-items: center;
       overflow-x: hidden; padding: 1rem;
     }
-    #bg-video {
+    #bg-image {
       position: fixed; inset: 0;
       min-width: 100%; min-height: 100%;
       object-fit: cover; z-index: -2;
@@ -245,10 +245,10 @@
     inset 0 0 15px 3px rgba(0, 0, 0, 0.8);
 ">👁️ Carregando...</div>
 
-  <!-- Vídeo de fundo -->
-  <video autoplay muted loop id="bg-video">
-    <source src="media/bg.mp4" type="video/mp4" />
-  </video>
+<!-- Fundo com imagem -->
+<div id="bg-container">
+  <img src="media/bg.jpg" id="bg-image" alt="Fundo">
+</div>
 
   <!-- Overlay CONTENDO o conteúdo -->
   <div class="overlay" id="overlay">

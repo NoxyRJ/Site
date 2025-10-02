@@ -548,7 +548,7 @@
   </p>
 </div>
 
-<audio id="background-audio" src="media/seu-audio.mp3" preload="auto"></au>
+<audio id="background-audio" src="media/seu-audio.mp3" preload="auto"></audio>
 
 <script>
   window.addEventListener("DOMContentLoaded", () => {
@@ -583,7 +583,7 @@ music.volume = 0.5;
 
 btnPlay.addEventListener('click', () => {
   music.play().then(() => {
-    auModal.style.display = 'none';
+    audioModal.style.display = 'none';
     volumeBox.style.display = 'flex';
     overlay.classList.add("show");
     document.getElementById("main-content").classList.add("show");

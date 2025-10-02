@@ -621,18 +621,6 @@ volumeSlider.addEventListener('input', () => {
   </script>
 
 <script>
-  const t = "Noxy7";
-  let i = 0, del = false;
-  function anim() {
-    document.title = t.slice(0, i) || "\u200B";
-    if (!del) i < t.length ? i++ : (del = true, setTimeout(anim, 1000));
-    else i > 0 ? i-- : del = false;
-    setTimeout(anim, 800);
-  }
-  document.addEventListener("DOMContentLoaded", anim);
-</script>
-
-<script>
   const BIN_ID = "685cb3a58a456b7966b5ccfb";
   const API_KEY = "$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW";
   const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;

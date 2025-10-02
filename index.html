@@ -168,7 +168,7 @@
       font-size: clamp(1rem, 2vw, 1.2rem);
       color: white; text-align: center;
     }
-    #audio-modal {
+    #au-modal {
       position: fixed; inset: 0;
       background: rgba(0,0,0,.85);
       display: flex; flex-direction: column;
@@ -176,14 +176,14 @@
       padding: 1.5rem; z-index: 100;
     }
     .intro-logo { width: 80%; max-width: 600px; margin-bottom: 2rem; }
-    #audio-modal button {
+    #au-modal button {
       padding: 12px 24px;
       font-size: clamp(1rem, 2.5vw, 1.2rem);
       background: red; color: white; border: none;
       border-radius: 8px; font-weight: bold;
       cursor: pointer; transition: 0.3s;
     }
-    #audio-modal button:hover { background: #c00; }
+    #au-modal button:hover { background: #c00; }
     @keyframes pulseGlowWhite {
       0%, 100% { box-shadow: 0 0 4px rgba(255,255,255,.7); transform: scale(1); }
       50% { box-shadow: 0 0 12px rgba(255,255,255,1); transform: scale(1.05); }
@@ -500,12 +500,12 @@
   </div>
 
   <!-- Música -->
-  <audio id="bg-music" loop>
-    <source src="media/music.mp3" type="audio/mp3" />
-  </audio>
+  <au id="bg-music" loop>
+    <source src="media/music.mp3" type="au/mp3" />
+  </au>
 
 <!-- Modal para iniciar áudio -->
-<div id="audio-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+<div id="au-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
   <img src="media/png inicial.png" alt="Logo" class="intro-logo"
     style="user-select: none; -webkit-user-drag: none;" draggable="false" />
 
@@ -548,20 +548,20 @@
   </p>
 </div>
 
-<audio id="background-audio" src="media/seu-audio.mp3" preload="auto"></audio>
+<au id="background-au" src="media/seu-au.mp3" preload="auto"></au>
 
 <script>
   window.addEventListener("DOMContentLoaded", () => {
     const btnPlay = document.getElementById('btn-play');
-    const modal = document.getElementById('audio-modal');
-    const audio = document.getElementById('background-audio');
+    const modal = document.getElementById('au-modal');
+    const au = document.getElementById('background-au');
 
     btnPlay.addEventListener('click', () => {
       // Oculta todo o overlay com botão + texto juntos
       modal.style.display = 'none';
 
       // Inicia o áudio
-      audio.play().catch(err => {
+      au.play().catch(err => {
         console.warn("Erro ao iniciar áudio:", err);
       });
     });
@@ -571,7 +571,7 @@
 
   <!-- Scripts -->
   <script>
-    const audioModal = document.getElementById('audio-modal');
+    const auModal = document.getElementById('au-modal');
     const btnPlay = document.getElementById('btn-play');
     const volumeBox = document.getElementById('volume-box');
     const music = document.getElementById('bg-music');
@@ -583,7 +583,7 @@ music.volume = 0.5;
 
 btnPlay.addEventListener('click', () => {
   music.play().then(() => {
-    audioModal.style.display = 'none';
+    auModal.style.display = 'none';
     volumeBox.style.display = 'flex';
     overlay.classList.add("show");
     document.getElementById("main-content").classList.add("show");
@@ -663,7 +663,7 @@ volumeSlider.addEventListener('input', () => {
     }
   }
 
-  document.querySelector("#audio-modal button").onclick = () => {
+  document.querySelector("#au-modal button").onclick = () => {
     document.getElementById("view-counter").style.display = "block";
     updateViews();
   };

@@ -291,49 +291,26 @@
 
 <!-- Discord Card -->
 <div id="discord-status" style="text-align: center; margin: 2rem 0; color: white; font-family: Arial, sans-serif; position: relative;">
-
+  
   <!-- Título -->
   <div style="font-size: 1.4rem; user-select: none; font-weight: bold; margin-bottom: 10px;">𝑫𝒊𝒔𝒄𝒐𝒓𝒅</div>
 
-  <!-- Avatar + Status -->
-  <div style="position: relative; display: inline-block;">
+  <!-- Avatar + Status com borda neon -->
+  <div class="avatar-wrapper">
     <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
-      <img
-        id="discord-avatar"
-        class="neon-sync"
-        src=""
-        alt="Avatar Discord"
-        style="
-          width: 120px;
-          height: 120px;
-          border-radius: 50%;
-          transition: transform 0.3s;
-        "
-        onmouseover="this.style.transform='scale(1.05)'"
-        onmouseout="this.style.transform='scale(1)'"
-      />
+      <img id="discord-avatar" class="avatar neon-sync" src="" alt="Avatar Discord" style="cursor:pointer;">
+      <div class="avatar-border"></div> <!-- Decoração do avatar -->
     </a>
 
+    <!-- Círculo de status -->
     <span id="discord-status-circle"
-      class="neon-sync"
-      style="
-        position: absolute;
-        bottom: 6px;
-        right: 6px;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        border: 3px solid #1a1a1a;
-        background-color: gray;
-      "
+      style="position: absolute; bottom: 6px; right: 6px; width: 20px; height: 20px; border-radius: 50%; border: 3px solid #1a1a1a; background-color: gray;"
       title="Status"
     ></span>
   </div>
 
   <!-- Nome de exibição -->
-  <div id="display-name" style="margin-top: 10px; font-size: 1.6rem; font-weight: bold;">
-    Noxy7
-  </div>
+  <div id="display-name" style="margin-top: 10px; font-size: 1.6rem; font-weight: bold;">Noxy7</div>
 
   <!-- @username e #tag -->
   <div style="font-size: 1.1rem; opacity: 0.8;">
@@ -341,21 +318,19 @@
   </div>
 </div>
 
-<div class="avatar-wrapper">
-  <img id="discord-avatar" src="" alt="Avatar" class="avatar">
-  <div class="avatar-border"></div> <!-- Decoração do avatar -->
-</div>
-
+<!-- Estilo da borda neon -->
 <style>
 .avatar-wrapper {
   position: relative;
   width: 128px;
   height: 128px;
+  margin: auto;
 }
 .avatar {
   width: 100%;
   height: 100%;
   border-radius: 50%;
+  display: block;
 }
 .avatar-border {
   position: absolute;
@@ -378,7 +353,7 @@
 }
 </style>
 
-<!-- Script de atualização -->
+<!-- Script de atualização do Discord -->
 <script>
 async function fetchDiscordStatus() {
   const userId = "278691315594559489";
@@ -442,6 +417,7 @@ async function fetchDiscordStatus() {
   }
 }
 
+// Atualiza a cada 5 segundos
 fetchDiscordStatus();
 setInterval(fetchDiscordStatus, 5000);
 </script>

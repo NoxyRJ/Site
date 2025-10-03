@@ -606,36 +606,39 @@
   });
 </script>
 
-<!-- Musica + Volume -->
-<script>
-  const audioModal=document.getElementById('audio-modal'),
-        btnPlay=document.getElementById('btn-play'),
-        volumeBox=document.getElementById('volume-box'),
-        music=document.getElementById('bg-music'),
-        volumeBtn=document.getElementById('volume'),
-        overlay=document.getElementById("overlay"),
-        mainContent=document.getElementById("main-content");
-  
-  music.volume=0.3;
-  
-  btnPlay.onclick=()=>music.play().then(()=>{
-    audioModal.style.display='none';
-    volumeBox.style.display='flex';
-    overlay.classList.add("show");
-    mainContent.classList.add("show");
-  }).catch(()=>alert('Não foi possível iniciar o áudio automaticamente.'));
-  
-  volumeBtn.onclick=()=>music.paused?(music.play(),volumeBtn.textContent='🔊'):(music.pause(),volumeBtn.textContent='🔇');
 
-// Slider de volume
-volumeSlider.addEventListener('input', () => {
-  music.volume = volumeSlider.value;
-  volumeBtn.textContent = music.volume == 0 ? '🔇' : '🔊';
-  if (music.paused && music.volume > 0) music.play();
+  <!-- Musica + Volume -->
+  <script>
+    const audioModal = document.getElementById('audio-modal');
+    const btnPlay = document.getElementById('btn-play');
+    const volumeBox = document.getElementById('volume-box');
+    const music = document.getElementById('bg-music');
+    const volumeBtn = document.getElementById('volume');
+    const volumeSlider = document.getElementById('volume-slider');
+    const overlay = document.getElementById("overlay");
+
+music.volume = 0.3;
+
+btnPlay.addEventListener('click', () => {
+  music.play().then(() => {
+    audioModal.style.display = 'none';
+    volumeBox.style.display = 'flex';
+    overlay.classList.add("show");
+    document.getElementById("main-content").classList.add("show");
+  }).catch(() => {
+    alert('Não foi possível iniciar o áudio automaticamente.');
+  });
 });
 
-// Gif pricipal (abaixo do avatar)
-document.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".imagem-extra");if(e){e.src="media/Extra.gif";e.alt="GIF animado extra"}});
+volumeBtn.addEventListener('click', () => {
+  if (music.paused) {
+    music.play();
+    volumeBtn.textContent = '🔊';
+  } else {
+    music.pause();
+    volumeBtn.textContent = '🔇';
+  }
+});
 
 // Slider de volume
 volumeSlider.addEventListener('input', () => {

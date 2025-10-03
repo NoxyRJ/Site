@@ -646,6 +646,9 @@ volumeSlider.addEventListener('input', () => {
   volumeBtn.textContent = music.volume == 0 ? '🔇' : '🔊';
   if (music.paused && music.volume > 0) music.play();
 });
+
+// Gif pricipal (abaixo do avatar)
+document.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".imagem-extra");if(e){e.src="media/Extra.gif";e.alt="GIF animado extra"}});
 </script>
 
 <!-- Contador de visitas -->

@@ -719,72 +719,58 @@ volumeSlider.addEventListener('input', () => {
 </style>
 
 <script>
-(function() {
-
+(() => {
   const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7861af7accc04585";
-
-  // 🔹 Se o Spotify não retornar o artista, você pode definir manualmente aqui:
   const manualArtist = "isotopxs";
 
-  function loadSpotifySong(url) {
+  async function loadSpotifySong(url) {
     try {
-      const trackId = url.split("/track/")[1].split("?")[0];
+      const trackId = url.split("/track/")[1]?.split("?")[0];
+      if (!trackId) throw new Error("ID da música inválido");
 
-      fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`)
-        .then(res => res.json())
-        .then(data => {
+      const res = await fetch(`https://open.spotify.com/oembed?url=spotify:track:${trackId}`);
+      const data = await res.json();
 
-          const title = data.title || "Música desconhecida";
-          const artist = (data.author_name && data.author_name.trim() !== "") 
-            ? data.author_name 
-            : manualArtist;
+      const title = data.title || "Música desconhecida";
+      const artist = data.author_name?.trim() || manualArtist;
 
-          const musicDiv = document.createElement("div");
-          musicDiv.id = "musicInfo";
-          musicDiv.style.display = "flex";
-          musicDiv.style.flexDirection = "column";
-          musicDiv.style.alignItems = "center"; 
-          musicDiv.style.justifyContent = "center";
-          musicDiv.style.marginTop = "20px";
-          musicDiv.style.textAlign = "center";
-          musicDiv.style.color = "white"; 
+      const musicDiv = document.createElement("div");
+      musicDiv.id = "musicInfo";
+      Object.assign(musicDiv.style, {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: "20px",
+        textAlign: "center",
+        color: "white"
+      });
 
-          // Envolvendo a imagem em um link e adicionando a classe neon-sync
-          musicDiv.innerHTML = `
-            <!-- Título -->
-            <div style="font-size: 1.4rem; user-select: none; font-weight: bold; margin-bottom: 10px;">
-              𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
-            </div>
+      musicDiv.innerHTML = `
+        <div style="font-size:1.4rem;user-select:none;font-weight:bold;margin-bottom:10px;">
+          𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
+        </div>
+        <a href="${spotifyUrl}" target="_blank" rel="noopener noreferrer">
+          <img src="${data.thumbnail_url}" alt="Capa da música" class="neon-sync"
+            style="width:150px;height:150px;margin-bottom:10px;cursor:pointer;">
+        </a>
+        <div class="music-data">
+          <div style="font-size:18px;font-weight:bold;color:white;">${title}</div>
+          <div style="font-size:14px;color:white;opacity:0.8;">${artist}</div>
+        </div>
+      `;
 
-            <a href="${spotifyUrl}" target="_blank" rel="noopener noreferrer">
-              <img src="${data.thumbnail_url}" alt="Capa da música" class="neon-sync"
-                style="width:150px; height:150px; margin-bottom:10px; cursor:pointer;">
-            </a>
-
-            <div class="music-data">
-              <div style="font-size:18px; font-weight:bold; color:white;">${title}</div>
-              <div style="font-size:14px; color:white; opacity:0.8;">${artist}</div>
-            </div>
-          `;
-
-          const overlay = document.getElementById("overlay");
-          if (overlay) {
-            overlay.appendChild(musicDiv);
-          } else {
-            console.error("Overlay principal não encontrado! Verifique o id.");
-          }
-        })
-        .catch(err => console.error("Erro ao buscar música:", err));
+      document.getElementById("overlay")?.appendChild(musicDiv) 
+        || console.error("Overlay principal não encontrado! Verifique o id.");
     } catch (e) {
-      console.error("Link inválido:", e);
+      console.error("Erro ao carregar música:", e);
     }
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    loadSpotifySong(spotifyUrl);
-  });
+  document.addEventListener("DOMContentLoaded", () => loadSpotifySong(spotifyUrl));
 })();
 </script>
+
 
 
 </body>

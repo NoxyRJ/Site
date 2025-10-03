@@ -94,11 +94,26 @@
   width: 100%;
   height: 100%;
   transform: translate(-50%, -50%);
-  border-radius: 20%;
+  border-radius: 50%; /* 🔥 deixei redondo igual ao avatar */
   z-index: 0;
   background: radial-gradient(rgba(255,255,255,0.15), transparent);
-  box-shadow: 0 0 10px white, 0 0 30px white, 0 0 60px white;
-  animation: rotateNeon 4s linear infinite;
+  animation: pulseNeonBlack 4s infinite ease-in-out; /* 🔥 neon pulsante */
+}
+
+/* Animação neon branco pulsante */
+@keyframes pulseNeonBlack {
+  0%, 100% {
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 16px #ffffff,
+      0 0 24px #ffffff;
+  }
+  50% {
+    box-shadow:
+      0 0 4px #ffffff,
+      0 0 10px #ffffff,
+      0 0 15px #ffffff;
+  }
 }
 
     .imagem-extra {
@@ -179,7 +194,7 @@
     #audio-modal button {
       padding: 12px 24px;
       font-size: clamp(1rem, 2.5vw, 1.2rem);
-      background: red; color: white; border: none;
+      background: rgb(0, 255, 255); color: white; border: none;
       border-radius: 8px; font-weight: bold;
       cursor: pointer; transition: 0.3s;
     }

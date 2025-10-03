@@ -566,46 +566,28 @@
   </button>
 
   <!-- Texto de crédito dentro do modal -->
-  <p id="credit-text" style="
-    user-select: none;
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    font-size: 1.2rem;
-    margin: 0;
-    text-shadow:
-      0 0 4px #fff,
-      0 0 8px #fff,
-      0 0 16px #fff,
-      0 0 32px #fff;
-    animation: blinkNeon 1.5s infinite alternate;
-  ">
-    𝐒𝐢𝐭𝐞 𝐟𝐞𝐢𝐭𝐨 𝐩𝐨𝐫: 𝐍𝐨𝐱𝐲.𝐠𝐠
-  </p>
-</div>
+<p id="credit-text" style="
+  user-select:none;
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  color:#fff;
+  font-size:1.2rem;
+  margin:0;
+  text-shadow:0 0 4px #fff,0 0 8px #fff,0 0 16px #fff,0 0 32px #fff;
+  animation:blinkNeon 1.5s infinite alternate;
+">𝐒𝐢𝐭𝐞 𝐟𝐞𝐢𝐭𝐨 𝐩𝐨𝐫: 𝐍𝐨𝐱𝐲.𝐠𝐠</p>
 
 <audio id="background-audio" src="media/seu-audio.mp3" preload="auto"></audio>
 
 <script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const btnPlay = document.getElementById('btn-play');
-    const modal = document.getElementById('audio-modal');
-    const audio = document.getElementById('background-audio');
+const btnPlay=document.getElementById('btn-play'),
+      modal=document.getElementById('audio-modal'),
+      audio=document.getElementById('background-audio');
 
-    btnPlay.addEventListener('click', () => {
-      // Oculta todo o overlay com botão + texto juntos
-      modal.style.display = 'none';
-
-      // Inicia o áudio
-      audio.play().catch(err => {
-        console.warn("Erro ao iniciar áudio:", err);
-      });
-    });
-  });
+btnPlay.onclick=()=>audio.play().catch(e=>console.warn("Erro ao iniciar áudio:",e))|| (modal.style.display='none');
 </script>
-
 
   <!-- Musica + Volume -->
   <script>

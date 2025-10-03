@@ -658,42 +658,32 @@ volumeSlider.addEventListener('input', () => {
     });
   </script>
 
+<!-- Contador de visitas -->
 <script>
-  const BIN_ID = "685cb3a58a456b7966b5ccfb";
-  const API_KEY = "$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW";
-  const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-  const visited = localStorage.getItem("siteVisited");
-
-  async function updateViews() {
-    try {
-      const res = await fetch(URL, { headers: { "X-Master-Key": API_KEY } });
-      const { record } = await res.json();
-      let views = record.views;
-
-      if (!visited) {
+  const BIN_ID="685cb3a58a456b7966b5ccfb",
+        API_KEY="$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW",
+        URL=`https://api.jsonbin.io/v3/b/${BIN_ID}`,
+        visited=localStorage.getItem("siteVisited");
+  
+  async function updateViews(){
+    try{
+      const res=await fetch(URL,{headers:{"X-Master-Key":API_KEY}}),
+            {record}=await res.json();
+      let views=record.views;
+      if(!visited){
         views++;
-        await fetch(URL, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Master-Key": API_KEY
-          },
-          body: JSON.stringify({ views })
-        });
-        localStorage.setItem("siteVisited", "true");
+        await fetch(URL,{method:"PUT",headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},body:JSON.stringify({views})});
+        localStorage.setItem("siteVisited","true");
       }
-
-      document.getElementById("view-counter").textContent = `👁️ ${views} visitantes`;
-    } catch (e) {
-      console.error("Erro ao atualizar visitas:", e);
-    }
+      document.getElementById("view-counter").textContent=`👁️ ${views} visitantes`;
+    }catch(e){console.error("Erro ao atualizar visitas:",e);}
   }
-
-  document.querySelector("#audio-modal button").onclick = () => {
-    document.getElementById("view-counter").style.display = "block";
+  
+  document.querySelector("#audio-modal button").onclick=()=>{
+    document.getElementById("view-counter").style.display="block";
     updateViews();
   };
-</script>
+  </script>  
 
 <!-- Estilo do Neon Preto Pulsante -->
 <style>

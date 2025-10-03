@@ -641,7 +641,11 @@ volumeBtn.addEventListener('click', () => {
 });
 
 // Slider de volume
-volumeSlider.oninput=()=>{music.volume=volumeSlider.value;volumeBtn.textContent=music.volume? "🔊":"🔇"; if(music.paused && music.volume>0) music.play();};
+volumeSlider.addEventListener('input', () => {
+  music.volume = volumeSlider.value;
+  volumeBtn.textContent = music.volume == 0 ? '🔇' : '🔊';
+  if (music.paused && music.volume > 0) music.play();
+});
 </script>
 
 <!-- Contador de visitas -->

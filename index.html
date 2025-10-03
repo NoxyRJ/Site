@@ -606,47 +606,29 @@
   });
 </script>
 
-
-  <!-- Scripts -->
-  <script>
-    const audioModal = document.getElementById('audio-modal');
-    const btnPlay = document.getElementById('btn-play');
-    const volumeBox = document.getElementById('volume-box');
-    const music = document.getElementById('bg-music');
-    const volumeBtn = document.getElementById('volume');
-    const volumeSlider = document.getElementById('volume-slider');
-    const overlay = document.getElementById("overlay");
-
-music.volume = 0.5;
-
-btnPlay.addEventListener('click', () => {
-  music.play().then(() => {
-    audioModal.style.display = 'none';
-    volumeBox.style.display = 'flex';
+<!-- Musica + Volume -->
+<script>
+  const audioModal=document.getElementById("audio-modal"),
+        btnPlay=document.getElementById("btn-play"),
+        volumeBox=document.getElementById("volume-box"),
+        music=document.getElementById("bg-music"),
+        volumeBtn=document.getElementById("volume"),
+        volumeSlider=document.getElementById("volume-slider"),
+        overlay=document.getElementById("overlay");
+  
+  music.volume=0.5;
+  
+  btnPlay.onclick=()=>music.play().then(()=>{
+    audioModal.style.display="none";
+    volumeBox.style.display="flex";
     overlay.classList.add("show");
     document.getElementById("main-content").classList.add("show");
-  }).catch(() => {
-    alert('Não foi possível iniciar o áudio automaticamente.');
-  });
-});
-
-volumeBtn.addEventListener('click', () => {
-  if (music.paused) {
-    music.play();
-    volumeBtn.textContent = '🔊';
-  } else {
-    music.pause();
-    volumeBtn.textContent = '🔇';
-  }
-});
-
-// Slider de volume
-volumeSlider.addEventListener('input', () => {
-  music.volume = volumeSlider.value;
-  volumeBtn.textContent = music.volume == 0 ? '🔇' : '🔊';
-  if (music.paused && music.volume > 0) music.play();
-});
-</script>
+  }).catch(()=>alert("Não foi possível iniciar o áudio automaticamente."));
+  
+  volumeBtn.onclick=()=>music.paused?(music.play(),volumeBtn.textContent="🔊"):(music.pause(),volumeBtn.textContent="🔇");
+  
+  volumeSlider.oninput=()=>{music.volume=volumeSlider.value;volumeBtn.textContent=music.volume==0?"🔇":"🔊";if(music.paused&&music.volume>0)music.play();};
+  </script>  
 
 <!-- Contador de visitas -->
 <script>

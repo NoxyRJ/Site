@@ -310,40 +310,59 @@
   <!-- Título -->
   <div style="font-size: 1.4rem; user-select: none; font-weight: bold; margin-bottom: 10px;">𝑫𝒊𝒔𝒄𝒐𝒓𝒅</div>
 
-  <!-- Avatar + Status -->
-  <div style="position: relative; display: inline-block;">
-    <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
-      <img
-        id="discord-avatar"
-        class="neon-sync"
-        src=""
-        alt="Avatar Discord"
-        style="
-          width: 120px;
-          height: 120px;
-          border-radius: 50%;
-          transition: transform 0.3s;
-        "
-        onmouseover="this.style.transform='scale(1.05)'"
-        onmouseout="this.style.transform='scale(1)'"
-      />
-    </a>
-
-    <span id="discord-status-circle"
+<!-- Avatar + Status -->
+<div style="position: relative; display: inline-block;">
+  <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
+    <img
+      id="discord-avatar"
       class="neon-sync"
+      src=""
+      alt="Avatar Discord"
       style="
-        position: absolute;
-        bottom: 6px;
-        right: 6px;
-        width: 20px;
-        height: 20px;
+        width: 120px;
+        height: 120px;
         border-radius: 50%;
-        border: 3px solid #1a1a1a;
-        background-color: gray;
+        transition: transform 0.3s;
+        animation: pulseNeonBlack 3s infinite ease-in-out; /* 🔥 animação neon */
       "
-      title="Status"
-    ></span>
-  </div>
+      onmouseover="this.style.transform='scale(1.05)'"
+      onmouseout="this.style.transform='scale(1)'"
+    />
+  </a>
+
+  <span id="discord-status-circle"
+    class="neon-sync"
+    style="
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 3px solid #1a1a1a;
+      background-color: gray;
+      animation: pulseNeonBlack 3s infinite ease-in-out; /* 🔥 animação neon */
+    "
+    title="Status"
+  ></span>
+</div>
+
+<style>
+@keyframes pulseNeonBlack {
+  0%, 100% {
+    box-shadow:
+      0 0 8px #ffffff,
+      0 0 16px #ffffff,
+      0 0 24px #ffffff;
+  }
+  50% {
+    box-shadow:
+      0 0 4px #ffffff,
+      0 0 10px #ffffff,
+      0 0 15px #ffffff;
+  }
+}
+</style>
 
   <!-- Nome de exibição -->
   <div id="display-name" style="margin-top: 10px; font-size: 1.6rem; font-weight: bold;">

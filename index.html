@@ -647,16 +647,9 @@ volumeSlider.addEventListener('input', () => {
   if (music.paused && music.volume > 0) music.play();
 });
 
-
-    // Trocar imagem extra por GIF
-    document.addEventListener("DOMContentLoaded", () => {
-      const imagemExtra = document.querySelector(".imagem-extra");
-      if (imagemExtra) {
-        imagemExtra.src = "media/Extra.gif";
-        imagemExtra.alt = "GIF animado extra";
-      }
-    });
-  </script>
+// Trocar imagem extra por GIF
+document.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector(".imagem-extra");if(e){e.src="media/Extra.gif";e.alt="GIF animado extra"}});
+</script>
 
 <!-- Contador de visitas -->
 <script>

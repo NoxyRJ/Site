@@ -543,67 +543,20 @@
   </audio>
 
 <!-- Modal para iniciar áudio -->
-<div id="audio-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-  <img src="media/png inicial.png" alt="Logo" class="intro-logo"
-    style="user-select: none; -webkit-user-drag: none;" draggable="false" />
-
-  <button id="btn-play" aria-label="Clique para iniciar áudio"
-    style="
-      user-select: none;
-      margin-top: 20px;
-      padding: 12px 20px;
-      font-size: 1rem;
-      font-weight: bold;
-      color: white;
-      background-color: #ff0000;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
-      animation: pulseNeon 1.5s infinite;
-      cursor: pointer;
-    ">
-    𝗖𝗹𝗶𝗾𝘂𝗲 𝗮𝗾𝘂𝗶
-  </button>
-
-  <!-- Texto de crédito dentro do modal -->
-  <p id="credit-text" style="
-    user-select: none;
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    font-size: 1.2rem;
-    margin: 0;
-    text-shadow:
-      0 0 4px #fff,
-      0 0 8px #fff,
-      0 0 16px #fff,
-      0 0 32px #fff;
-    animation: blinkNeon 1.5s infinite alternate;
-  ">
-    𝐒𝐢𝐭𝐞 𝐟𝐞𝐢𝐭𝐨 𝐩𝐨𝐫: 𝐍𝐨𝐱𝐲.𝐠𝐠
-  </p>
+<div id="audio-modal" style="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+  <img src="media/png inicial.png" alt="Logo" class="intro-logo" style="user-select:none;-webkit-user-drag:none;" draggable="false">
+  <button id="btn-play" style="user-select:none;margin-top:20px;padding:12px 20px;font-size:1rem;font-weight:bold;color:#fff;background:#f00;border:none;border-radius:10px;box-shadow:0 0 10px #f00,0 0 20px #f00;animation:pulseNeon 1.5s infinite;cursor:pointer;">𝗖𝗹𝗶𝗾𝘂𝗲 𝗮𝗾𝘂𝗶</button>
+  <p style="user-select:none;position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;font-size:1.2rem;margin:0;text-shadow:0 0 4px #fff,0 0 8px #fff,0 0 16px #fff,0 0 32px #fff;animation:blinkNeon 1.5s infinite alternate;">𝐒𝐢𝐭𝐞 𝐟𝐞𝐢𝐭𝐨 𝐩𝐨𝐫: 𝐍𝐨𝐱𝐲.𝐠𝐠</p>
 </div>
 
 <audio id="background-audio" src="media/seu-audio.mp3" preload="auto"></audio>
 
 <script>
-  window.addEventListener("DOMContentLoaded", () => {
-    const btnPlay = document.getElementById('btn-play');
-    const modal = document.getElementById('audio-modal');
-    const audio = document.getElementById('background-audio');
+const btn=document.getElementById('btn-play'),
+      modal=document.getElementById('audio-modal'),
+      audio=document.getElementById('background-audio');
 
-    btnPlay.addEventListener('click', () => {
-      // Oculta todo o overlay com botão + texto juntos
-      modal.style.display = 'none';
-
-      // Inicia o áudio
-      audio.play().catch(err => {
-        console.warn("Erro ao iniciar áudio:", err);
-      });
-    });
-  });
+btn.onclick=()=>audio.play().catch(e=>console.warn("Erro ao iniciar áudio:",e))|| (modal.style.display='none');
 </script>
 
   <!-- Musica + Volume -->

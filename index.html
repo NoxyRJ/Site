@@ -280,6 +280,120 @@
   .neon-sync{animation:pulseNeonBlack 3s infinite ease-in-out}
   </style>  
 
+<!-- 🔹 Dentro do seu overlay principal -->
+<div class="overlay">
+  <h1>Noxy7</h1>
+  <p>Links e status...</p>
+
+  <!-- Botão dentro do overlay -->
+  <button id="btn-config" class="config-btn">💻 Ver Configurações</button>
+</div>
+
+<!-- 🔹 Painel de configurações (fora do overlay principal) -->
+<div id="config-panel" class="config-overlay">
+  <div class="config-box">
+    <h2>💻 Configurações do PC</h2>
+    <ul>
+      <li><strong>Processador:</strong> Ryzen 5 1600</li>
+      <li><strong>Placa-mãe:</strong> TGT H61 M.2 DDR3</li>
+      <li><strong>Memória RAM:</strong> 16GB DDR3</li>
+      <li><strong>Placa de vídeo:</strong> RTX 2060</li>
+      <li><strong>Armazenamento:</strong> SSD 480GB + HD 1TB</li>
+    </ul>
+    <button id="btn-fechar" class="close-btn">Fechar</button>
+  </div>
+</div>
+
+<!-- 🔹 Estilo -->
+<style>
+.config-btn {
+  margin-top: 20px;
+  background: rgba(255, 0, 100, 0.8);
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 15px rgba(255, 0, 100, 0.6);
+}
+.config-btn:hover {
+  background: rgba(255, 0, 120, 1);
+  transform: scale(1.05);
+}
+
+.config-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+.config-box {
+  background: rgba(25, 25, 25, 0.9);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(255, 0, 100, 0.3);
+  color: white;
+  width: 90%;
+  max-width: 450px;
+  animation: aparecer 0.3s ease;
+}
+
+.close-btn {
+  margin-top: 20px;
+  background: rgba(255, 0, 100, 0.8);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.close-btn:hover {
+  background: rgba(255, 0, 100, 1);
+}
+
+@keyframes aparecer {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+</style>
+
+<!-- 🔹 SCRIPT (COLOQUE ISSO NO FINAL DO SEU SITE, ABAIXO DO SCRIPT DO SPOTIFY) -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const btnConfig = document.getElementById("btn-config");
+  const btnFechar = document.getElementById("btn-fechar");
+  const painel = document.getElementById("config-panel");
+
+  if (btnConfig && btnFechar && painel) {
+    // Mostrar painel
+    btnConfig.addEventListener("click", () => {
+      painel.style.display = "flex";
+    });
+
+    // Fechar painel
+    btnFechar.addEventListener("click", () => {
+      painel.style.display = "none";
+    });
+  } else {
+    console.error("❌ Elementos do painel de configuração não encontrados no DOM.");
+  }
+});
+</script>
+
 <!-- Discord -->
 <!-- Discord Card -->
 <div id="discord-status" style="text-align: center; margin: 2rem 0; color: white; font-family: Arial, sans-serif; position: relative;">
@@ -672,111 +786,6 @@ document.addEventListener("DOMContentLoaded",()=>{const e=document.querySelector
   document.addEventListener("DOMContentLoaded", () => loadSpotifySong(spotifyUrl));
 })();
 </script>
-
-<!-- 🔹 Dentro do seu overlay principal -->
-<div class="overlay">
-  <h1>Noxy7</h1>
-  <p>Links e status...</p>
-
-  <!-- Botão dentro do overlay -->
-  <button id="btn-config" class="config-btn">💻 Ver Configurações</button>
-</div>
-
-<!-- 🔹 Painel de configurações (fica fora do overlay) -->
-<div id="config-panel" class="config-overlay">
-  <div class="config-box">
-    <h2>💻 Configurações do PC</h2>
-    <ul>
-      <li><strong>Processador:</strong> Ryzen 5 1600</li>
-      <li><strong>Placa-mãe:</strong> TGT H61 M.2 DDR3</li>
-      <li><strong>Memória RAM:</strong> 16GB DDR3</li>
-      <li><strong>Placa de vídeo:</strong> RTX 2060</li>
-      <li><strong>Armazenamento:</strong> SSD 480GB + HD 1TB</li>
-    </ul>
-    <button id="btn-fechar" class="close-btn">Fechar</button>
-  </div>
-</div>
-
-<!-- 🔹 Estilo -->
-<style>
-.config-btn {
-  margin-top: 20px;
-  background: rgba(255, 0, 100, 0.8);
-  border: none;
-  padding: 10px 18px;
-  border-radius: 10px;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 0 15px rgba(255, 0, 100, 0.6);
-}
-.config-btn:hover {
-  background: rgba(255, 0, 120, 1);
-  transform: scale(1.05);
-}
-
-.config-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(6px);
-  z-index: 9999;
-  justify-content: center;
-  align-items: center;
-}
-
-.config-box {
-  background: rgba(25, 25, 25, 0.9);
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 0 30px rgba(255, 0, 100, 0.3);
-  color: white;
-  width: 90%;
-  max-width: 450px;
-  animation: aparecer 0.3s ease;
-}
-
-.close-btn {
-  margin-top: 20px;
-  background: rgba(255, 0, 100, 0.8);
-  border: none;
-  padding: 10px 15px;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.close-btn:hover {
-  background: rgba(255, 0, 100, 1);
-}
-
-@keyframes aparecer {
-  from {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-</style>
-
-<!-- 🔹 SCRIPT (coloque antes do </body>) -->
-<script>
-// Mostrar painel
-document.getElementById("btn-config").addEventListener("click", () => {
-  document.getElementById("config-panel").style.display = "flex";
-});
-
-// Fechar painel
-document.getElementById("btn-fechar").addEventListener("click", () => {
-  document.getElementById("config-panel").style.display = "none";
-});
-</script>
-
 
 </body>
 </html>

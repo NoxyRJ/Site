@@ -209,6 +209,54 @@
   </style>  
 
 <!-- Volume no canto superior esquerdo -->
+<!-- Caixa do volume -->
+<div class="view-box" id="volume-box" style="
+  display: none;
+  user-select: none;
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  color: white;
+  font-size: 18px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 5px 10px;
+  border-radius: 7px;
+  font-family: sans-serif;
+  box-shadow:
+    0 0 8px 2px rgba(0, 0, 0, 0.9),
+    inset 0 0 15px 3px rgba(0, 0, 0, 0.8);
+">
+🔊 Volume: --
+</div>
+
+<script>
+  // Função para exibir e atualizar o volume
+  function atualizarVolume(novoVolume) {
+    const volumeBox = document.getElementById("volume-box");
+
+    // Mostra a caixa se estiver oculta
+    if (volumeBox.style.display === "none") {
+      volumeBox.style.display = "block";
+    }
+
+    // Atualiza o texto com o volume atual em porcentagem
+    const porcentagem = Math.round(novoVolume * 100);
+    volumeBox.innerHTML = `🔊 Volume: ${porcentagem}%`;
+  }
+
+  // Exemplo: integração com o áudio principal do site
+  // Substitua '#background-music' pelo ID do seu <audio>
+  const audio = document.getElementById("background-music");
+  if (audio) {
+    // Atualiza sempre que o volume mudar
+    audio.addEventListener("volumechange", () => {
+      atualizarVolume(audio.volume);
+    });
+
+    // Atualiza ao carregar
+    atualizarVolume(audio.volume);
+  }
+</script>
 
 
 <!-- Contador de visitantes -->

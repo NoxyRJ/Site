@@ -222,10 +222,10 @@
   box-shadow:
     0 0 8px 2px rgba(0, 0, 0, 0.9),
     inset 0 0 15px 3px rgba(0, 0, 0, 0.8);
-  display: none;
+  display: none; /* ESCONDE até ativar */
   align-items: center;
   gap: 10px;
-  z-index: 9999999; /* Corrigido/Reforçado aqui */
+  z-index: 2;
 ">
   <button id="volume" aria-label="Toggle volume" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">🔊</button>
   <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" style="width: 100px;" aria-label="Volume slider" />
@@ -408,49 +408,43 @@
 
 <!-- 🔹 Script -->
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-      const btnConfig = document.getElementById("btn-config");
-      const btnFechar = document.getElementById("btn-fechar");
-      const painel = document.getElementById("config-panel");
-      const volumeBox = document.getElementById("volume-box");
-  
-      if (btnConfig && btnFechar && painel && volumeBox) {
-          // Mostrar painel
-          btnConfig.addEventListener("click", () => {
-              painel.style.display = "flex";
-              document.body.style.overflow = "hidden";
-              
-              // ✅ Adiciona um efeito de blur/escurecimento e desativa o clique
-              volumeBox.style.filter = "blur(3px) brightness(0.6)"; 
-              volumeBox.style.pointerEvents = "none";
-          });
-  
-          // Fechar painel
-          btnFechar.addEventListener("click", () => {
-              painel.style.display = "none";
-              document.body.style.overflow = "";
-              
-              // ✅ Remove o efeito
-              volumeBox.style.filter = "none"; 
-              volumeBox.style.pointerEvents = "auto";
-          });
-  
-          // Fechar ao clicar fora do painel
-          painel.addEventListener("click", (e) => {
-              if (e.target === painel) {
-                  painel.style.display = "none";
-                  document.body.style.overflow = "";
-                  
-                  // ✅ Remove o efeito
-                  volumeBox.style.filter = "none";
-                  volumeBox.style.pointerEvents = "auto";
-              }
-          });
-      } else {
-          console.error("❌ Elementos do painel de configuração não encontrados no DOM.");
+document.addEventListener("DOMContentLoaded", () => {
+  const btnConfig = document.getElementById("btn-config");
+  const btnFechar = document.getElementById("btn-fechar");
+  const painel = document.getElementById("config-panel");
+
+  if (btnConfig && btnFechar && painel && volumeBox) {
+    // Mostrar painel
+    btnConfig.addEventListener("click", () => {
+      painel.style.display = "flex";
+      document.body.style.overflow = "hidden";
+      volumeBox.style.filter = "blur(5px) brightness(0.6)"; // 🔹 aplica efeito ao volume
+      volumeBox.style.zIndex = "998"; 
+      volumeBox.style.pointerEvents = "none"; // desativa clique
+    });
+
+    // Fechar painel
+    btnFechar.addEventListener("click", () => {
+      painel.style.display = "none";
+      document.body.style.overflow = "";
+      volumeBox.style.filter = "none"; // 🔹 remove o blur
+      volumeBox.style.pointerEvents = "auto"; // reativa clique
+    });
+
+    // Fechar ao clicar fora do painel
+    painel.addEventListener("click", (e) => {
+      if (e.target === painel) {
+        painel.style.display = "none";
+        document.body.style.overflow = "";
+        volumeBox.style.filter = "none";
+        volumeBox.style.pointerEvents = "auto";
       }
-  });
-  </script>
+    });
+  } else {
+    console.error("❌ Elementos do painel de configuração não encontrados no DOM.");
+  }
+});
+</script>
 
 <!-- Discord -->
 <!-- Discord Card -->

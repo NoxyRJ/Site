@@ -209,8 +209,10 @@
   </style>  
 
 <!-- Volume no canto superior esquerdo -->
+<!-- 🔊 Caixa de Volume (igual ao contador de visitas e atrás do overlay) -->
 <div id="volume-box" style="
-  position: absolute;
+  user-select: none;
+  position: fixed;
   top: 10px;
   left: 10px;
   color: white;
@@ -222,14 +224,32 @@
   box-shadow:
     0 0 8px 2px rgba(0, 0, 0, 0.9),
     inset 0 0 15px 3px rgba(0, 0, 0, 0.8);
-  display: none; /* ESCONDE até ativar */
+  display: flex;
   align-items: center;
   gap: 10px;
-  z-index: 2;
+  z-index: 10; /* 🔹 fica acima de elementos normais, mas abaixo do overlay */
+  backdrop-filter: none; /* 🔹 impede o desfoque quando o overlay aparece */
 ">
-  <button id="volume" aria-label="Toggle volume" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">🔊</button>
-  <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" style="width: 100px;" aria-label="Volume slider" />
+  <button id="volume" aria-label="Toggle volume" style="
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+  ">🔊</button>
+
+  <input
+    type="range"
+    id="volume-slider"
+    min="0"
+    max="1"
+    step="0.01"
+    value="0.5"
+    style="width: 100px;"
+    aria-label="Controle de volume"
+  />
 </div>
+
 
 <!-- Contador de visitantes -->
 <div class="view-box" id="view-counter" style="

@@ -410,16 +410,16 @@
                     </a>
                     <a href="https://www.xbox.com/pt-BR/play/user/iCHiBANN8988" target="_blank" rel="noopener noreferrer">
                         <img src="media/Xbox.png" alt="Xbox" class="link-icon" /> Xbox
-                    </a>     
+                    </a>
                     <a href="https://x.com/NoxyRJ" target="_blank" rel="noopener noreferrer">
                         <img src="media/X.png" alt="Twitter" class="link-icon" /> Twitter
                     </a> 
                     <a href="https://www.twitch.tv/noxyrj_" target="_blank" rel="noopener noreferrer">
                         <img src="https://cdn.simpleicons.org/twitch/9146FF" alt="Twitch" class="link-icon" /> Twitch
-                    </a>       
+                    </a>
                     <a href="https://linktr.ee/NoxyRJ_" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/linktree/43E660" alt="linktr.ee" class="link-icon" /> linktr.ee          
-                    </a>      
+                        <img src="https://cdn.simpleicons.org/linktree/43E660" alt="linktr.ee" class="link-icon" /> linktr.ee
+                    </a>
                 </div>
             </div>
 
@@ -657,56 +657,63 @@
         });
 
 
-        // 6. Spotify (OEmbed/Info)
-        // OBS: As URLs http://googleusercontent.com/spotify.com/X não são válidas
-        // e foram mantidas como estão no seu script original para evitar quebrar a lógica.
-        (() => {
-            const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7861af7accc04585";
-            const manualArtist = "isotopxs";
+    (() => {
+        const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=7861af7accc04585";
+        const manualArtist = "isotopxs";
 
-            async function loadSpotifySong(url) {
-                try {
-                    // Simulação para o exemplo (assumindo que o link é para uma música)
-                    const title = "Nome da Música do Site";
-                    const artist = manualArtist;
-                    const thumbnailUrl = "media/Capa spotify.jpg"; // Usando a imagem local como fallback
+        async function loadSpotifySong(url) {
+            try {
+                // Tenta extrair o ID da música da URL.
+                const trackId = url.split("/track/")[1]?.split("?")[0];
+                if (!trackId) throw new Error("ID da música inválido");
 
-                    const musicDiv = document.createElement("div");
-                    musicDiv.id = "musicInfo";
-                    Object.assign(musicDiv.style, {
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        marginTop: "20px",
-                        textAlign: "center",
-                        color: "white"
-                    });
+                // Tenta fazer o fetch do OEmbed.
+                const res = await fetch(`https://open.spotify.com/oembed?url=spotify:track:$${trackId}`);
+                const data = await res.json();
 
-                    musicDiv.innerHTML = `
-                        <div style="font-size:1.4rem;user-select:none;font-weight:bold;margin-bottom:10px;">
-                            𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
-                        </div>
-                        <a href="${url}" target="_blank" rel="noopener noreferrer">
-                            <img src="${thumbnailUrl}" alt="Capa da música" class="neon-sync"
-                                style="width:150px;height:150px;margin-bottom:10px;cursor:pointer;border-radius:12px;">
-                        </a>
-                        <div class="music-data">
-                            <div style="font-size:18px;font-weight:bold;color:white;">${title}</div>
-                            <div style="font-size:14px;color:white;opacity:0.8;">${artist}</div>
-                        </div>
-                    `;
+                // Extrai Título e Artista, usando fallback para valores fixos se necessário.
+                const title = data.title || "Música desconhecida";
+                const artist = data.author_name?.trim() || manualArtist;
 
-                    document.getElementById("main-content")?.appendChild(musicDiv) 
-                        || console.error("Content principal não encontrado! Verifique o id.");
-                } catch (e) {
-                    console.error("Erro ao carregar música:", e);
-                }
+                // Cria o elemento Div principal da música.
+                const musicDiv = document.createElement("div");
+                musicDiv.id = "musicInfo";
+                Object.assign(musicDiv.style, {
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                    textAlign: "center",
+                    color: "white"
+                });
+
+                // Preenche o HTML do Div com os dados.
+                musicDiv.innerHTML = `
+                    <div style="font-size:1.4rem;user-select:none;font-weight:bold;margin-bottom:10px;">
+                        𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
+                    </div>
+                    <a href="${spotifyUrl}" target="_blank" rel="noopener noreferrer">
+                        <img src="${data.thumbnail_url}" alt="Capa da música" class="neon-sync"
+                            style="width:150px;height:150px;margin-bottom:10px;cursor:pointer;">
+                    </a>
+                    <div class="music-data">
+                        <div style="font-size:18px;font-weight:bold;color:white;">${title}</div>
+                        <div style="font-size:14px;color:white;opacity:0.8;">${artist}</div>
+                    </div>
+                `;
+
+                // Adiciona o elemento ao DOM.
+                document.getElementById("overlay")?.appendChild(musicDiv)
+                    || console.error("Overlay principal não encontrado! Verifique o id.");
+            } catch (e) {
+                console.error("Erro ao carregar música:", e);
             }
+        }
 
-            document.addEventListener("DOMContentLoaded", () => loadSpotifySong(spotifyUrl));
-        })();
-
-    </script>
+        // Inicia o carregamento da música quando o DOM estiver pronto.
+        document.addEventListener("DOMContentLoaded", () => loadSpotifySong(spotifyUrl));
+    })();
+</script>
 </body>
 </html>

@@ -282,16 +282,15 @@
 
 
 
-  <!-- 🔹 Botão de Configurações acima do card do Spotify -->
-  <button id="btn-config" class="config-btn">💻 Ver Configurações</button>
+<!-- 🔹 Botão de Configurações acima do card do Spotify -->
+<button id="btn-config" class="config-btn">💻 Ver Configurações</button>
 
-  <!-- 🔹 Card do Spotify (exemplo) -->
-  <div class="spotify-card">
-    <!-- Código do player Spotify -->
-  </div>
+<!-- 🔹 Card do Spotify (exemplo) -->
+<div class="spotify-card">
+  <!-- Código do player Spotify -->
 </div>
 
-<!-- 🔹 Painel de configurações (fora do overlay principal) -->
+<!-- 🔹 Painel de configurações (overlay centralizado) -->
 <div id="config-panel" class="config-overlay">
   <div class="config-box">
     <h2>💻 Configurações do PC</h2>
@@ -308,23 +307,6 @@
 
 <!-- 🔹 Estilo -->
 <style>
-/* Overlay principal */
-.overlay {
-  position: fixed;
-  inset: 0;
-  margin: auto;
-  max-width: 570px;
-  max-height: 82vh;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow-y: auto;
-  z-index: 2;
-  padding: 20px;
-}
-
 /* Botão de Configurações */
 .config-btn {
   position: relative;
@@ -346,7 +328,7 @@
   transform: scale(1.05);
 }
 
-/* Painel de Configurações */
+/* Overlay do Painel de Configurações */
 .config-overlay {
   display: none;
   position: fixed;
@@ -354,10 +336,12 @@
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(6px);
   z-index: 9999;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
 
+/* Caixa de Configurações */
 .config-box {
   background: rgba(25, 25, 25, 0.9);
   padding: 30px;
@@ -367,8 +351,25 @@
   width: 90%;
   max-width: 450px;
   animation: aparecer 0.3s ease;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
+.config-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.config-box li {
+  margin-bottom: 10px;
+}
+
+/* Botão Fechar */
 .close-btn {
   margin-top: 20px;
   background: rgba(255, 0, 100, 0.8);
@@ -383,11 +384,11 @@
   background: rgba(255, 0, 100, 1);
 }
 
+/* Animação de aparecimento */
 @keyframes aparecer {
   from { transform: scale(0.9); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
-
 </style>
 
 <!-- 🔹 Script -->
@@ -407,11 +408,17 @@ document.addEventListener("DOMContentLoaded", () => {
     btnFechar.addEventListener("click", () => {
       painel.style.display = "none";
     });
+
+    // Fechar ao clicar fora da caixa
+    painel.addEventListener("click", (e) => {
+      if (e.target === painel) painel.style.display = "none";
+    });
   } else {
     console.error("❌ Elementos do painel de configuração não encontrados no DOM.");
   }
 });
 </script>
+
 
 
 <!-- Discord -->

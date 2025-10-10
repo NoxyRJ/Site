@@ -412,24 +412,27 @@
       const btnConfig = document.getElementById("btn-config");
       const btnFechar = document.getElementById("btn-fechar");
       const painel = document.getElementById("config-panel");
-      const volumeBox = document.getElementById("volume-box"); // Deve existir para o script do volume
+      const volumeBox = document.getElementById("volume-box");
   
       if (btnConfig && btnFechar && painel && volumeBox) {
           // Mostrar painel
           btnConfig.addEventListener("click", () => {
               painel.style.display = "flex";
               document.body.style.overflow = "hidden";
-              // ❌ REMOVIDA: volumeBox.style.filter = "blur(5px) brightness(0.6)"; 
-              // ❌ REMOVIDA: volumeBox.style.zIndex = "998"; 
-              // ❌ REMOVIDA: volumeBox.style.pointerEvents = "none";
+              
+              // ✅ Adiciona um efeito de blur/escurecimento e desativa o clique
+              volumeBox.style.filter = "blur(3px) brightness(0.6)"; 
+              volumeBox.style.pointerEvents = "none";
           });
   
           // Fechar painel
           btnFechar.addEventListener("click", () => {
               painel.style.display = "none";
               document.body.style.overflow = "";
-              // ❌ REMOVIDA: volumeBox.style.filter = "none"; 
-              // ❌ REMOVIDA: volumeBox.style.pointerEvents = "auto";
+              
+              // ✅ Remove o efeito
+              volumeBox.style.filter = "none"; 
+              volumeBox.style.pointerEvents = "auto";
           });
   
           // Fechar ao clicar fora do painel
@@ -437,8 +440,10 @@
               if (e.target === painel) {
                   painel.style.display = "none";
                   document.body.style.overflow = "";
-                  // ❌ REMOVIDA: volumeBox.style.filter = "none";
-                  // ❌ REMOVIDA: volumeBox.style.pointerEvents = "auto";
+                  
+                  // ✅ Remove o efeito
+                  volumeBox.style.filter = "none";
+                  volumeBox.style.pointerEvents = "auto";
               }
           });
       } else {

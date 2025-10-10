@@ -282,35 +282,37 @@
 
 
 <!-- Configuraçoes do meu pc-->
-<!-- 🔹 Botão de Configurações-->
+<!-- 🔹 Botão de Configurações -->
 <button id="btn-config" class="config-btn">💻 Configurações do PC</button>
 
-<!-- 🔹 Painel de configurações (overlay centralizado) -->
+<!-- 🔹 Painel de configurações (overlay centralizado com scroll) -->
 <div id="config-panel" class="config-overlay">
   <div class="config-box">
     <h2 style="color: #FF0064;">💻 Configurações do PC</h2>
     <ul>
       <li><strong>Processador:</strong> AMD Ryzen 5 1600</li>
       <li><strong>Placa-mãe:</strong> PCWare APM A320G</li>
-      <li><strong>Water Cooler:</strong> Water Cooler Rise Mode, RGB, 360mm </li>
+      <li><strong>Water Cooler:</strong> Water Cooler Rise Mode, RGB, 360mm</li>
       <li><strong>Memória RAM:</strong> Asgard 8GBx2 3200Mhz série w2</li>
       <li><strong>Placa de vídeo:</strong> Rx 550 4Gb</li>
-      <li><strong>Armazenamento:</strong> SSD 240GB + 2xHD 500GB </li>
-      <li><strong>Fans:</strong> 10 Fans Wx-1 argb, 800-2000rpm, Uni-fan </li>
+      <li><strong>Armazenamento:</strong> SSD 240GB + 2xHD 500GB</li>
+      <li><strong>Fans:</strong> 10 Fans Wx-1 argb, 800-2000rpm, Uni-fan</li>
       <li><strong>Fonte:</strong> Gamemax GX800, 800w, 80 plus gold, PFC Ativo</li>
-      
-      <h2 style="color: #FF0064;">💻 Monitores</h2>
     </ul>
-      <li><strong>Monitor primario:</strong> Monitor Gamer Dahua DHI-LM25-E231B, 25 Polegadas, IPS, 180Hz, E-Led Full HD</li>
-      <li><strong>Monitor Secundario:</strong> Monitor HQ, 21 Polegadas, 75Hz (Posição Horizontal)</li> 
 
-      <h2 style="color: #FF0064;">💻 Periféricos</h2>
+    <h2 style="color: #FF0064;">💻 Monitores</h2>
+    <ul>
+      <li><strong>Monitor primário:</strong> Dahua DHI-LM25-E231B, 25", IPS, 180Hz, Full HD</li>
+      <li><strong>Monitor secundário:</strong> HQ 21", 75Hz (horizontal)</li>
     </ul>
-      <li><strong>Teclado:</strong> Ajazz ak820</li> 
-      <li><strong>Mouse:</strong> Ambidestro Fontrek BlackFire</li> 
-      <li><strong>Headset:</strong> Headset Gamer Mancer Aura</li> 
 
+    <h2 style="color: #FF0064;">💻 Periféricos</h2>
+    <ul>
+      <li><strong>Teclado:</strong> Ajazz ak820</li>
+      <li><strong>Mouse:</strong> Ambidestro Fontrek BlackFire</li>
+      <li><strong>Headset:</strong> Mancer Aura</li>
     </ul>
+
     <button id="btn-fechar" class="close-btn">Fechar</button>
   </div>
 </div>
@@ -338,9 +340,9 @@
   transform: scale(1.05);
 }
 
-/* Overlay do Painel de Configurações */
+/* Overlay fixo e com rolagem */
 .config-overlay {
-  display: none; /* overlay inicia escondido */
+  display: none; /* ✅ começa escondido */
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
@@ -348,11 +350,13 @@
   z-index: 9999;
   justify-content: center;
   align-items: center;
+  overflow-y: auto; /* ✅ rolagem do overlay */
+  padding: 20px;
 }
 
 /* Caixa de Configurações */
 .config-box {
-  background: rgba(25, 25, 25, 0.9);
+  background: rgba(25, 25, 25, 0.95);
   padding: 30px;
   border-radius: 16px;
   box-shadow: 0 0 30px rgba(255, 0, 100, 0.3);
@@ -360,12 +364,9 @@
   width: 90%;
   max-width: 450px;
   animation: aparecer 0.3s ease;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   text-align: center;
+  max-height: 90vh; /* ✅ impede corte */
+  overflow-y: auto; /* ✅ rola o conteúdo interno */
 }
 
 .config-box ul {
@@ -375,11 +376,12 @@
 }
 
 .config-box li strong {
-  color: #FF00AA; /* coloque a cor que quiser */
+  color: #FF00AA; /* cor dos títulos */
 }
 
 .config-box li {
   margin-bottom: 10px;
+  word-wrap: break-word; /* ✅ evita corte de palavras longas */
 }
 
 /* Botão Fechar */
@@ -397,7 +399,7 @@
   background: rgba(255, 0, 100, 1);
 }
 
-/* Animação de aparecimento */
+/* Animação */
 @keyframes aparecer {
   from { transform: scale(0.9); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
@@ -415,16 +417,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // Mostrar painel
     btnConfig.addEventListener("click", () => {
       painel.style.display = "flex";
+      document.body.style.overflow = "hidden"; // 🔹 trava o fundo
     });
 
     // Fechar painel
     btnFechar.addEventListener("click", () => {
       painel.style.display = "none";
+      document.body.style.overflow = ""; // 🔹 destrava o fundo
     });
 
     // Fechar ao clicar fora da caixa
     painel.addEventListener("click", (e) => {
-      if (e.target === painel) painel.style.display = "none";
+      if (e.target === painel) {
+        painel.style.display = "none";
+        document.body.style.overflow = "";
+      }
     });
   } else {
     console.error("❌ Elementos do painel de configuração não encontrados no DOM.");

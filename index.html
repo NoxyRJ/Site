@@ -487,11 +487,10 @@
                 volumeBox.style.display = 'flex';
                 overlay.classList.add("show");
                 mainContent.classList.add("show");
-                document.getElementById("view-counter").style.display="block"; // Mostrar contador
-                updateViews(); // Iniciar contagem de visitas
+                document.getElementById("view-counter").style.display="block";
+                updateViews();
             }).catch(e => {
                 console.warn('Erro ao iniciar áudio:', e);
-                // Mesmo que não inicie, esconde o modal e mostra o conteúdo
                 audioModal.style.display = 'none';
                 volumeBox.style.display = 'flex';
                 overlay.classList.add("show");

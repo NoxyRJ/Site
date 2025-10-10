@@ -593,113 +593,118 @@
             }
         }
         
-        // 5. Discord Status (Lanyard)
-        async function fetchDiscordStatus() {
-            const userId = "278691315594559489";
-            const apiLink = `https://api.lanyard.rest/v1/users/${userId}`;
+    // ====================================================================
+    // 5. Discord Status (Lanyard)
+    // ====================================================================
 
-            try {
-                const response = await fetch(apiLink);
-                if (!response.ok) throw new Error("Erro na API");
+    async function fetchDiscordStatus() {
+        const userId = "278691315594559489";
+        const apiLink = `https://api.lanyard.rest/v1/users/${userId}`;
 
-                const data = await response.json();
-                if (!data.data || !data.data.discord_user) throw new Error("Usuário não encontrado");
+        try {
+            const response = await fetch(apiLink);
+            if (!response.ok) throw new Error("Erro na API");
 
-                const user = data.data.discord_user;
-                const status = data.data.discord_status;
+            const data = await response.json();
+            if (!data.data || !data.data.discord_user) throw new Error("Usuário não encontrado");
 
-                // Atualiza avatar
-                const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
-                const avatarEl = document.getElementById("discord-avatar");
-                if (avatarEl && avatarEl.src !== avatarUrl) { avatarEl.src = avatarUrl; }
+            const user = data.data.discord_user;
+            const status = data.data.discord_status;
 
-                // Nome e Username
-                document.getElementById("display-name").textContent = user.global_name || user.username;
-                document.getElementById("discord-username").textContent = "@" + user.username;
-                
-                // Discriminator (apenas se for diferente de "0" - novo sistema de username)
-                const discriminatorEl = document.getElementById("discord-discriminator");
-                if (user.discriminator !== "0") {
-                    discriminatorEl.textContent = "#" + user.discriminator;
-                    discriminatorEl.style.display = "inline";
-                } else {
-                    discriminatorEl.style.display = "none";
-                }
+            // Atualiza avatar
+            const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
+            const avatarEl = document.getElementById("discord-avatar");
+            if (avatarEl && avatarEl.src !== avatarUrl) { avatarEl.src = avatarUrl; }
 
-                // Círculo de status
-                const statusCircle = document.getElementById("discord-status-circle");
-                let color = "gray";
-                let statusText = "Offline";
-
-                switch (status) {
-                    case "online": color = "#43B581"; statusText = "Online"; break;
-                    case "idle": color = "#FAA61A"; statusText = "Ausente"; break;
-                    case "dnd": color = "#F04747"; statusText = "Não perturbe"; break;
-                    case "offline": default: color = "gray"; statusText = "Offline"; break;
-                }
-
-                if (statusCircle) {
-                    statusCircle.style.backgroundColor = color;
-                    statusCircle.title = statusText;
-                    statusCircle.classList.add("neon-sync"); // Aplica a animação neon
-                }
-
-            } catch (error) {
-                console.error("Erro ao buscar status do Discord:", error);
-                const statusEl = document.getElementById("discord-status");
-                if (statusEl) { statusEl.innerHTML = `<p style="color:red;">Status Discord indisponível</p>`; }
+            // Nome e Username
+            document.getElementById("display-name").textContent = user.global_name || user.username;
+            document.getElementById("discord-username").textContent = "@" + user.username;
+            
+            // Discriminator
+            const discriminatorEl = document.getElementById("discord-discriminator");
+            if (user.discriminator !== "0") {
+                discriminatorEl.textContent = "#" + user.discriminator;
+                discriminatorEl.style.display = "inline";
+            } else {
+                discriminatorEl.style.display = "none";
             }
+
+            // Círculo de status
+            const statusCircle = document.getElementById("discord-status-circle");
+            let color = "gray";
+            let statusText = "Offline";
+
+            switch (status) {
+                case "online": color = "#43B581"; statusText = "Online"; break;
+                case "idle": color = "#FAA61A"; statusText = "Ausente"; break;
+                case "dnd": color = "#F04747"; statusText = "Não perturbe"; break;
+                case "offline": default: color = "gray"; statusText = "Offline"; break;
+            }
+
+            if (statusCircle) {
+                statusCircle.style.backgroundColor = color;
+                statusCircle.title = statusText;
+                statusCircle.classList.add("neon-sync");
+            }
+
+        } catch (error) {
+            console.error("Erro ao buscar status do Discord:", error);
+            const statusEl = document.getElementById("discord-status");
+            if (statusEl) { statusEl.innerHTML = `<p style="color:red;">Status Discord indisponível</p>`; }
         }
+    }
 
-        document.addEventListener("DOMContentLoaded", () => {
-            fetchDiscordStatus();
-            setInterval(fetchDiscordStatus, 5000); // Atualiza a cada 5 segundos
-        });
+    // Inicializa o Discord Lanyard e o loop de atualização
+    document.addEventListener("DOMContentLoaded", () => {
+        fetchDiscordStatus();
+        setInterval(fetchDiscordStatus, 5000); // Atualiza a cada 5 segundos
+    });
 
 
-// 6. Spotify (OEmbed/Info) - Versão CORRIGIDA
+    // ====================================================================
+    // 6. Spotify (Música Fixa via OEmbed) - CORRIGIDO
+    // ====================================================================
+
     (() => {
-        // ⚠️ SUBSTITUA por uma URL de música REAL do Spotify que você deseja exibir.
-        // Exemplo: const spotifyUrl = "https://open.spotify.com/track/6UjTz2hT0mG43Z2lEus7Jc";
-        const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=68027daedf25438c"; // URL de música real
-
+        // ⚠️ SUBSTITUA: Link de música REAL do Spotify.
+        const spotifyUrl = "https://open.spotify.com/oembed?url=spotify:track:$9"; 
         const manualArtist = "isotopxs";
+        const fallbackImage = "media/Capa spotify.jpg"; 
 
         async function loadSpotifySong(url) {
-            // Se a URL ainda for a falsa, voltamos para a simulação para não quebrar.
-            if (url.includes("googleusercontent.com/spotify.com")) {
-                console.warn("Usando dados de simulação, pois a URL do Spotify não é válida.");
-                const title = "Nome da Música do Site (Simulado)";
-                const artist = manualArtist;
-                const thumbnailUrl = "media/Capa spotify.jpg";
-                renderMusic(url, title, artist, thumbnailUrl);
-                return;
-            }
+            let title = "Música Desconhecida (Erro)";
+            let artist = manualArtist;
+            let thumbnailUrl = fallbackImage;
 
             try {
-                // Endpoint OEmbed alternativo, mais confiável para Spotify:
-                const oembedUrl = `https://open.spotify.com/track/6rqhFgbbKwnb9MLmUQDhG6${encodeURIComponent(url)}`;
+                // Endpoint OEmbed oficial do Spotify.
+                const oembedBase = "https://open.spotify.com/oembed"; 
+                const oembedUrl = `${oembedBase}?url=${encodeURIComponent(url)}`;
                 
                 const res = await fetch(oembedUrl);
+                
+                if (!res.ok) throw new Error(`Status de resposta: ${res.status}`);
+                
                 const data = await res.json();
 
                 // Extrai dados reais
-                const title = data.title || "Música Desconhecida";
-                const artist = data.author_name?.trim() || manualArtist;
-                const thumbnailUrl = data.thumbnail_url || "media/Capa spotify.jpg";
-
-                renderMusic(url, title, artist, thumbnailUrl);
+                title = data.title || title;
+                artist = data.author_name?.trim() || manualArtist;
+                thumbnailUrl = data.thumbnail_url || fallbackImage;
 
             } catch (e) {
-                console.error("Erro ao carregar dados reais do Spotify. Usando fallback.", e);
-                // Fallback para dados de simulação em caso de erro na API
-                renderMusic(url, "Música Desconhecida (Erro)", manualArtist, "media/Capa spotify.jpg");
+                console.error("❌ Erro ao buscar dados do Spotify. Usando fallback.", e);
             }
+
+            // Renderiza o componente com os dados
+            renderMusic(url, title, artist, thumbnailUrl);
         }
 
         function renderMusic(url, title, artist, thumbnailUrl) {
             const musicDiv = document.createElement("div");
             musicDiv.id = "musicInfo";
+            
+            // Estilos
             Object.assign(musicDiv.style, {
                 display: "flex",
                 flexDirection: "column",
@@ -710,6 +715,7 @@
                 color: "white"
             });
 
+            // Estrutura HTML
             musicDiv.innerHTML = `
                 <div style="font-size:1.4rem;user-select:none;font-weight:bold;margin-bottom:10px;">
                     𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
@@ -724,10 +730,12 @@
                 </div>
             `;
 
+            // Adiciona ao elemento principal
             document.getElementById("main-content")?.appendChild(musicDiv)
                 || console.error("Content principal não encontrado! Verifique o id.");
         }
 
+        // Inicializa o Spotify (Música Fixa)
         document.addEventListener("DOMContentLoaded", () => loadSpotifySong(spotifyUrl));
     })();
 </script>

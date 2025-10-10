@@ -425,14 +425,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // Fechar painel
     btnFechar.addEventListener("click", () => {
       painel.style.display = "none";
-      document.body.style.overflow = ""; // 🔹 destrava o fundo
+      document.body.style.overflow = "";
+      volumeBox.style.filter = "none"; // 🔹 remove o blur
+      volumeBox.style.pointerEvents = "auto"; // reativa clique
     });
 
-    // Fechar ao clicar fora da caixa
+    // Fechar ao clicar fora do painel
     painel.addEventListener("click", (e) => {
       if (e.target === painel) {
         painel.style.display = "none";
         document.body.style.overflow = "";
+        volumeBox.style.filter = "none";
+        volumeBox.style.pointerEvents = "auto";
       }
     });
   } else {

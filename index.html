@@ -285,7 +285,7 @@
 <!-- 🔹 Botão de Configurações-->
 <button id="btn-config" class="config-btn">💻 Configurações do PC</button>
 
-<!-- 🔹 Painel de configurações (overlay centralizado com scroll) -->
+<!-- 🔹 Painel de configurações (overlay centralizado) -->
 <div id="config-panel" class="config-overlay">
   <div class="config-box">
     <h2 style="color: #FF0064;">💻 Configurações do PC</h2>
@@ -298,21 +298,19 @@
       <li><strong>Armazenamento:</strong> SSD 240GB + 2xHD 500GB </li>
       <li><strong>Fans:</strong> 10 Fans Wx-1 argb, 800-2000rpm, Uni-fan </li>
       <li><strong>Fonte:</strong> Gamemax GX800, 800w, 80 plus gold, PFC Ativo</li>
+      
+      <h2 style="color: #FF0064;">💻 Monitores</h2>
     </ul>
+      <li><strong>Monitor primario:</strong> Monitor Gamer Dahua DHI-LM25-E231B, 25 Polegadas, IPS, 180Hz, E-Led Full HD</li>
+      <li><strong>Monitor Secundario:</strong> Monitor HQ, 21 Polegadas, 75Hz (Posição Horizontal)</li> 
 
-    <h2 style="color: #FF0064;">💻 Monitores</h2>
-    <ul>
-      <li><strong>Monitor primário:</strong> Dahua DHI-LM25-E231B, 25", IPS, 180Hz, Full HD</li>
-      <li><strong>Monitor secundário:</strong> HQ 21", 75Hz (horizontal)</li>
+      <h2 style="color: #FF0064;">💻 Periféricos</h2>
     </ul>
+      <li><strong>Teclado:</strong> Ajazz ak820</li> 
+      <li><strong>Mouse:</strong> Ambidestro Fontrek BlackFire</li> 
+      <li><strong>Headset:</strong> Headset Gamer Mancer Aura</li> 
 
-    <h2 style="color: #FF0064;">💻 Periféricos</h2>
-    <ul>
-      <li><strong>Teclado:</strong> Ajazz ak820</li>
-      <li><strong>Mouse:</strong> Ambidestro Fontrek BlackFire</li>
-      <li><strong>Headset:</strong> Mancer Aura</li>
     </ul>
-
     <button id="btn-fechar" class="close-btn">Fechar</button>
   </div>
 </div>
@@ -340,19 +338,16 @@
   transform: scale(1.05);
 }
 
-/* Overlay fixo e com rolagem */
+/* Overlay do Painel de Configurações */
 .config-overlay {
-  display: none;
+  display: none; /* overlay inicia escondido */
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(6px);
   z-index: 9999;
-  overflow-y: auto; /* 🔹 permite rolagem */
-  display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px; /* 🔹 espaçamento para mobile */
 }
 
 /* Caixa de Configurações */
@@ -365,9 +360,12 @@
   width: 90%;
   max-width: 450px;
   animation: aparecer 0.3s ease;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   text-align: center;
-  overflow-y: auto; /* 🔹 rolagem interna no conteúdo */
-  max-height: 90vh; /* 🔹 impede de sair da tela */
 }
 
 .config-box ul {
@@ -377,7 +375,7 @@
 }
 
 .config-box li strong {
-  color: #FF00AA; /* Cor dos títulos */
+  color: #FF00AA; /* coloque a cor que quiser */
 }
 
 .config-box li {
@@ -417,28 +415,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // Mostrar painel
     btnConfig.addEventListener("click", () => {
       painel.style.display = "flex";
-      document.body.style.overflow = "hidden"; // 🔹 trava scroll do fundo
     });
 
     // Fechar painel
     btnFechar.addEventListener("click", () => {
       painel.style.display = "none";
-      document.body.style.overflow = ""; // 🔹 libera scroll do fundo
     });
 
     // Fechar ao clicar fora da caixa
     painel.addEventListener("click", (e) => {
-      if (e.target === painel) {
-        painel.style.display = "none";
-        document.body.style.overflow = "";
-      }
+      if (e.target === painel) painel.style.display = "none";
     });
   } else {
     console.error("❌ Elementos do painel de configuração não encontrados no DOM.");
   }
 });
 </script>
-
 
 <!-- Discord -->
 <!-- Discord Card -->

@@ -209,13 +209,10 @@
   </style>  
 
 <!-- Volume no canto superior esquerdo -->
-<!-- Caixa do volume -->
-<div class="view-box" id="volume-box" style="
-  display: none;
-  user-select: none;
+<div id="volume-box" style="
   position: absolute;
-  top: 50px;
-  right: 10px;
+  top: 10px;
+  left: 10px;
   color: white;
   font-size: 18px;
   background: rgba(0, 0, 0, 0.3);
@@ -225,39 +222,14 @@
   box-shadow:
     0 0 8px 2px rgba(0, 0, 0, 0.9),
     inset 0 0 15px 3px rgba(0, 0, 0, 0.8);
+  display: none; /* ESCONDE até ativar */
+  align-items: center;
+  gap: 10px;
+  z-index: 2;
 ">
-🔊 Volume: --
+  <button id="volume" aria-label="Toggle volume" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">🔊</button>
+  <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.5" style="width: 100px;" aria-label="Volume slider" />
 </div>
-
-<script>
-  // Função para exibir e atualizar o volume
-  function atualizarVolume(novoVolume) {
-    const volumeBox = document.getElementById("volume-box");
-
-    // Mostra a caixa se estiver oculta
-    if (volumeBox.style.display === "none") {
-      volumeBox.style.display = "block";
-    }
-
-    // Atualiza o texto com o volume atual em porcentagem
-    const porcentagem = Math.round(novoVolume * 100);
-    volumeBox.innerHTML = `🔊 Volume: ${porcentagem}%`;
-  }
-
-  // Exemplo: integração com o áudio principal do site
-  // Substitua '#background-music' pelo ID do seu <audio>
-  const audio = document.getElementById("background-music");
-  if (audio) {
-    // Atualiza sempre que o volume mudar
-    audio.addEventListener("volumechange", () => {
-      atualizarVolume(audio.volume);
-    });
-
-    // Atualiza ao carregar
-    atualizarVolume(audio.volume);
-  }
-</script>
-
 
 <!-- Contador de visitantes -->
 <div class="view-box" id="view-counter" style="

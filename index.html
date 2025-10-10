@@ -155,7 +155,9 @@
         .listen-btn:hover { background: #fff; }
         
         /* Volume Control Box */
-        #volume-box {
+/* Volume Control Box */
+#volume-box {
+            /* ... (manter o restante dos estilos) ... */
             position: fixed;
             top: 10px;
             left: 10px;
@@ -174,7 +176,47 @@
             z-index: 1;
         }
         #volume-box button { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
-        #volume-box input[type="range"] { width: 100px; max-width: 80%; }
+
+        /* ESTILOS DO SLIDER DE VOLUME: COR RIGOROSA */
+        #volume-box input[type="range"] {
+            width: 100px; max-width: 80%;
+            /* 1. Ocultar o estilo padrão em WebKit (Chrome, Safari) */
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        
+        /* 2. Estilo da trilha (a linha branca) para WebKit */
+        #volume-box input[type="range"]::-webkit-slider-runnable-track {
+            height: 8px;
+            background: #fff;
+            border-radius: 4px;
+        }
+
+        /* 3. Estilo do polegar/círculo (o ponto azul/vermelho) para WebKit */
+        #volume-box input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            margin-top: -4px; /* Centraliza verticalmente */
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #FF0000; /* COR VERMELHA */
+            box-shadow: 0 0 5px #FF0000;
+        }
+        
+        /* 4. Estilos para Firefox */
+        #volume-box input[type="range"]::-moz-range-thumb {
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #FF0000; /* COR VERMELHA */
+            border: none;
+            box-shadow: 0 0 5px #FF0000;
+        }
+        #volume-box input[type="range"]::-moz-range-track {
+            height: 8px;
+            background: #fff;
+            border-radius: 4px;
+        }
         
         /* Contador de Visitas */
         #view-counter {
@@ -592,7 +634,7 @@
                 document.getElementById("view-counter").textContent=`👁️ Erro`;
             }
         }
-        
+
     // Inicializa o Discord Lanyard
     async function fetchDiscordStatus() {
         const userId = "278691315594559489";

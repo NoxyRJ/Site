@@ -39,35 +39,65 @@
             object-fit: cover; z-index: -2;
         }
         
+        /* ================= Overlay Principal ================= */
+        .overlay {
+            position: relative;
+            inset: 0;
+            margin: 60px auto;
+            max-width: 570px;
+            max-height: 80vh;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 3s;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow: visible;
+            box-shadow: 0 0 8px rgba(0,0,0,.9), inset 0 0 15px rgba(0,0,0,.8);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,.2) transparent;
+        }
+        .overlay::-webkit-scrollbar { width: 8px; }
+        .overlay::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,.2);
+            border-radius: 10px;
+        }
+        .overlay.show { opacity: 1; }
+
+        html {
+           scroll-behavior: smooth;
+        }
+        
         /* ================= Overlay Principal (FIX MOBILE) ================= */
-.overlay {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+        .overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
 
-    width: calc(100% - 30px);
-    max-width: 570px;
-    max-height: 85dvh;
+            width: calc(100% - 30px);
+            max-width: 570px;
+            max-height: 85dvh;
 
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
 
-    opacity: 0;
-    transition: opacity 0.8s ease;
+            opacity: 0;
+            transition: opacity 0.8s ease;
 
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
 
-    overflow-y: auto;
-    overscroll-behavior: contain;
+            overflow-y: auto;
+            overscroll-behavior: contain;
 
-    box-shadow: 0 0 8px rgba(0,0,0,.9), inset 0 0 15px rgba(0,0,0,.8);
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,.2) transparent;
-}
-.overlay.show { opacity: 1; }
+            box-shadow: 0 0 8px rgba(0,0,0,.9), inset 0 0 15px rgba(0,0,0,.8);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,.2) transparent;
+        }
+        .overlay.show { opacity: 1; }
         
         /* ================= Chrome, Edge, Opera  ================= */
         ::-webkit-scrollbar {

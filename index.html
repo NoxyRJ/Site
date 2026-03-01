@@ -46,6 +46,9 @@
             margin: 60px auto;
             max-width: 570px;
             max-height: 80vh;
+            background: rgba(0,0,0,0.45);
+            backdrop-filter: blur(6px);
+            border-radius: 16px;
             opacity: 0;
             transition: opacity 3s;
             display: flex;
@@ -101,18 +104,6 @@
         h2, p {
             font-size: clamp(1rem, 2.5vw, 1.5rem);
             margin-bottom: 1rem; color: white;
-        }
-
-        .content-box {
-            width: 100%;
-            max-width: 570px;
-            background: rgba(0,0,0,0.35);
-            border-radius: 16px;
-            padding: 20px;
-
-            box-shadow:
-                0 0 8px rgba(0,0,0,.9),
-                inset 0 0 15px rgba(0,0,0,.8);
         }
         
         /* ================= Avatar ================= */

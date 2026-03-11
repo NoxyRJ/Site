@@ -339,8 +339,19 @@
 
 <body>
     <div id="volume-box">
-        <button id="volume" aria-label="Toggle volume">🔊</button>
-        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.2" aria-label="Volume slider" />
+        <button id="volume" aria-label="Toggle volume">
+            <img id="volumeIcon" src="media/sound_on.png" alt="Volume" width="22">
+        </button>
+
+        <input 
+            type="range" 
+            id="volume-slider" 
+            min="0" 
+            max="1" 
+            step="0.01" 
+            value="0.2" 
+            aria-label="Volume slider"
+        />
     </div>
 
     <div class="view-box" id="view-counter">👁️ Carregando...</div>
@@ -591,20 +602,30 @@
         });
 
         /* ================= Toggle volume (Mute/Unmute) ================= */
+
+        const volumeIcon = document.getElementById("volumeIcon");
+
         volumeBtn.addEventListener('click', () => {
             if (music.paused) {
                 music.play();
-                volumeBtn.textContent = '🔊';
+                volumeIcon.src = "media/sound_on.png";
             } else {
                 music.pause();
-                volumeBtn.textContent = '🔇';
+                volumeIcon.src = "media/sound_muted.png";
             }
         });
 
         /* ================= Slider de volume ================= */
+
         volumeSlider.addEventListener('input', () => {
             music.volume = volumeSlider.value;
-            volumeBtn.textContent = music.volume == 0 ? '🔇' : '🔊';
+
+            if (music.volume == 0) {
+                volumeIcon.src = "media/sound_muted.png";
+            } else {
+                volumeIcon.src = "media/sound_on.png";
+            }
+
             if (music.paused && music.volume > 0) music.play();
         });
 

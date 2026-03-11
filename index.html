@@ -16,7 +16,7 @@
     <meta name="theme-color" content="#FF0000">
 
     <link rel="icon" type="image/png" href="media/icon.png" />
-    <link rel="icon" type="image/png" href="media/icon.png" sizes="36x36" />
+    <link rel="icon" type="image/png" href="media/icon.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="media/icon.png" />
     <link rel="shortcut icon" href="media/icon.png" type="image/png" />
 
@@ -363,6 +363,57 @@
             0% { opacity: 0.7; text-shadow: 0 0 4px #fff; }
             100% { opacity: 1; text-shadow: 0 0 16px #fff; }
         }
+
+        /* ================= Credito do Site ================= */
+
+        .site-credit{
+            width:100%;
+            text-align:center;
+            margin:40px 0 20px;
+            user-select:none;
+        }
+
+        .site-credit span{
+            font-size:1.4rem;
+            font-weight:bold;
+
+            background: linear-gradient(
+                90deg,
+                #ffffff 0%,
+                #ffffff 35%,
+                #ff0000 47%,
+                #ff0000 50%,
+                #ff0000 53%,
+                #ff0000 58%,
+                #ffffff 65%,
+                #ffffff 100%
+            );
+
+            background-size:200% 100%;
+
+            -webkit-background-clip:text;
+            background-clip:text;
+            -webkit-text-fill-color:transparent;
+
+            animation:scanText 5s linear infinite;
+
+            /* brilho vermelho forte */
+            text-shadow:
+                0 0 10px #ffffff,
+                0 0 15px #ff0000,
+                0 0 25px #ff0000,
+                0 0 30px #ff0000;
+        }
+
+        @keyframes scanText{
+            0%{
+                background-position:-200% 0;
+            }
+            100%{
+                background-position:200% 0;
+            }
+        }
+
     </style>
 </head>
 
@@ -808,7 +859,6 @@
 
 /* ================= Musica do Site  ================= */
     (() => {
-        // ⚠️ SUBSTITUA: Link de música REAL do Spotify.
         const spotifyUrl = "https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=784b639399214e45"; 
         const manualArtist = "isotopxs";
         const fallbackImage = "media/Capa spotify.jpg"; 
@@ -845,8 +895,7 @@
         function renderMusic(url, title, artist, thumbnailUrl) {
             const musicDiv = document.createElement("div");
             musicDiv.id = "musicInfo";
-            
-            /* ================= Estilos ================= */
+
             Object.assign(musicDiv.style, {
                 display: "flex",
                 flexDirection: "column",
@@ -857,7 +906,6 @@
                 color: "white"
             });
 
-            /* ================= Estrutura HTML ================= */
             musicDiv.innerHTML = `
                 <div style="font-size:1.7rem;user-select:none;font-weight:bold;margin-bottom:10px;">
                     𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
@@ -870,9 +918,12 @@
                     <div style="font-size:18px;font-weight:bold;color:white;">${title}</div>
                     <div style="font-size:14px;color:white;opacity:0.8;">${artist}</div>
                 </div>
+
+                <div class="site-credit">
+                    <span>Site feito por: Noxy.gg</span>
+                </div>
             `;
 
-            /* ================= Adiciona ao elemento principal ================= */
             document.getElementById("main-content")?.appendChild(musicDiv)
                 || console.error("Content principal não encontrado! Verifique o id.");
         }
@@ -880,6 +931,8 @@
         /* ================= Inicializa o Spotify (Música Fixa) ================= */
         document.addEventListener("DOMContentLoaded", () => loadSpotifySong(spotifyUrl));
     })();
+
+    
 </script>
 </body>
 </html>

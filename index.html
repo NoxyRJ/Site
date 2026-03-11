@@ -66,13 +66,13 @@
            scroll-behavior: smooth;
         }
         
-        /* ================= Chrome, Edge, Opera  ================= */
+        /* ================= Chrome, Edge, Opera ================= */
         ::-webkit-scrollbar {
-           width: 6px;
+            width: 6px;
         }
 
         ::-webkit-scrollbar-track {
-           background: transparent;
+            background: transparent;
         }
 
         ::-webkit-scrollbar-thumb {
@@ -90,6 +90,35 @@
             scrollbar-color: rgba(0,0,0,0.5) transparent;
         }
         
+        /* ================= Icon Counter ================= */
+        .view-box{
+            display:flex;
+            align-items:center;
+            gap:8px;
+            line-height:1;
+        }
+        #viewIcon{
+            width:32px;
+            height:32px;
+            transform:none;
+            vertical-align:middle;
+            object-fit:contain;
+        }
+
+        /* ================= Icon Som ================= */
+        #volume-box{
+            display:flex;
+            align-items:center;
+            gap:8px;
+        }
+        #volumeIcon{
+            width:24px;
+            height:24px;
+            object-fit:contain;
+            transform:none;
+            vertical-align:middle;
+        }
+
         /* ================= Conteúdo ================= */
         .content {
             flex: 1; text-align: center; color: white;
@@ -354,7 +383,10 @@
         />
     </div>
 
-    <div class="view-box" id="view-counter">👁️ Carregando...</div>
+    <div class="view-box" id="view-counter">
+        <img src="media/eye.png" id="viewIcon" alt="Views" width="28">
+        <span id="view-text">Carregando...</span>
+    </div>
 
     <div id="bg-container">
         <img src="media/bg.jpg" id="bg-image" alt="Fundo">
@@ -684,23 +716,28 @@
         
         async function updateViews(){
             try{
-                const res=await fetch(URL,{headers:{"X-Master-Key":API_KEY}});
-                const {record}=await res.json();
-                let views=record.views;
+                const res = await fetch(URL,{headers:{"X-Master-Key":API_KEY}});
+                const {record} = await res.json();
+                let views = record.views;
 
                 if(!visited){
                     views++;
                     await fetch(URL,{
                         method:"PUT",
-                        headers:{"Content-Type":"application/json","X-Master-Key":API_KEY},
+                        headers:{
+                            "Content-Type":"application/json",
+                            "X-Master-Key":API_KEY
+                        },
                         body:JSON.stringify({views})
                     });
                     localStorage.setItem("siteVisited","true");
                 }
-                document.getElementById("view-counter").textContent=`👁️ ${views} visitantes`;
+
+                document.getElementById("view-text").textContent = `${views} visitantes`;
+
             }catch(e){
                 console.error("Erro ao atualizar visitas:",e);
-                document.getElementById("view-counter").textContent=`👁️ Erro`;
+                document.getElementById("view-text").textContent = `Erro`;
             }
         }
         

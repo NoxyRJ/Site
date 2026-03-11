@@ -255,7 +255,7 @@
             transition: 0.3s;
             box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
         }
-        .config-btn:hover { background: rgb(255, 144, 144); transform: scale(1.05); }
+        .config-btn:hover { background: rgb(253, 69, 69); transform: scale(1.05); }
         .config-overlay {
             display: none;
             position: fixed;
@@ -294,7 +294,7 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .close-btn:hover { background: rgb(255, 141, 141); }
+        .close-btn:hover { background: rgb(253, 69, 69); }
         
         /* ================= Discord Card e Animação Neon ================= */
         .neon-sync{animation:pulseNeonBlack 3s infinite ease-in-out;border-radius:50%}
@@ -415,42 +415,98 @@
 
             <div class="links-section">
                 <h2 style="user-select: none; font-size: 1.7rem;">𝑳𝒊𝒏𝒌𝒔</h2>
+
+                <style>
+                    .links {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                        gap: 10px 12px;
+                        margin-top: 10px;
+                    }
+
+                    .links a {
+                        display: inline-flex;
+                        align-items: center;
+                        gap: 8px;
+                        padding: 8px 16px;
+                        background: #1b1b1f;
+                        border-radius: 14px;
+                        text-decoration: none;
+                        color: #fff;
+                        font-size: 1rem;
+                        font-weight: 700;
+                        line-height: 1;
+                        box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+                        transition: transform 0.2s ease, background 0.2s ease;
+                        user-select: none;
+                    }
+
+                    .links a:hover {
+                        transform: translateY(-2px);
+                        background: #232329;
+                    }
+
+                    .link-icon {
+                        width: 20px;
+                        height: 20px;
+                        object-fit: contain;
+                        flex-shrink: 0;
+                        transition: transform 0.25s ease;
+                    }
+
+                    .links a:hover .link-icon {
+                        transform: rotate(15deg);
+                    }
+                </style>
+
                 <div class="links">
                     <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/discord/5865F2" alt="Discord" class="link-icon" /> Discord
+                        <img src="https://cdn.simpleicons.org/discord/5865F2" alt="Discord" class="link-icon"> Discord
                     </a>
+
                     <a href="https://steamcommunity.com/id/Noxy_gg/" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/steam/171A21" alt="Steam" class="link-icon" /> Steam
+                        <img src="https://cdn.simpleicons.org/steam/ffffff" alt="Steam" class="link-icon"> Steam
                     </a>
+
                     <a href="https://www.roblox.com/pt/users/315909186/profile" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/roblox/E00E1A" alt="Roblox" class="link-icon" /> Roblox
+                        <img src="https://cdn.simpleicons.org/roblox/E2231A" alt="Roblox" class="link-icon"> Roblox
                     </a>
+
                     <a href="https://www.roblox.com/share/g/16392138" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/roblox/E00E1A" alt="Roblox" class="link-icon" /> Grupo
+                        <img src="https://cdn.simpleicons.org/roblox/E2231A" alt="Grupo" class="link-icon"> Grupo
                     </a>
+
                     <a href="https://www.tiktok.com/@noxy.gg" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/tiktok/000000" alt="TikTok" class="link-icon" /> TikTok
+                        <img src="https://cdn.simpleicons.org/tiktok/ffffff" alt="TikTok" class="link-icon"> TikTok
                     </a>
+
                     <a href="https://open.spotify.com/user/7ybhk69ilst4jfm3a24n6npzb" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/spotify/1DB954" alt="Spotify" class="link-icon" /> Spotify
+                        <img src="https://cdn.simpleicons.org/spotify/1ED760" alt="Spotify" class="link-icon"> Spotify
                     </a>
+
                     <a href="https://www.youtube.com/@NoxyRJ" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube" class="link-icon" /> YouTube
+                        <img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube" class="link-icon"> YouTube
                     </a>
+
                     <a href="https://www.instagram.com/hey.thsc7/?next=%2F" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram" class="link-icon" /> Instagram
+                        <img src="https://cdn.simpleicons.org/instagram/ff4aa2" alt="Instagram" class="link-icon"> Instagram
                     </a>
+
                     <a href="https://www.xbox.com/pt-BR/play/user/iCHiBANN8988" target="_blank" rel="noopener noreferrer">
-                        <img src="media/Xbox.png" alt="Xbox" class="link-icon" /> Xbox
+                        <img src="media/Xbox.png" alt="Xbox" class="link-icon"> Xbox
                     </a>
+
                     <a href="https://x.com/NoxyRJ" target="_blank" rel="noopener noreferrer">
-                        <img src="media/X.png" alt="Twitter" class="link-icon" /> Twitter
-                    </a> 
-                    <a href="https://www.twitch.tv/noxyrj_" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/twitch/9146FF" alt="Twitch" class="link-icon" /> Twitch
+                        <img src="media/X.png" alt="Twitter" class="link-icon"> Twitter
                     </a>
+
+                    <a href="https://www.twitch.tv/noxyrj_" target="_blank" rel="noopener noreferrer">
+                        <img src="https://cdn.simpleicons.org/twitch/9146FF" alt="Twitch" class="link-icon"> Twitch
+                    </a>
+
                     <a href="https://linktr.ee/NoxyRJ_" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/linktree/43E660" alt="linktr.ee" class="link-icon" /> linktr.ee
+                        <img src="https://cdn.simpleicons.org/linktree/43E660" alt="linktr.ee" class="link-icon"> linktr.ee
                     </a>
                 </div>
             </div>

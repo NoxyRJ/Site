@@ -71,17 +71,13 @@
             position: relative;
             margin: 60px auto;
             max-width: 570px;
-
             width: 100%;
             min-height: 100vh;
-
             opacity: 0;
             transition: opacity 3s;
-
             display: flex;
             flex-direction: column;
             padding: 20px;
-
             overflow: visible;
         }
 
@@ -151,19 +147,13 @@
                 z-index: auto !important;
             }
 
-            #volume-box {
-                margin: 0;
-            }
-
+            #volume-box,
             #view-counter {
                 margin: 0;
             }
         }
 
-
-
         /* ================= AVATAR PRINCIPAL ================= */
-
         .avatar-wrapper {
             display: inline-block;
             margin-bottom: 15px;
@@ -194,37 +184,34 @@
                 0 0 30px rgba(255, 0, 0, 0.6);
             background: transparent;
             pointer-events: none;
-
             animation: avatarPulse 4.5s infinite ease-in-out;
         }
 
-            @keyframes avatarPulse {
+        @keyframes avatarPulse {
+            0% {
+                transform: scale(1);
+                box-shadow:
+                    0 0 4px #ff0000,
+                    0 0 10px rgba(255, 0, 0, 0.8),
+                    0 0 16px rgba(255, 0, 0, 0.5);
+            }
 
-        0% {
-            transform: scale(1);
-            box-shadow:
-                0 0 4px #ff0000,
-                0 0 10px rgba(255, 0, 0, 0.8),
-                0 0 16px rgba(255, 0, 0, 0.5);
+            50% {
+                transform: scale(1.02);
+                box-shadow:
+                    0 0 12px #ff0000,
+                    0 0 16px rgba(255, 0, 0, 1),
+                    0 0 20px rgba(255, 0, 0, 0.8);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow:
+                    0 0 4px #ff0000,
+                    0 0 10px rgba(255, 0, 0, 0.8),
+                    0 0 16px rgba(255, 0, 0, 0.5);
+            }
         }
-
-        50% {
-            transform: scale(1.02);
-            box-shadow:
-                0 0 12px #ff0000,
-                0 0 16px rgba(255, 0, 0, 1),
-                0 0 20px rgba(255, 0, 0, 0.8);
-        }
-
-        100% {
-            transform: scale(1);
-            box-shadow:
-                0 0 4px #ff0000,
-                0 0 10px rgba(255, 0, 0, 0.8),
-                0 0 16px rgba(255, 0, 0, 0.5);
-        }
-
-    }
 
         /* ================= IMAGENS ================= */
         .imagem-extra {
@@ -379,8 +366,8 @@
             color: white;
             font-size: 18px;
             background: rgba(0, 0, 0, 0.35);
-            padding: 5px 10px;
-            border-radius: 7px;
+            padding: 5px 12px;
+            border-radius: 9px;
             font-family: sans-serif;
             display: none;
             align-items: center;
@@ -388,7 +375,7 @@
             user-select: none;
             backdrop-filter: blur(6px);
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.6);
-            z-index: 1;
+            z-index: 999;
         }
 
         #volume-box button {
@@ -416,7 +403,7 @@
         .view-box {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             line-height: 1;
         }
 
@@ -428,20 +415,23 @@
             right: 10px;
             color: white;
             font-size: 18px;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 5px 10px;
-            border-radius: 7px;
+            background: rgba(0, 0, 0, 0.65);
+            padding: 2px 12px;
+            border-radius: 9px;
             font-family: sans-serif;
-            box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.9), inset 0 0 15px 3px rgba(0, 0, 0, 0.8);
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.6);
             z-index: 999;
         }
 
         #viewIcon {
             width: 32px;
             height: 32px;
+            object-fit: contain;
             transform: none;
             vertical-align: middle;
-            object-fit: contain;
         }
 
         /* ================= MODAL INTRO ================= */
@@ -614,44 +604,6 @@
                 0 0 30px #ff0000;
         }
 
-        /* ================= AJUSTES MOBILE ================= */
-        @media (max-width: 768px) {
-            #volume-box {
-                position: fixed;
-                top: 10px;
-                left: 10px;
-                color: white;
-                font-size: 18px;
-                background: rgba(0, 0, 0, 0.35);
-                padding: 5px 10px;
-                border-radius: 7px;
-                font-family: sans-serif;
-                display: none;
-                align-items: center;
-                gap: 10px;
-                user-select: none;
-                backdrop-filter: blur(6px);
-                box-shadow: 0 0 8px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.6);
-                z-index: 999;
-            }
-
-            #view-counter {
-                display: none;
-                user-select: none;
-                position: fixed;
-                top: 10px;
-                right: 10px;
-                color: white;
-                font-size: 18px;
-                background: rgba(0, 0, 0, 0.3);
-                padding: 5px 10px;
-                border-radius: 7px;
-                font-family: sans-serif;
-                box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.9), inset 0 0 15px 3px rgba(0, 0, 0, 0.8);
-                z-index: 999;
-            }
-        }
-
         /* ================= NEON VERMELHO MELHORADO ================= */
         .red-neon-frame {
             box-shadow:
@@ -706,6 +658,23 @@
             }
             100% {
                 background-position: 200% 0;
+            }
+        }
+
+        @keyframes redPulseFrame {
+            0%, 100% {
+                box-shadow:
+                    0 0 8px rgba(0, 0, 0, 0.65),
+                    0 0 16px rgba(0, 0, 0, 0.65),
+                    0 0 28px rgba(0, 0, 0, 0.65),
+                    0 0 40px rgba(0, 0, 0, 0.65);
+            }
+            50% {
+                box-shadow:
+                    0 0 10px rgba(0, 0, 0, 0.75),
+                    0 0 18px rgba(0, 0, 0, 0.75),
+                    0 0 30px rgba(0, 0, 0, 0.75),
+                    0 0 44px rgba(0, 0, 0, 0.75);
             }
         }
     </style>
@@ -986,7 +955,7 @@
                 volumeBox.style.display = 'flex';
                 overlay.classList.add('show');
                 mainContent.classList.add('show');
-                document.getElementById('view-counter').style.display = 'block';
+                document.getElementById('view-counter').style.display = 'flex';
                 updateViews();
             }).catch((e) => {
                 console.warn('Erro ao iniciar áudio:', e);
@@ -994,7 +963,7 @@
                 volumeBox.style.display = 'flex';
                 overlay.classList.add('show');
                 mainContent.classList.add('show');
-                document.getElementById('view-counter').style.display = 'block';
+                document.getElementById('view-counter').style.display = 'flex';
                 updateViews();
             });
         });
@@ -1042,7 +1011,7 @@
                 const fecharPainel = () => {
                     painel.style.display = 'none';
                     document.body.style.overflow = '';
-                    volumeBox.style.zIndex = '1';
+                    volumeBox.style.zIndex = '999';
                     volumeBox.style.filter = 'none';
                     volumeBox.style.pointerEvents = 'auto';
                 };
@@ -1237,7 +1206,7 @@
             document.addEventListener('DOMContentLoaded', () => loadSpotifySong(spotifyUrl));
         })();
 
-        
+        /* ================= MOBILE FLOATING BOXES ================= */
         function handleFloatingBoxes() {
             const volumeBox = document.getElementById('volume-box');
             const viewCounter = document.getElementById('view-counter');
@@ -1246,7 +1215,6 @@
             if (!volumeBox || !viewCounter || !overlay) return;
 
             let mobileContainer = document.getElementById('mobile-floating-boxes');
-
             const isMobile = window.innerWidth <= 768;
 
             if (isMobile) {
@@ -1254,7 +1222,6 @@
                     mobileContainer = document.createElement('div');
                     mobileContainer.id = 'mobile-floating-boxes';
                     mobileContainer.className = 'mobile-floating-boxes';
-
                     overlay.insertBefore(mobileContainer, overlay.firstChild);
                 }
 
@@ -1274,9 +1241,6 @@
 
         window.addEventListener('load', handleFloatingBoxes);
         window.addEventListener('resize', handleFloatingBoxes);
-
-
-
     </script>
 </body>
 </html>

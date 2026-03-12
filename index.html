@@ -120,33 +120,69 @@
             color: white;
         }
 
-        /* ================= AVATAR ================= */
+        /* ================= AVATAR PRINCIPAL ================= */
+
         .avatar-wrapper {
             display: inline-block;
             margin-bottom: 15px;
             position: relative;
+            padding: 1px;
+            border-radius: 50%;
+            background: rgba(255, 0, 0, 0.35);
         }
 
         .avatar {
             width: clamp(100px, 30vw, 150px);
             border-radius: 50%;
             display: block;
-            margin: auto;
             position: relative;
+            z-index: 2;
+            border: 2px solid #ff2a2a;
         }
 
         .avatar-border {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 100%;
-            height: 100%;
-            transform: translate(-50%, -50%);
+            inset: 0;
             border-radius: 50%;
-            z-index: 0;
-            background: radial-gradient(rgba(255,255,255,0.15), transparent);
-            animation: pulseNeonBlack 3s infinite ease-in-out;
+            z-index: 1;
+            border: 2px solid #ff0000;
+            box-shadow:
+                0 0 10px #ff0000,
+                0 0 20px rgba(255, 0, 0, 0.9),
+                0 0 30px rgba(255, 0, 0, 0.6);
+            background: transparent;
+            pointer-events: none;
+
+            animation: avatarPulse 4.5s infinite ease-in-out;
         }
+
+            @keyframes avatarPulse {
+
+        0% {
+            transform: scale(1);
+            box-shadow:
+                0 0 4px #ff0000,
+                0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 16px rgba(255, 0, 0, 0.5);
+        }
+
+        50% {
+            transform: scale(1.02);
+            box-shadow:
+                0 0 12px #ff0000,
+                0 0 16px rgba(255, 0, 0, 1),
+                0 0 20px rgba(255, 0, 0, 0.8);
+        }
+
+        100% {
+            transform: scale(1);
+            box-shadow:
+                0 0 4px #ff0000,
+                0 0 10px rgba(255, 0, 0, 0.8),
+                0 0 16px rgba(255, 0, 0, 0.5);
+        }
+
+    }
 
         /* ================= IMAGENS ================= */
         .imagem-extra {
@@ -396,7 +432,6 @@
             cursor: pointer;
             transition: 0.3s;
             box-shadow: 0 0 10px #f00, 0 0 20px #f00;
-            animation: pulseNeon 1.5s infinite;
         }
 
         /* ================= CONFIG DO PC ================= */
@@ -480,8 +515,12 @@
         }
 
         /* ================= DISCORD ================= */
-        .neon-sync {
-            animation: pulseNeonBlack 3s infinite ease-in-out;
+        .discord-avatar-white {
+            border: 2px solid rgba(255, 255, 255, 0.95);
+            box-shadow:
+                0 0 8px rgba(255, 255, 255, 0.85),
+                0 0 16px rgba(255, 255, 255, 0.55),
+                0 0 28px rgba(255, 255, 255, 0.25);
             border-radius: 50%;
         }
 
@@ -492,8 +531,11 @@
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            border: 3px solid #1a1a1a;
+            border: 3px solid #ffffff;
             background-color: gray;
+            box-shadow:
+                0 0 8px rgba(255, 255, 255, 0.8),
+                0 0 16px rgba(255, 255, 255, 0.35);
         }
 
         /* ================= CRÉDITOS DO SITE ================= */
@@ -530,27 +572,36 @@
                 0 0 30px #ff0000;
         }
 
+        /* ================= AJUSTES MOBILE ================= */
+        @media (max-width: 768px) {
+            #volume-box {
+                top: 20px;
+                left: 10px;
+                transform: scale(0.95);
+            }
+
+            #view-counter {
+                top: 20px;
+                right: 10px;
+                transform: scale(0.95);
+            }
+        }
+
+        /* ================= NEON VERMELHO MELHORADO ================= */
+        .red-neon-frame {
+            box-shadow:
+                0 0 8px rgba(0, 0, 0, 0.65),
+                0 0 16px rgba(0, 0, 0, 0.65),
+                0 0 28px rgba(0, 0, 0, 0.65),
+                0 0 40px rgba(0, 0, 0, 0.65);
+            border: 2px solid rgba(0, 0, 0, 0.65);
+        }
+
+        .red-neon-frame-soft {
+            animation: redPulseFrame 2.8s infinite ease-in-out;
+        }
+
         /* ================= ANIMAÇÕES ================= */
-        @keyframes pulseNeon {
-            0%, 100% {
-                box-shadow: 0 0 6px #ff0000, 0 0 12px #ff0000;
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 10px #ff3333, 0 0 20px #ff3333;
-                transform: scale(1.02);
-            }
-        }
-
-        @keyframes pulseNeonBlack {
-            0%, 100% {
-                box-shadow: 0 0 8px #fff, 0 0 16px #fff, 0 0 24px #fff;
-            }
-            50% {
-                box-shadow: 0 0 4px #fff, 0 0 10px #fff, 0 0 15px #fff;
-            }
-        }
-
         @keyframes pulseGlowGreen {
             0%, 100% {
                 box-shadow: 0 0 4px rgba(30,215,96,.7);
@@ -627,7 +678,26 @@
     <div id="audio-modal">
         <img src="media/png inicial.png" alt="Logo" class="intro-logo" style="user-select:none;-webkit-user-drag:none;" draggable="false">
         <button id="btn-play">𝗖𝗹𝗶𝗾𝘂𝗲 𝗮𝗾𝘂𝗶</button>
-        <p style="user-select:none;position:absolute;bottom:20px;left:50%;transform:translateX(-50%);color:#fff;font-size:1.2rem;margin:0;text-shadow:0 0 4px #fff,0 0 8px #fff,0 0 16px #fff,0 0 32px #fff;animation:blinkNeon 1.5s infinite alternate;">𝐒𝐢𝐭𝐞 𝐟𝐞𝐢𝐭𝐨 𝐩𝐨𝐫: 𝐍𝐨𝐱𝐲.𝐠𝐠</p>
+        <p style="
+            user-select:none;
+            position:absolute;
+            bottom:20px;
+            left:50%;
+            transform:translateX(-50%);
+            color:#fff;
+            font-size:1.2rem;
+            margin:0;
+            font-weight:bold;
+            text-shadow:
+                0 0 5px #ffffff,
+                0 0 10px #ff4d4d,
+                0 0 18px #ff0000,
+                0 0 28px #ff0000,
+                0 0 40px #ff0000;
+            animation:blinkNeon 1.5s infinite alternate;
+        ">
+            𝐒𝐢𝐭𝐞 𝐟𝐞𝐢𝐭𝐨 𝐩𝐨𝐫: 𝐍𝐨𝐱𝐲.𝐠𝐠
+        </p>
     </div>
 
     <!-- ================= ÁUDIO ================= -->
@@ -670,7 +740,7 @@
 
             <!-- 4° GIF NEW VIDEO -->
             <section class="gif-section">
-                <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra" id="gif-new-video"
+                <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra red-neon-frame red-neon-frame-soft" id="gif-new-video"
                     style="user-select: none; -webkit-user-drag: none;" draggable="false" />
 
                 <p style="
@@ -745,13 +815,13 @@
 
                 <div style="position: relative; display: inline-block;">
                     <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
-                        <img id="discord-avatar" class="neon-sync" src="" alt="Avatar Discord"
+                        <img id="discord-avatar" class="discord-avatar-white" src="" alt="Avatar Discord"
                             style="width: 120px; height: 120px; border-radius: 50%; transition: transform 0.3s;"
                             onmouseover="this.style.transform='scale(1.05)'"
                             onmouseout="this.style.transform='scale(1)'"
                         />
                     </a>
-                    <span id="discord-status-circle" class="neon-sync" title="Status"></span>
+                    <span id="discord-status-circle" title="Status"></span>
                 </div>
 
                 <div id="display-name" style="margin-top: 10px; font-size: 1.6rem; font-weight: bold;">Noxy7</div>
@@ -767,7 +837,7 @@
 
             <!-- 8° BANNER PERSONALIZADO NOXY -->
             <section class="banner-section">
-                <img src="media/Banner_love.png" alt="Imagem Banner_love" class="imagem-extra"
+                <img src="media/Banner_love.png" alt="Imagem Banner_love" class="imagem-extra red-neon-frame red-neon-frame-soft"
                     style="user-select: none; -webkit-user-drag: none; display:block; margin: 15px auto; border-radius:12px;"
                     draggable="false" />
                 <p style="user-select: none; font-size: 1.3rem;">Quem leu vai ter sorte no amor❤️ ~ Noxy</p>
@@ -923,7 +993,6 @@
                 console.error('❌ Elementos do Painel de Configurações não encontrados no DOM.');
             }
 
-            /* ================= GIF NEW VIDEO ================= */
             if (gifNewVideo) {
                 gifNewVideo.src = 'media/Extra.gif';
                 gifNewVideo.alt = 'GIF animado extra';
@@ -1025,7 +1094,6 @@
                 if (statusCircle) {
                     statusCircle.style.backgroundColor = color;
                     statusCircle.title = statusText;
-                    statusCircle.classList.add('neon-sync');
                 }
             } catch (error) {
                 console.error('Erro ao buscar status do Discord:', error);
@@ -1089,8 +1157,8 @@
                         𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
                     </div>
                     <a href="${url}" target="_blank" rel="noopener noreferrer">
-                        <img src="${thumbnailUrl}" alt="Capa da música" class="neon-sync"
-                            style="width:150px;height:150px;margin-bottom:10px;cursor:pointer;border-radius:12px;">
+                        <img src="${thumbnailUrl}" alt="Capa da música"
+                            style="width:150px;height:150px;margin-bottom:10px;cursor:pointer;border-radius:12px;border:2px solid #ff0000;box-shadow:0 0 8px #ff0000,0 0 16px rgba(255,0,0,0.9),0 0 35px rgba(255,0,0,0.6);">
                     </a>
                     <div class="music-data">
                         <div style="font-size:18px;font-weight:bold;color:white;">${title}</div>

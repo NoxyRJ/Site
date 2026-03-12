@@ -69,18 +69,20 @@
         /* ================= OVERLAY PRINCIPAL ================= */
         .overlay {
             position: relative;
-            inset: 0;
             margin: 60px auto;
             max-width: 570px;
-            max-height: 80vh;
+
+            width: 100%;
+            min-height: 100vh;
+
             opacity: 0;
             transition: opacity 3s;
+
             display: flex;
             flex-direction: column;
             padding: 20px;
+
             overflow: visible;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,.2) transparent;
         }
 
         .overlay::-webkit-scrollbar {
@@ -119,6 +121,38 @@
             margin-bottom: 1rem;
             color: white;
         }
+
+        /* ================= Fix celular overlay volume, counter ================= */
+        .mobile-floating-boxes {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            #volume-box,
+            #view-counter {
+                position: static !important;
+                top: auto !important;
+                right: auto !important;
+                left: auto !important;
+                transform: none !important;
+                z-index: auto !important;
+            }
+
+            #volume-box {
+                margin: 0;
+            }
+
+            #view-counter {
+                margin: 0;
+            }
+        }
+
+
 
         /* ================= AVATAR PRINCIPAL ================= */
 
@@ -381,7 +415,7 @@
         #view-counter {
             display: none;
             user-select: none;
-            position: absolute;
+            position: fixed;
             top: 10px;
             right: 10px;
             color: white;
@@ -391,7 +425,7 @@
             border-radius: 7px;
             font-family: sans-serif;
             box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.9), inset 0 0 15px 3px rgba(0, 0, 0, 0.8);
-            z-index: 1;
+            z-index: 999;
         }
 
         #viewIcon {
@@ -575,15 +609,38 @@
         /* ================= AJUSTES MOBILE ================= */
         @media (max-width: 768px) {
             #volume-box {
-                top: 20px;
+                position: fixed;
+                top: 10px;
                 left: 10px;
-                transform: scale(0.95);
+                color: white;
+                font-size: 18px;
+                background: rgba(0, 0, 0, 0.35);
+                padding: 5px 10px;
+                border-radius: 7px;
+                font-family: sans-serif;
+                display: none;
+                align-items: center;
+                gap: 10px;
+                user-select: none;
+                backdrop-filter: blur(6px);
+                box-shadow: 0 0 8px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.6);
+                z-index: 999;
             }
 
             #view-counter {
-                top: 20px;
+                display: none;
+                user-select: none;
+                position: fixed;
+                top: 10px;
                 right: 10px;
-                transform: scale(0.95);
+                color: white;
+                font-size: 18px;
+                background: rgba(0, 0, 0, 0.3);
+                padding: 5px 10px;
+                border-radius: 7px;
+                font-family: sans-serif;
+                box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.9), inset 0 0 15px 3px rgba(0, 0, 0, 0.8);
+                z-index: 999;
             }
         }
 
@@ -1171,6 +1228,47 @@
 
             document.addEventListener('DOMContentLoaded', () => loadSpotifySong(spotifyUrl));
         })();
+
+        
+        function handleFloatingBoxes() {
+            const volumeBox = document.getElementById('volume-box');
+            const viewCounter = document.getElementById('view-counter');
+            const overlay = document.getElementById('overlay');
+
+            if (!volumeBox || !viewCounter || !overlay) return;
+
+            let mobileContainer = document.getElementById('mobile-floating-boxes');
+
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+                if (!mobileContainer) {
+                    mobileContainer = document.createElement('div');
+                    mobileContainer.id = 'mobile-floating-boxes';
+                    mobileContainer.className = 'mobile-floating-boxes';
+
+                    overlay.insertBefore(mobileContainer, overlay.firstChild);
+                }
+
+                mobileContainer.appendChild(volumeBox);
+                mobileContainer.appendChild(viewCounter);
+            } else {
+                if (mobileContainer) {
+                    document.body.appendChild(volumeBox);
+                    document.body.appendChild(viewCounter);
+                    mobileContainer.remove();
+                } else {
+                    document.body.appendChild(volumeBox);
+                    document.body.appendChild(viewCounter);
+                }
+            }
+        }
+
+        window.addEventListener('load', handleFloatingBoxes);
+        window.addEventListener('resize', handleFloatingBoxes);
+
+
+
     </script>
 </body>
 </html>

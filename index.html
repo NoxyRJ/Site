@@ -67,11 +67,14 @@
         }
 
         #bg-image {
-            position: fixed;
+            position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
+
             object-fit: cover;
+            object-position: left center;
+
             display: block;
         }
 
@@ -900,8 +903,6 @@
                 </p>
             </section>
 
-            <div style="height:25px;"></div>
-
             <!-- 5° BOTÕES DE LINKS -->
             <section class="links-section">
                 <h2 style="user-select: none; font-size: 1.7rem;">𝑳𝒊𝒏𝒌𝒔</h2>
@@ -999,14 +1000,10 @@
                 </div>
             </section>
 
-            <div style="height:45px;"></div>
-
             <!-- 7° CONFIG PC -->
             <section class="pc-config-section">
                 <button id="btn-config" class="config-btn">💻 Configurações do meu PC</button>
             </section>
-
-            <div style="height:15px;"></div>
 
             <!-- 8° BANNER PERSONALIZADO NOXY -->
             <section class="banner-section">
@@ -1015,8 +1012,6 @@
                     draggable="false" />
                 <p style="user-select: none; font-size: 1.3rem;">Quem leu vai ter sorte no amor❤️ ~ Noxy</p>
             </section>
-
-            <div style="height:25px;"></div>
 
             <!-- 9° PLAYLIST SPOTIFY -->
             <section class="playlist-section">
@@ -1030,12 +1025,8 @@
                 </div>
             </section>
 
-            <div style="height:25px;"></div>
-
             <!-- 10° MÚSICA DO SITE -->
             <section id="music-site-section"></section>
-
-            <div style="height:50px;"></div>
 
             <!-- 11° CRÉDITOS DO SITE -->
             <section class="site-credit">
@@ -1255,42 +1246,20 @@
             }
         }
 
-        function buildDiscordAssetUrl(activity, assetValue) {
-            if (!activity || !assetValue) return '';
+        function resolveDiscordAssetUrl(activity) {
+            if (!activity?.assets?.large_image) return '';
 
-            if (assetValue.startsWith('mp:')) {
-                return `https://media.discordapp.net/${assetValue.slice(3)}`;
-            }
+            const largeImage = activity.assets.large_image;
 
-            if (assetValue.startsWith('http://') || assetValue.startsWith('https://')) {
-                return assetValue;
+            if (largeImage.startsWith('mp:')) {
+                return `https://media.discordapp.net/${largeImage.slice(3)}`;
             }
 
             if (activity.application_id) {
-                return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${assetValue}.png`;
+                return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${largeImage}.png`;
             }
 
             return '';
-        }
-
-        function resolveDiscordAssetUrl(activity) {
-            if (!activity) return '';
-
-            const largeImage = activity.assets?.large_image;
-            const smallImage = activity.assets?.small_image;
-
-            const largeUrl = buildDiscordAssetUrl(activity, largeImage);
-            if (largeUrl) return largeUrl;
-
-            const smallUrl = buildDiscordAssetUrl(activity, smallImage);
-            if (smallUrl) return smallUrl;
-
-            if (activity.name) {
-                const encodedName = encodeURIComponent(activity.name);
-                return `https://images.weserv.nl/?url=cdn.cloudflare.steamstatic.com/steam/apps/${encodedName}/header.jpg`;
-            }
-
-            return 'media/icon.png';
         }
 
         function getBestDiscordActivity(activities = []) {
@@ -1481,7 +1450,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             updateDiscordLinks();
             fetchDiscordStatus();
-            setInterval(fetchDiscordStatus, 4000);
+            setInterval(fetchDiscordStatus, 10000);
         });
 
         /* ================= MÚSICA DO SITE ================= */

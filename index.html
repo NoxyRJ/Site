@@ -887,6 +887,8 @@
                 </div>
             </section>
 
+            <div style="height:25px;"></div>
+
             <!-- 4° GIF NEW VIDEO -->
             <section class="gif-section">
                 <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra red-neon-frame red-neon-frame-soft" id="gif-new-video"
@@ -902,6 +904,8 @@
                     O mundo é seu... e tudo que há nele está lá fora, trabalhe duro e conquiste! ~ Scarface
                 </p>
             </section>
+
+            <div style="height:25px;"></div>
 
             <!-- 5° BOTÕES DE LINKS -->
             <section class="links-section">
@@ -1000,10 +1004,14 @@
                 </div>
             </section>
 
+            <div style="height:40px;"></div>
+
             <!-- 7° CONFIG PC -->
             <section class="pc-config-section">
                 <button id="btn-config" class="config-btn">💻 Configurações do meu PC</button>
             </section>
+
+            <div style="height:25px;"></div>
 
             <!-- 8° BANNER PERSONALIZADO NOXY -->
             <section class="banner-section">
@@ -1012,6 +1020,8 @@
                     draggable="false" />
                 <p style="user-select: none; font-size: 1.3rem;">Quem leu vai ter sorte no amor❤️ ~ Noxy</p>
             </section>
+
+            <div style="height:25px;"></div>
 
             <!-- 9° PLAYLIST SPOTIFY -->
             <section class="playlist-section">
@@ -1025,8 +1035,12 @@
                 </div>
             </section>
 
+            <div style="height:25px;"></div>
+
             <!-- 10° MÚSICA DO SITE -->
             <section id="music-site-section"></section>
+
+            <div style="height:40px;"></div>
 
             <!-- 11° CRÉDITOS DO SITE -->
             <section class="site-credit">
@@ -1074,6 +1088,10 @@
         const OWNER_DISCORD_ID = '278691315594559489';
         const LANYARD_API = `https://api.lanyard.rest/v1/users/${OWNER_DISCORD_ID}`;
 
+        /* ================= ATIVIDADES BLOQUEADAS ================= */
+        const blockedActivities = [
+            'CustomRP',
+        ];
         /* ================= ELEMENTOS PRINCIPAIS ================= */
         const audioModal = document.getElementById('audio-modal');
         const btnPlay = document.getElementById('btn-play');
@@ -1267,14 +1285,25 @@
 
             const filtered = activities.filter(activity => {
                 if (!activity) return false;
+
+                // ignora status personalizado
                 if (activity.type === 4) return false;
+
+                // precisa ter nome
                 if (!activity.name) return false;
+
+                // bloqueia nomes da lista
+                if (blockedActivities.includes(activity.name)) return false;
+
                 return true;
             });
 
             if (!filtered.length) return null;
 
-            const withImage = filtered.find(activity => activity.assets?.large_image);
+            const withImage = filtered.find(activity =>
+                activity.assets?.large_image || activity.assets?.small_image
+            );
+
             return withImage || filtered[0];
         }
 

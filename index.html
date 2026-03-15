@@ -466,8 +466,10 @@
 
         .intro-logo {
             width: 80%;
-            max-width: 600px;
+            max-width: 700px;
             margin-bottom: 2rem;
+
+            animation: logoPulse 2.5s ease-in-out infinite;
         }
 
         #audio-modal button {
@@ -601,7 +603,6 @@
                 0 10px 30px rgba(0,0,0,0.45);
             text-align: left;
             color: #fff;
-            animation: aparecer 0.25s ease;
         }
 
         .discord-activity-card.show {
@@ -629,8 +630,8 @@
         }
 
         .discord-activity-image {
-            width: 72px;
-            height: 72px;
+            width: 96px;
+            height: 96px;
             border-radius: 14px;
             object-fit: cover;
             background: #1a1a1a;
@@ -742,6 +743,20 @@
             50% {
                 box-shadow: 0 0 12px rgba(30,215,96,1);
                 transform: scale(1.05);
+            }
+        }
+
+        @keyframes logoPulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
             }
         }
 
@@ -985,23 +1000,7 @@
 
             <!-- CARD DE ATIVIDADE DO DISCORD -->
             <section id="discord-activity-wrapper" style="text-align:center; margin-top:-8px;">
-                <div id="discord-activity-card" class="discord-activity-card">
-                    <div class="discord-activity-top">
-                        <span>Atividade do discord</span>
-                        <span style="opacity:.65;">•••</span>
-                    </div>
-
-                    <div class="discord-activity-body">
-                        <img id="discord-activity-image" class="discord-activity-image" src="" alt="Atividade">
-
-                        <div class="discord-activity-info">
-                            <h3 id="discord-activity-name" class="discord-activity-name"></h3>
-                            <p id="discord-activity-details" class="discord-activity-details"></p>
-                            <p id="discord-activity-state" class="discord-activity-state"></p>
-                            <p id="discord-activity-time" class="discord-activity-time"></p>
-                        </div>
-                    </div>
-                </div>
+                <div id="discord-activities"></div>
             </section>
 
             <div style="height:40px;"></div>
@@ -1090,7 +1089,7 @@
 
         /* ================= ATIVIDADES BLOQUEADAS ================= */
         const blockedActivities = [
-            'CustomRP',
+            'Noxy.gg',
         ];
         /* ================= ELEMENTOS PRINCIPAIS ================= */
         const audioModal = document.getElementById('audio-modal');
@@ -1264,17 +1263,26 @@
             }
         }
 
-        function resolveDiscordAssetUrl(activity) {
-            if (!activity?.assets?.large_image) return '';
+        function resolveDiscordAssetUrl(activity, fullData = null) {
+            if (!activity) return '';
 
-            const largeImage = activity.assets.large_image;
+            /* Spotify: usa a capa do álbum */
+            if (activity.name === 'Spotify' && fullData?.spotify?.album_art_url) {
+                return fullData.spotify.album_art_url;
+            }
 
-            if (largeImage.startsWith('mp:')) {
-                return `https://media.discordapp.net/${largeImage.slice(3)}`;
+            const large = activity.assets?.large_image;
+            const small = activity.assets?.small_image;
+            const asset = large || small;
+
+            if (!asset) return '';
+
+            if (asset.startsWith('mp:')) {
+                return `https://media.discordapp.net/${asset.slice(3)}`;
             }
 
             if (activity.application_id) {
-                return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${largeImage}.png`;
+                return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${asset}.png`;
             }
 
             return '';
@@ -1285,14 +1293,8 @@
 
             const filtered = activities.filter(activity => {
                 if (!activity) return false;
-
-                // ignora status personalizado
                 if (activity.type === 4) return false;
-
-                // precisa ter nome
                 if (!activity.name) return false;
-
-                // bloqueia nomes da lista
                 if (blockedActivities.includes(activity.name)) return false;
 
                 return true;
@@ -1403,79 +1405,103 @@
                     statusCircle.title = statusConfig.text;
                 }
 
-                const activity = getBestDiscordActivity(activities);
+                const container = document.getElementById('discord-activities');
+                if (!container) return;
 
-                if (!activity) {
-                    hideDiscordActivityCard();
-                    return;
-                }
+                container.innerHTML = '';
 
-                const card = document.getElementById('discord-activity-card');
-                const imageEl = document.getElementById('discord-activity-image');
-                const nameEl = document.getElementById('discord-activity-name');
-                const detailsEl = document.getElementById('discord-activity-details');
-                const stateEl = document.getElementById('discord-activity-state');
-                const timeEl = document.getElementById('discord-activity-time');
+                const filteredActivities = activities.filter(activity => {
+                    if (!activity) return false;
+                    if (activity.type === 4) return false;
+                    if (!activity.name) return false;
+                    if (blockedActivities.includes(activity.name)) return false;
+                    return true;
+                });
 
-                if (!card || !imageEl || !nameEl || !detailsEl || !stateEl || !timeEl) return;
+                if (!filteredActivities.length) return;
 
-                const imageUrl = resolveDiscordAssetUrl(activity);
+                filteredActivities.forEach(activity => {
 
-                nameEl.textContent = activity.name || '';
+                    const imageUrl = resolveDiscordAssetUrl(activity, json.data);
 
-                if (activity.details) {
-                    detailsEl.textContent = activity.details;
-                    detailsEl.style.display = 'block';
-                } else {
-                    detailsEl.textContent = '';
-                    detailsEl.style.display = 'none';
-                }
+                    const card = document.createElement('div');
+                    card.className = 'discord-activity-card show';
 
-                if (activity.state) {
-                    stateEl.textContent = activity.state;
-                    stateEl.style.display = 'block';
-                } else {
-                    stateEl.textContent = '';
-                    stateEl.style.display = 'none';
-                }
+                    const name = activity.name || '';
+                    const details = activity.details || '';
+                    const state = activity.state || '';
 
-                if (imageUrl) {
-                    imageEl.src = imageUrl;
-                    imageEl.style.display = 'block';
-                } else {
-                    imageEl.src = '';
-                    imageEl.style.display = 'none';
-                }
+                    let timeHTML = '';
 
-                if (activity.timestamps?.start) {
-                    const activityKey = `${activity.name || ''}|${activity.details || ''}|${activity.state || ''}`;
-                    startDiscordActivityTimer(activity.timestamps.start, activityKey);
-                    timeEl.style.display = 'flex';
-                } else {
-                    timeEl.textContent = '';
-                    timeEl.style.display = 'none';
+                    if (activity.timestamps?.start) {
+                        const start = activity.timestamps.start;
 
-                    if (discordActivityInterval) {
-                        clearInterval(discordActivityInterval);
-                        discordActivityInterval = null;
+                        function formatTime(ms) {
+                            const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+                            const h = Math.floor(totalSeconds / 3600);
+                            const m = Math.floor((totalSeconds % 3600) / 60);
+                            const s = totalSeconds % 60;
+
+                            if (h > 0) {
+                                return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+                            }
+
+                            return `${m}:${String(s).padStart(2, '0')}`;
+                        }
+
+                        const timeId = "time_" + Math.random().toString(36).substring(2);
+
+                        timeHTML = `<p class="discord-activity-time" id="${timeId}">⏱ 0:00</p>`;
+
+                        setTimeout(() => {
+                            const el = document.getElementById(timeId);
+                            if (!el) return;
+
+                            const update = () => {
+                                const elapsed = Math.max(0, Date.now() - start);
+                                el.textContent = formatTime(elapsed);
+                            };
+
+                            update();
+                            setInterval(update, 1000);
+                        }, 100);
                     }
-                }
 
-                card.classList.add('show');
+                    card.innerHTML = `
+                        <div class="discord-activity-top">
+                            <span>Atividade do discord</span>
+                            <span style="opacity:.65;">•••</span>
+                        </div>
+
+                        <div class="discord-activity-body">
+
+                            <img class="discord-activity-image"
+                            src="${imageUrl || ''}"
+                            style="${imageUrl ? '' : 'display:none'}">
+
+                            <div class="discord-activity-info">
+
+                                <h3 class="discord-activity-name">${name}</h3>
+
+                                ${details ? `<p class="discord-activity-details">${details}</p>` : ''}
+
+                                ${state ? `<p class="discord-activity-state">${state}</p>` : ''}
+
+                                ${timeHTML}
+
+                            </div>
+
+                        </div>
+                    `;
+
+                    container.appendChild(card);
+
+                });
+
             } catch (error) {
                 console.error('Erro ao buscar status do Discord:', error);
-                hideDiscordActivityCard();
-
-                const statusEl = document.getElementById('discord-status');
-                if (statusEl) {
-                    const avatarEl = document.getElementById('discord-avatar');
-                    if (avatarEl && !avatarEl.src) {
-                        statusEl.innerHTML = `<p style="color:red;">Status Discord indisponível</p>`;
-                    }
-                }
             }
         }
-
         document.addEventListener('DOMContentLoaded', () => {
             updateDiscordLinks();
             fetchDiscordStatus();

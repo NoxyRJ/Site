@@ -32,43 +32,53 @@
             width: 100%;
             min-height: 100%;
             font-family: Arial, sans-serif;
-            background: transparent;
+            background: #000;
             overflow-x: hidden;
             overflow-y: auto;
             scroll-behavior: smooth;
             scrollbar-width: thin;
-            scrollbar-color: rgba(0,0,0,0.5) transparent;
+            scrollbar-color: #111 #000;
         }
 
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: transparent;
+            background: #000;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.5);
+            background: #111;
             border-radius: 10px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 0, 0, 0.8);
+            background: #1f1f1f;
+        }
+
+        /* ================= FUNDO CORRIGIDO ================= */
+        #bg-container {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
         }
 
         #bg-image {
             position: fixed;
             inset: 0;
-            min-width: 100%;
-            min-height: 100%;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            z-index: -2;
+            display: block;
         }
 
         /* ================= OVERLAY PRINCIPAL ================= */
         .overlay {
             position: relative;
+            z-index: 1;
             margin: 60px auto;
             max-width: 570px;
             width: 100%;
@@ -85,8 +95,12 @@
             width: 8px;
         }
 
+        .overlay::-webkit-scrollbar-track {
+            background: #000;
+        }
+
         .overlay::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,.2);
+            background: #111;
             border-radius: 10px;
         }
 
@@ -125,7 +139,7 @@
             }
         }
 
-        /* ================= Fix celular overlay volume, counter ================= */
+        /* ================= FIX MOBILE FLOATING BOXES ================= */
         .mobile-floating-boxes {
             display: flex;
             justify-content: space-between;
@@ -570,6 +584,104 @@
                 0 0 16px rgba(255, 255, 255, 0.35);
         }
 
+        /* ================= CARD ATIVIDADE DISCORD ================= */
+        .discord-activity-card {
+            display: none;
+            width: 100%;
+            max-width: 380px;
+            margin: 18px auto 0;
+            padding: 12px;
+            border-radius: 16px;
+            background: linear-gradient(180deg, #11151c, #0d1016);
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.04),
+                0 10px 30px rgba(0,0,0,0.45);
+            text-align: left;
+            color: #fff;
+            animation: aparecer 0.25s ease;
+        }
+
+        .discord-activity-card.show {
+            display: block;
+        }
+
+        .discord-activity-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .discord-activity-top span {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #d9d9d9;
+            user-select: none;
+        }
+
+        .discord-activity-body {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .discord-activity-image {
+            width: 72px;
+            height: 72px;
+            border-radius: 14px;
+            object-fit: cover;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.08);
+            flex-shrink: 0;
+        }
+
+        .discord-activity-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .discord-activity-name {
+            margin: 0 0 4px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            line-height: 1.2;
+            color: #fff;
+            word-break: break-word;
+        }
+
+        .discord-activity-details,
+        .discord-activity-state {
+            margin: 0;
+            font-size: 0.95rem;
+            line-height: 1.3;
+            color: #d0d0d0;
+            word-break: break-word;
+        }
+
+        .discord-activity-details {
+            margin-bottom: 2px;
+        }
+
+        .discord-activity-state {
+            color: #b8b8b8;
+            margin-bottom: 8px;
+        }
+
+        .discord-activity-time {
+            margin: 0;
+            font-size: 0.95rem;
+            color: #46d160;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .discord-activity-time::before {
+            content: "⏱";
+            font-size: 0.95rem;
+        }
+
         /* ================= CRÉDITOS DO SITE ================= */
         .site-credit {
             width: 100%;
@@ -705,7 +817,7 @@
 
     <!-- ================= FUNDO ================= -->
     <div id="bg-container">
-        <img src="media/bg.jpg" id="bg-image" alt="Fundo">
+        <img src="media/bg.jpg" id="bg-image" alt="Fundo" draggable="false" style="user-select:none;-webkit-user-drag:none;">
     </div>
 
     <!-- ================= MODAL INICIAL ================= -->
@@ -788,12 +900,14 @@
                 </p>
             </section>
 
+            <div style="height:25px;"></div>
+
             <!-- 5° BOTÕES DE LINKS -->
             <section class="links-section">
                 <h2 style="user-select: none; font-size: 1.7rem;">𝑳𝒊𝒏𝒌𝒔</h2>
 
                 <div class="links">
-                    <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
+                    <a class="discord-user-link" href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
                         <img src="https://cdn.simpleicons.org/discord/5865F2" alt="Discord" class="link-icon"> Discord
                     </a>
 
@@ -848,7 +962,7 @@
                 <div style="font-size: 1.7rem; user-select: none; font-weight: bold; margin-bottom: 10px;">𝑫𝒊𝒔𝒄𝒐𝒓𝒅</div>
 
                 <div style="position: relative; display: inline-block;">
-                    <a href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
+                    <a class="discord-user-link" href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
                         <img id="discord-avatar" class="discord-avatar-white" src="" alt="Avatar Discord"
                             style="width: 120px; height: 120px; border-radius: 50%; transition: transform 0.3s;"
                             onmouseover="this.style.transform='scale(1.05)'"
@@ -864,10 +978,35 @@
                 </div>
             </section>
 
+            <!-- CARD DE ATIVIDADE DO DISCORD -->
+            <section id="discord-activity-wrapper" style="text-align:center; margin-top:-8px;">
+                <div id="discord-activity-card" class="discord-activity-card">
+                    <div class="discord-activity-top">
+                        <span>Atividade</span>
+                        <span style="opacity:.65;">•••</span>
+                    </div>
+
+                    <div class="discord-activity-body">
+                        <img id="discord-activity-image" class="discord-activity-image" src="" alt="Atividade">
+
+                        <div class="discord-activity-info">
+                            <h3 id="discord-activity-name" class="discord-activity-name"></h3>
+                            <p id="discord-activity-details" class="discord-activity-details"></p>
+                            <p id="discord-activity-state" class="discord-activity-state"></p>
+                            <p id="discord-activity-time" class="discord-activity-time"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div style="height:45px;"></div>
+
             <!-- 7° CONFIG PC -->
             <section class="pc-config-section">
                 <button id="btn-config" class="config-btn">💻 Configurações do meu PC</button>
             </section>
+
+            <div style="height:15px;"></div>
 
             <!-- 8° BANNER PERSONALIZADO NOXY -->
             <section class="banner-section">
@@ -876,6 +1015,8 @@
                     draggable="false" />
                 <p style="user-select: none; font-size: 1.3rem;">Quem leu vai ter sorte no amor❤️ ~ Noxy</p>
             </section>
+
+            <div style="height:25px;"></div>
 
             <!-- 9° PLAYLIST SPOTIFY -->
             <section class="playlist-section">
@@ -889,8 +1030,12 @@
                 </div>
             </section>
 
+            <div style="height:25px;"></div>
+
             <!-- 10° MÚSICA DO SITE -->
             <section id="music-site-section"></section>
+
+            <div style="height:50px;"></div>
 
             <!-- 11° CRÉDITOS DO SITE -->
             <section class="site-credit">
@@ -934,6 +1079,10 @@
     </div>
 
     <script>
+        /* ================= CONFIG PRINCIPAL ================= */
+        const OWNER_DISCORD_ID = '278691315594559489';
+        const LANYARD_API = `https://api.lanyard.rest/v1/users/${OWNER_DISCORD_ID}`;
+
         /* ================= ELEMENTOS PRINCIPAIS ================= */
         const audioModal = document.getElementById('audio-modal');
         const btnPlay = document.getElementById('btn-play');
@@ -971,7 +1120,7 @@
         /* ================= BOTÃO DE VOLUME ================= */
         volumeBtn.addEventListener('click', () => {
             if (music.paused) {
-                music.play();
+                music.play().catch(() => {});
                 volumeIcon.src = 'media/sound_on.png';
             } else {
                 music.pause();
@@ -982,14 +1131,14 @@
         volumeSlider.addEventListener('input', () => {
             music.volume = volumeSlider.value;
 
-            if (music.volume == 0) {
+            if (Number(music.volume) === 0) {
                 volumeIcon.src = 'media/sound_muted.png';
             } else {
                 volumeIcon.src = 'media/sound_on.png';
             }
 
-            if (music.paused && music.volume > 0) {
-                music.play();
+            if (music.paused && Number(music.volume) > 0) {
+                music.play().catch(() => {});
             }
         });
 
@@ -1068,79 +1217,271 @@
             }
         }
 
-        /* ================= DISCORD LANYARD ================= */
-        async function fetchDiscordStatus() {
-            const userId = '278691315594559489';
-            const apiLink = `https://api.lanyard.rest/v1/users/${userId}`;
+        /* ================= DISCORD + ATIVIDADE ================= */
+        let discordActivityInterval = null;
+        let lastActivityStart = null;
+        let lastActivityKey = '';
 
+        function updateDiscordLinks() {
+            const discordAnchors = document.querySelectorAll('.discord-user-link');
+            discordAnchors.forEach(anchor => {
+                anchor.href = `https://discord.com/users/${OWNER_DISCORD_ID}`;
+            });
+        }
+
+        function formatElapsedTime(ms) {
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            if (hours > 0) {
+                return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+
+            return `${minutes}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function getDiscordStatusConfig(status) {
+            switch (status) {
+                case 'online':
+                    return { color: '#43B581', text: 'Online' };
+                case 'idle':
+                    return { color: '#FAA61A', text: 'Ausente' };
+                case 'dnd':
+                    return { color: '#F04747', text: 'Não perturbe' };
+                default:
+                    return { color: 'gray', text: 'Offline' };
+            }
+        }
+
+        function buildDiscordAssetUrl(activity, assetValue) {
+            if (!activity || !assetValue) return '';
+
+            if (assetValue.startsWith('mp:')) {
+                return `https://media.discordapp.net/${assetValue.slice(3)}`;
+            }
+
+            if (assetValue.startsWith('http://') || assetValue.startsWith('https://')) {
+                return assetValue;
+            }
+
+            if (activity.application_id) {
+                return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${assetValue}.png`;
+            }
+
+            return '';
+        }
+
+        function resolveDiscordAssetUrl(activity) {
+            if (!activity) return '';
+
+            const largeImage = activity.assets?.large_image;
+            const smallImage = activity.assets?.small_image;
+
+            const largeUrl = buildDiscordAssetUrl(activity, largeImage);
+            if (largeUrl) return largeUrl;
+
+            const smallUrl = buildDiscordAssetUrl(activity, smallImage);
+            if (smallUrl) return smallUrl;
+
+            if (activity.name) {
+                const encodedName = encodeURIComponent(activity.name);
+                return `https://images.weserv.nl/?url=cdn.cloudflare.steamstatic.com/steam/apps/${encodedName}/header.jpg`;
+            }
+
+            return 'media/icon.png';
+        }
+
+        function getBestDiscordActivity(activities = []) {
+            if (!Array.isArray(activities) || !activities.length) return null;
+
+            const filtered = activities.filter(activity => {
+                if (!activity) return false;
+                if (activity.type === 4) return false;
+                if (!activity.name) return false;
+                return true;
+            });
+
+            if (!filtered.length) return null;
+
+            const withImage = filtered.find(activity => activity.assets?.large_image);
+            return withImage || filtered[0];
+        }
+
+        function hideDiscordActivityCard() {
+            const card = document.getElementById('discord-activity-card');
+            if (card) {
+                card.classList.remove('show');
+            }
+
+            if (discordActivityInterval) {
+                clearInterval(discordActivityInterval);
+                discordActivityInterval = null;
+            }
+
+            lastActivityStart = null;
+            lastActivityKey = '';
+        }
+
+        function startDiscordActivityTimer(startTimestamp, activityKey) {
+            const timeEl = document.getElementById('discord-activity-time');
+            if (!timeEl) return;
+
+            if (
+                discordActivityInterval &&
+                lastActivityStart === startTimestamp &&
+                lastActivityKey === activityKey
+            ) {
+                return;
+            }
+
+            if (discordActivityInterval) {
+                clearInterval(discordActivityInterval);
+                discordActivityInterval = null;
+            }
+
+            lastActivityStart = startTimestamp;
+            lastActivityKey = activityKey;
+
+            const update = () => {
+                const elapsed = Date.now() - startTimestamp;
+                timeEl.textContent = formatElapsedTime(elapsed);
+            };
+
+            update();
+            discordActivityInterval = setInterval(update, 1000);
+        }
+
+        async function fetchDiscordStatus() {
             try {
-                const response = await fetch(apiLink);
+                const response = await fetch(LANYARD_API);
                 if (!response.ok) throw new Error('Erro na API');
 
-                const data = await response.json();
-                if (!data.data || !data.data.discord_user) throw new Error('Usuário não encontrado');
+                const json = await response.json();
+                if (!json?.data?.discord_user) throw new Error('Usuário não encontrado');
 
-                const user = data.data.discord_user;
-                const status = data.data.discord_status;
+                const user = json.data.discord_user;
+                const status = json.data.discord_status;
+                const activities = json.data.activities || [];
 
-                const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`;
+                updateDiscordLinks();
+
+                const avatarUrl = user.avatar
+                    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
+                    : `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator || 0) % 5}.png`;
+
                 const avatarEl = document.getElementById('discord-avatar');
+                const displayNameEl = document.getElementById('display-name');
+                const usernameEl = document.getElementById('discord-username');
+                const discriminatorEl = document.getElementById('discord-discriminator');
+                const statusCircle = document.getElementById('discord-status-circle');
 
                 if (avatarEl && avatarEl.src !== avatarUrl) {
                     avatarEl.src = avatarUrl;
                 }
 
-                document.getElementById('display-name').textContent = user.global_name || user.username;
-                document.getElementById('discord-username').textContent = '@' + user.username;
-
-                const discriminatorEl = document.getElementById('discord-discriminator');
-                if (user.discriminator !== '0') {
-                    discriminatorEl.textContent = '#' + user.discriminator;
-                    discriminatorEl.style.display = 'inline';
-                } else {
-                    discriminatorEl.style.display = 'none';
+                if (displayNameEl) {
+                    displayNameEl.textContent = user.global_name || user.username || 'Discord';
                 }
 
-                const statusCircle = document.getElementById('discord-status-circle');
-                let color = 'gray';
-                let statusText = 'Offline';
+                if (usernameEl) {
+                    usernameEl.textContent = '@' + (user.username || 'usuario');
+                }
 
-                switch (status) {
-                    case 'online':
-                        color = '#43B581';
-                        statusText = 'Online';
-                        break;
-                    case 'idle':
-                        color = '#FAA61A';
-                        statusText = 'Ausente';
-                        break;
-                    case 'dnd':
-                        color = '#F04747';
-                        statusText = 'Não perturbe';
-                        break;
-                    case 'offline':
-                    default:
-                        color = 'gray';
-                        statusText = 'Offline';
-                        break;
+                if (discriminatorEl) {
+                    if (user.discriminator && user.discriminator !== '0') {
+                        discriminatorEl.textContent = '#' + user.discriminator;
+                        discriminatorEl.style.display = 'inline';
+                    } else {
+                        discriminatorEl.textContent = '';
+                        discriminatorEl.style.display = 'none';
+                    }
                 }
 
                 if (statusCircle) {
-                    statusCircle.style.backgroundColor = color;
-                    statusCircle.title = statusText;
+                    const statusConfig = getDiscordStatusConfig(status);
+                    statusCircle.style.backgroundColor = statusConfig.color;
+                    statusCircle.title = statusConfig.text;
                 }
+
+                const activity = getBestDiscordActivity(activities);
+
+                if (!activity) {
+                    hideDiscordActivityCard();
+                    return;
+                }
+
+                const card = document.getElementById('discord-activity-card');
+                const imageEl = document.getElementById('discord-activity-image');
+                const nameEl = document.getElementById('discord-activity-name');
+                const detailsEl = document.getElementById('discord-activity-details');
+                const stateEl = document.getElementById('discord-activity-state');
+                const timeEl = document.getElementById('discord-activity-time');
+
+                if (!card || !imageEl || !nameEl || !detailsEl || !stateEl || !timeEl) return;
+
+                const imageUrl = resolveDiscordAssetUrl(activity);
+
+                nameEl.textContent = activity.name || '';
+
+                if (activity.details) {
+                    detailsEl.textContent = activity.details;
+                    detailsEl.style.display = 'block';
+                } else {
+                    detailsEl.textContent = '';
+                    detailsEl.style.display = 'none';
+                }
+
+                if (activity.state) {
+                    stateEl.textContent = activity.state;
+                    stateEl.style.display = 'block';
+                } else {
+                    stateEl.textContent = '';
+                    stateEl.style.display = 'none';
+                }
+
+                if (imageUrl) {
+                    imageEl.src = imageUrl;
+                    imageEl.style.display = 'block';
+                } else {
+                    imageEl.src = '';
+                    imageEl.style.display = 'none';
+                }
+
+                if (activity.timestamps?.start) {
+                    const activityKey = `${activity.name || ''}|${activity.details || ''}|${activity.state || ''}`;
+                    startDiscordActivityTimer(activity.timestamps.start, activityKey);
+                    timeEl.style.display = 'flex';
+                } else {
+                    timeEl.textContent = '';
+                    timeEl.style.display = 'none';
+
+                    if (discordActivityInterval) {
+                        clearInterval(discordActivityInterval);
+                        discordActivityInterval = null;
+                    }
+                }
+
+                card.classList.add('show');
             } catch (error) {
                 console.error('Erro ao buscar status do Discord:', error);
+                hideDiscordActivityCard();
+
                 const statusEl = document.getElementById('discord-status');
                 if (statusEl) {
-                    statusEl.innerHTML = `<p style="color:red;">Status Discord indisponível</p>`;
+                    const avatarEl = document.getElementById('discord-avatar');
+                    if (avatarEl && !avatarEl.src) {
+                        statusEl.innerHTML = `<p style="color:red;">Status Discord indisponível</p>`;
+                    }
                 }
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            updateDiscordLinks();
             fetchDiscordStatus();
-            setInterval(fetchDiscordStatus, 5000);
+            setInterval(fetchDiscordStatus, 4000);
         });
 
         /* ================= MÚSICA DO SITE ================= */
@@ -1208,11 +1549,11 @@
 
         /* ================= MOBILE FLOATING BOXES ================= */
         function handleFloatingBoxes() {
-            const volumeBox = document.getElementById('volume-box');
+            const volumeBoxEl = document.getElementById('volume-box');
             const viewCounter = document.getElementById('view-counter');
-            const overlay = document.getElementById('overlay');
+            const overlayEl = document.getElementById('overlay');
 
-            if (!volumeBox || !viewCounter || !overlay) return;
+            if (!volumeBoxEl || !viewCounter || !overlayEl) return;
 
             let mobileContainer = document.getElementById('mobile-floating-boxes');
             const isMobile = window.innerWidth <= 768;
@@ -1222,18 +1563,18 @@
                     mobileContainer = document.createElement('div');
                     mobileContainer.id = 'mobile-floating-boxes';
                     mobileContainer.className = 'mobile-floating-boxes';
-                    overlay.insertBefore(mobileContainer, overlay.firstChild);
+                    overlayEl.insertBefore(mobileContainer, overlayEl.firstChild);
                 }
 
-                mobileContainer.appendChild(volumeBox);
+                mobileContainer.appendChild(volumeBoxEl);
                 mobileContainer.appendChild(viewCounter);
             } else {
                 if (mobileContainer) {
-                    document.body.appendChild(volumeBox);
+                    document.body.appendChild(volumeBoxEl);
                     document.body.appendChild(viewCounter);
                     mobileContainer.remove();
                 } else {
-                    document.body.appendChild(volumeBox);
+                    document.body.appendChild(volumeBoxEl);
                     document.body.appendChild(viewCounter);
                 }
             }

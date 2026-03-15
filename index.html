@@ -1606,6 +1606,53 @@
 
         window.addEventListener('load', handleFloatingBoxes);
         window.addEventListener('resize', handleFloatingBoxes);
+
+    const titleBase = "Noxy7 ✦ ";
+
+    const texts = [
+        "Bem-Vindo",
+        "Site Personalizado",
+        "Exclusivo do Noxy"
+    ];
+
+    let textIndex = 0;
+    let letterIndex = 0;
+    let deleting = false;
+
+    function animateTitle() {
+
+        const currentText = texts[textIndex];
+
+        if (!deleting) {
+            letterIndex++;
+
+            document.title = titleBase + currentText.slice(0, letterIndex);
+
+            if (letterIndex === currentText.length) {
+                deleting = true;
+                setTimeout(animateTitle, 1500);
+                return;
+            }
+
+        } else {
+            letterIndex--;
+
+            document.title = titleBase + currentText.slice(0, letterIndex);
+
+            if (letterIndex === 0) {
+                deleting = false;
+                textIndex++;
+
+                if (textIndex >= texts.length) {
+                    textIndex = 0;
+                }
+            }
+        }
+
+        setTimeout(animateTitle, 250);
+    }
+
+    animateTitle();
     </script>
 </body>
 </html>

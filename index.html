@@ -614,13 +614,46 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 10px;
+            gap: 10px;
         }
 
-        .discord-activity-top span {
+        .discord-activity-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .discord-activity-top-label {
             font-size: 1rem;
             font-weight: 700;
             color: #d9d9d9;
             user-select: none;
+        }
+
+        .discord-activity-top-icon {
+            width: 20px;
+            height: 20px;
+            object-fit: contain;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 4px rgba(255,255,255,0.18));
+        }
+
+        .discord-activity-top-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 28px;
+            padding: 0 10px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #dcdcdc;
+            font-size: 0.9rem;
+            font-weight: 700;
+            user-select: none;
+            flex-shrink: 0;
         }
 
         .discord-activity-body {
@@ -1083,530 +1116,619 @@
     </div>
 
     <script>
-        /* ================= CONFIG PRINCIPAL ================= */
-        const OWNER_DISCORD_ID = '278691315594559489';
-        const LANYARD_API = `https://api.lanyard.rest/v1/users/${OWNER_DISCORD_ID}`;
+    /* ================= CONFIG PRINCIPAL ================= */
+    const OWNER_DISCORD_ID = '278691315594559489';
+    const LANYARD_API = `https://api.lanyard.rest/v1/users/${OWNER_DISCORD_ID}`;
 
-        /* ================= ATIVIDADES BLOQUEADAS ================= */
-        const blockedActivities = [
-            'Noxy.gg',
-        ];
-        /* ================= ELEMENTOS PRINCIPAIS ================= */
-        const audioModal = document.getElementById('audio-modal');
-        const btnPlay = document.getElementById('btn-play');
-        const volumeBox = document.getElementById('volume-box');
-        const music = document.getElementById('bg-music');
-        const volumeBtn = document.getElementById('volume');
-        const volumeSlider = document.getElementById('volume-slider');
-        const volumeIcon = document.getElementById('volumeIcon');
-        const overlay = document.getElementById('overlay');
-        const mainContent = document.getElementById('main-content');
-        const gifNewVideo = document.getElementById('gif-new-video');
+    /* ================= ATIVIDADES BLOQUEADAS ================= */
+    const blockedActivities = [
+        'Noxy.gg',
+    ];
 
-        /* ================= ÁUDIO INICIAL ================= */
-        music.volume = 0.1;
+    /* ================= ELEMENTOS PRINCIPAIS ================= */
+    const audioModal = document.getElementById('audio-modal');
+    const btnPlay = document.getElementById('btn-play');
+    const volumeBox = document.getElementById('volume-box');
+    const music = document.getElementById('bg-music');
+    const volumeBtn = document.getElementById('volume');
+    const volumeSlider = document.getElementById('volume-slider');
+    const volumeIcon = document.getElementById('volumeIcon');
+    const overlay = document.getElementById('overlay');
+    const mainContent = document.getElementById('main-content');
+    const gifNewVideo = document.getElementById('gif-new-video');
 
-        btnPlay.addEventListener('click', () => {
-            music.play().then(() => {
-                audioModal.style.display = 'none';
-                volumeBox.style.display = 'flex';
-                overlay.classList.add('show');
-                mainContent.classList.add('show');
-                document.getElementById('view-counter').style.display = 'flex';
-                updateViews();
-            }).catch((e) => {
-                console.warn('Erro ao iniciar áudio:', e);
-                audioModal.style.display = 'none';
-                volumeBox.style.display = 'flex';
-                overlay.classList.add('show');
-                mainContent.classList.add('show');
-                document.getElementById('view-counter').style.display = 'flex';
-                updateViews();
+    /* ================= CACHE DE IMAGENS ================= */
+    const activityImageCache = new Map();
+    const DEFAULT_ACTIVITY_IMAGE = 'media/icon.png';
+
+    /* ================= ÁUDIO INICIAL ================= */
+    music.volume = 0.1;
+
+    btnPlay.addEventListener('click', () => {
+        music.play().then(() => {
+            audioModal.style.display = 'none';
+            volumeBox.style.display = 'flex';
+            overlay.classList.add('show');
+            mainContent.classList.add('show');
+            document.getElementById('view-counter').style.display = 'flex';
+            updateViews();
+        }).catch((e) => {
+            console.warn('Erro ao iniciar áudio:', e);
+            audioModal.style.display = 'none';
+            volumeBox.style.display = 'flex';
+            overlay.classList.add('show');
+            mainContent.classList.add('show');
+            document.getElementById('view-counter').style.display = 'flex';
+            updateViews();
+        });
+    });
+
+    /* ================= BOTÃO DE VOLUME ================= */
+    volumeBtn.addEventListener('click', () => {
+        if (music.paused) {
+            music.play().catch(() => {});
+            volumeIcon.src = 'media/sound_on.png';
+        } else {
+            music.pause();
+            volumeIcon.src = 'media/sound_muted.png';
+        }
+    });
+
+    volumeSlider.addEventListener('input', () => {
+        music.volume = volumeSlider.value;
+
+        if (Number(music.volume) === 0) {
+            volumeIcon.src = 'media/sound_muted.png';
+        } else {
+            volumeIcon.src = 'media/sound_on.png';
+        }
+
+        if (music.paused && Number(music.volume) > 0) {
+            music.play().catch(() => {});
+        }
+    });
+
+    /* ================= PAINEL CONFIG DO PC ================= */
+    document.addEventListener('DOMContentLoaded', () => {
+        const btnConfig = document.getElementById('btn-config');
+        const btnFechar = document.getElementById('btn-fechar');
+        const painel = document.getElementById('config-panel');
+
+        if (btnConfig && btnFechar && painel && volumeBox) {
+            btnConfig.addEventListener('click', () => {
+                painel.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                volumeBox.style.zIndex = '0';
+                volumeBox.style.filter = 'blur(3px) brightness(0.7)';
+                volumeBox.style.pointerEvents = 'none';
             });
-        });
 
-        /* ================= BOTÃO DE VOLUME ================= */
-        volumeBtn.addEventListener('click', () => {
-            if (music.paused) {
-                music.play().catch(() => {});
-                volumeIcon.src = 'media/sound_on.png';
-            } else {
-                music.pause();
-                volumeIcon.src = 'media/sound_muted.png';
-            }
-        });
+            const fecharPainel = () => {
+                painel.style.display = 'none';
+                document.body.style.overflow = '';
+                volumeBox.style.zIndex = '999';
+                volumeBox.style.filter = 'none';
+                volumeBox.style.pointerEvents = 'auto';
+            };
 
-        volumeSlider.addEventListener('input', () => {
-            music.volume = volumeSlider.value;
+            btnFechar.addEventListener('click', fecharPainel);
 
-            if (Number(music.volume) === 0) {
-                volumeIcon.src = 'media/sound_muted.png';
-            } else {
-                volumeIcon.src = 'media/sound_on.png';
-            }
-
-            if (music.paused && Number(music.volume) > 0) {
-                music.play().catch(() => {});
-            }
-        });
-
-        /* ================= PAINEL CONFIG DO PC ================= */
-        document.addEventListener('DOMContentLoaded', () => {
-            const btnConfig = document.getElementById('btn-config');
-            const btnFechar = document.getElementById('btn-fechar');
-            const painel = document.getElementById('config-panel');
-
-            if (btnConfig && btnFechar && painel && volumeBox) {
-                btnConfig.addEventListener('click', () => {
-                    painel.style.display = 'flex';
-                    document.body.style.overflow = 'hidden';
-                    volumeBox.style.zIndex = '0';
-                    volumeBox.style.filter = 'blur(3px) brightness(0.7)';
-                    volumeBox.style.pointerEvents = 'none';
-                });
-
-                const fecharPainel = () => {
-                    painel.style.display = 'none';
-                    document.body.style.overflow = '';
-                    volumeBox.style.zIndex = '999';
-                    volumeBox.style.filter = 'none';
-                    volumeBox.style.pointerEvents = 'auto';
-                };
-
-                btnFechar.addEventListener('click', fecharPainel);
-
-                painel.addEventListener('click', (e) => {
-                    if (e.target === painel) {
-                        fecharPainel();
-                    }
-                });
-            } else {
-                console.error('❌ Elementos do Painel de Configurações não encontrados no DOM.');
-            }
-
-            if (gifNewVideo) {
-                gifNewVideo.src = 'media/Extra.gif';
-                gifNewVideo.alt = 'GIF animado extra';
-            }
-        });
-
-        /* ================= CONTADOR DE VISITAS ================= */
-        const BIN_ID = '685cb3a58a456b7966b5ccfb';
-        const API_KEY = '$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW';
-        const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-        const visited = localStorage.getItem('siteVisited');
-
-        async function updateViews() {
-            try {
-                const res = await fetch(URL, {
-                    headers: { 'X-Master-Key': API_KEY }
-                });
-
-                const { record } = await res.json();
-                let views = record.views;
-
-                if (!visited) {
-                    views++;
-                    await fetch(URL, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Master-Key': API_KEY
-                        },
-                        body: JSON.stringify({ views })
-                    });
-                    localStorage.setItem('siteVisited', 'true');
+            painel.addEventListener('click', (e) => {
+                if (e.target === painel) {
+                    fecharPainel();
                 }
-
-                document.getElementById('view-text').textContent = `${views} visitantes`;
-            } catch (e) {
-                console.error('Erro ao atualizar visitas:', e);
-                document.getElementById('view-text').textContent = 'Erro';
-            }
-        }
-
-        /* ================= DISCORD + ATIVIDADE ================= */
-        let discordActivityInterval = null;
-        let lastActivityStart = null;
-        let lastActivityKey = '';
-
-        function updateDiscordLinks() {
-            const discordAnchors = document.querySelectorAll('.discord-user-link');
-            discordAnchors.forEach(anchor => {
-                anchor.href = `https://discord.com/users/${OWNER_DISCORD_ID}`;
             });
+        } else {
+            console.error('❌ Elementos do Painel de Configurações não encontrados no DOM.');
         }
 
-        function formatElapsedTime(ms) {
-            const totalSeconds = Math.floor(ms / 1000);
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
+        if (gifNewVideo) {
+            gifNewVideo.src = 'media/Extra.gif';
+            gifNewVideo.alt = 'GIF animado extra';
+        }
+    });
 
-            if (hours > 0) {
-                return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    /* ================= CONTADOR DE VISITAS ================= */
+    const BIN_ID = '685cb3a58a456b7966b5ccfb';
+    const API_KEY = '$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW';
+    const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+    const visited = localStorage.getItem('siteVisited');
+
+    async function updateViews() {
+        try {
+            const res = await fetch(URL, {
+                headers: { 'X-Master-Key': API_KEY }
+            });
+
+            const { record } = await res.json();
+            let views = record.views;
+
+            if (!visited) {
+                views++;
+                await fetch(URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify({ views })
+                });
+                localStorage.setItem('siteVisited', 'true');
             }
 
-            return `${minutes}:${String(seconds).padStart(2, '0')}`;
+            document.getElementById('view-text').textContent = `${views} visitantes`;
+        } catch (e) {
+            console.error('Erro ao atualizar visitas:', e);
+            document.getElementById('view-text').textContent = 'Erro';
+        }
+    }
+
+    /* ================= DISCORD + ATIVIDADE ================= */
+    let discordRefreshInterval = null;
+    let discordTimeInterval = null;
+
+    function updateDiscordLinks() {
+        const discordAnchors = document.querySelectorAll('.discord-user-link');
+        discordAnchors.forEach(anchor => {
+            anchor.href = `https://discord.com/users/${OWNER_DISCORD_ID}`;
+        });
+    }
+
+    function formatElapsedTime(ms) {
+        const totalSeconds = Math.max(0, Math.floor(ms / 1000));
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        if (hours > 0) {
+            return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
         }
 
-        function getDiscordStatusConfig(status) {
-            switch (status) {
-                case 'online':
-                    return { color: '#43B581', text: 'Online' };
-                case 'idle':
-                    return { color: '#FAA61A', text: 'Ausente' };
-                case 'dnd':
-                    return { color: '#F04747', text: 'Não perturbe' };
-                default:
-                    return { color: 'gray', text: 'Offline' };
-            }
+        return `${minutes}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function getDiscordStatusConfig(status) {
+        switch (status) {
+            case 'online':
+                return { color: '#43B581', text: 'Online' };
+            case 'idle':
+                return { color: '#FAA61A', text: 'Ausente' };
+            case 'dnd':
+                return { color: '#F04747', text: 'Não perturbe' };
+            default:
+                return { color: 'gray', text: 'Offline' };
+        }
+    }
+
+    function escapeHtml(text = '') {
+        return String(text)
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
+    }
+
+    function resolveDiscordAssetUrl(activity, fullData = null) {
+        if (!activity) return '';
+
+        if (activity.name === 'Spotify' && fullData?.spotify?.album_art_url) {
+            return fullData.spotify.album_art_url;
         }
 
-        function resolveDiscordAssetUrl(activity, fullData = null) {
-            if (!activity) return '';
+        const large = activity.assets?.large_image;
+        const small = activity.assets?.small_image;
+        const asset = large || small;
 
-            /* Spotify: usa a capa do álbum */
-            if (activity.name === 'Spotify' && fullData?.spotify?.album_art_url) {
-                return fullData.spotify.album_art_url;
-            }
+        if (!asset) return '';
 
-            const large = activity.assets?.large_image;
-            const small = activity.assets?.small_image;
-            const asset = large || small;
+        if (asset.startsWith('mp:')) {
+            return `https://media.discordapp.net/${asset.slice(3)}`;
+        }
 
-            if (!asset) return '';
+        if (activity.application_id) {
+            return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${asset}.png`;
+        }
 
-            if (asset.startsWith('mp:')) {
-                return `https://media.discordapp.net/${asset.slice(3)}`;
-            }
+        return '';
+    }
 
-            if (activity.application_id) {
-                return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${asset}.png`;
-            }
+    async function getSteamImageByGameName(gameName) {
+        try {
+            const res = await fetch(`https://store.steampowered.com/api/storesearch/?term=${encodeURIComponent(gameName)}&l=portuguese&cc=BR`);
+            if (!res.ok) return '';
 
+            const data = await res.json();
+            const items = Array.isArray(data?.items) ? data.items : [];
+            if (!items.length) return '';
+
+            const normalizedName = gameName.trim().toLowerCase();
+
+            const exactMatch = items.find(item =>
+                item?.name?.trim?.().toLowerCase() === normalizedName
+            );
+
+            const bestMatch = exactMatch || items[0];
+            if (!bestMatch?.id) return '';
+
+            return `https://cdn.cloudflare.steamstatic.com/steam/apps/${bestMatch.id}/header.jpg`;
+        } catch (error) {
+            console.warn('Erro ao buscar imagem na Steam:', error);
             return '';
         }
+    }
 
-        function getBestDiscordActivity(activities = []) {
-            if (!Array.isArray(activities) || !activities.length) return null;
+    async function getWikipediaImageByGameName(gameName) {
+        try {
+            const searchRes = await fetch(
+                `https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(gameName + ' jogo')}&format=json&origin=*`
+            );
 
-            const filtered = activities.filter(activity => {
+            if (!searchRes.ok) return '';
+
+            const searchData = await searchRes.json();
+            const firstResult = searchData?.query?.search?.[0];
+            if (!firstResult?.title) return '';
+
+            const pageRes = await fetch(
+                `https://pt.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(firstResult.title)}&prop=pageimages&piprop=original&format=json&origin=*`
+            );
+
+            if (!pageRes.ok) return '';
+
+            const pageData = await pageRes.json();
+            const pages = pageData?.query?.pages;
+            if (!pages) return '';
+
+            const page = Object.values(pages)[0];
+            return page?.original?.source || '';
+        } catch (error) {
+            console.warn('Erro ao buscar imagem na Wikipedia:', error);
+            return '';
+        }
+    }
+
+    async function getActivityImage(activity, fullData = null) {
+        if (!activity?.name) return '';
+
+        const cacheKey = `${activity.name}::${activity.application_id || ''}::${activity.assets?.large_image || ''}::${activity.assets?.small_image || ''}`;
+
+        if (activityImageCache.has(cacheKey)) {
+            return activityImageCache.get(cacheKey);
+        }
+
+        let imageUrl = resolveDiscordAssetUrl(activity, fullData);
+
+        if (!imageUrl && activity.name !== 'Spotify') {
+            imageUrl = await getSteamImageByGameName(activity.name);
+        }
+
+        if (!imageUrl && activity.name !== 'Spotify') {
+            imageUrl = await getWikipediaImageByGameName(activity.name);
+        }
+
+        if (!imageUrl) {
+            imageUrl = DEFAULT_ACTIVITY_IMAGE;
+        }
+
+        activityImageCache.set(cacheKey, imageUrl);
+        return imageUrl;
+    }
+
+    function startAllActivityTimers() {
+        if (discordTimeInterval) {
+            clearInterval(discordTimeInterval);
+            discordTimeInterval = null;
+        }
+
+        const updateTimers = () => {
+            const timeElements = document.querySelectorAll('.discord-activity-time[data-start]');
+            timeElements.forEach(el => {
+                const start = Number(el.dataset.start || 0);
+                if (!start) return;
+
+                const elapsed = Date.now() - start;
+                el.textContent = formatElapsedTime(elapsed);
+            });
+        };
+
+        updateTimers();
+        discordTimeInterval = setInterval(updateTimers, 1000);
+    }
+
+    function getActivityTypeLabel(activity) {
+        if (!activity) return 'Atividade';
+
+        if (activity.name === 'Spotify') return 'Música';
+
+        switch (activity.type) {
+            case 0:
+                return 'Jogando';
+            case 1:
+                return 'Transmitindo';
+            case 2:
+                return 'Ouvindo';
+            case 3:
+                return 'Assistindo';
+            case 5:
+                return 'Competindo';
+            default:
+                return 'Atividade';
+        }
+    }
+
+    function getActivityTopIcon(activity) {
+        if (!activity) return '🎮';
+
+        if (activity.name === 'Spotify') return '🎵';
+
+        switch (activity.type) {
+            case 0:
+                return '🎮';
+            case 1:
+                return '📺';
+            case 2:
+                return '🎧';
+            case 3:
+                return '🎬';
+            case 5:
+                return '🏆';
+            default:
+                return '✨';
+        }
+    }
+
+    function getActivityBadgeText(activity) {
+        if (!activity) return 'Ativo';
+
+        if (activity.name === 'Spotify') return 'Spotify';
+
+        switch (activity.type) {
+            case 0:
+                return 'Game';
+            case 1:
+                return 'Live';
+            case 2:
+                return 'Áudio';
+            case 3:
+                return 'Vídeo';
+            case 5:
+                return 'Ranked';
+            default:
+                return 'Ativo';
+        }
+    }
+
+    async function fetchDiscordStatus() {
+        try {
+            const response = await fetch(LANYARD_API);
+            if (!response.ok) throw new Error('Erro na API');
+
+            const json = await response.json();
+            if (!json?.data?.discord_user) throw new Error('Usuário não encontrado');
+
+            const user = json.data.discord_user;
+            const status = json.data.discord_status;
+            const activities = json.data.activities || [];
+
+            updateDiscordLinks();
+
+            const avatarUrl = user.avatar
+                ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
+                : `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator || 0) % 5}.png`;
+
+            const avatarEl = document.getElementById('discord-avatar');
+            const displayNameEl = document.getElementById('display-name');
+            const usernameEl = document.getElementById('discord-username');
+            const discriminatorEl = document.getElementById('discord-discriminator');
+            const statusCircle = document.getElementById('discord-status-circle');
+
+            if (avatarEl && avatarEl.src !== avatarUrl) {
+                avatarEl.src = avatarUrl;
+            }
+
+            if (displayNameEl) {
+                displayNameEl.textContent = user.global_name || user.username || 'Discord';
+            }
+
+            if (usernameEl) {
+                usernameEl.textContent = '@' + (user.username || 'usuario');
+            }
+
+            if (discriminatorEl) {
+                if (user.discriminator && user.discriminator !== '0') {
+                    discriminatorEl.textContent = '#' + user.discriminator;
+                    discriminatorEl.style.display = 'inline';
+                } else {
+                    discriminatorEl.textContent = '';
+                    discriminatorEl.style.display = 'none';
+                }
+            }
+
+            if (statusCircle) {
+                const statusConfig = getDiscordStatusConfig(status);
+                statusCircle.style.backgroundColor = statusConfig.color;
+                statusCircle.title = statusConfig.text;
+            }
+
+            const container = document.getElementById('discord-activities');
+            if (!container) return;
+
+            const filteredActivities = activities.filter(activity => {
                 if (!activity) return false;
                 if (activity.type === 4) return false;
                 if (!activity.name) return false;
                 if (blockedActivities.includes(activity.name)) return false;
-
                 return true;
             });
 
-            if (!filtered.length) return null;
-
-            const withImage = filtered.find(activity =>
-                activity.assets?.large_image || activity.assets?.small_image
-            );
-
-            return withImage || filtered[0];
-        }
-
-        function hideDiscordActivityCard() {
-            const card = document.getElementById('discord-activity-card');
-            if (card) {
-                card.classList.remove('show');
-            }
-
-            if (discordActivityInterval) {
-                clearInterval(discordActivityInterval);
-                discordActivityInterval = null;
-            }
-
-            lastActivityStart = null;
-            lastActivityKey = '';
-        }
-
-        function startDiscordActivityTimer(startTimestamp, activityKey) {
-            const timeEl = document.getElementById('discord-activity-time');
-            if (!timeEl) return;
-
-            if (
-                discordActivityInterval &&
-                lastActivityStart === startTimestamp &&
-                lastActivityKey === activityKey
-            ) {
+            if (!filteredActivities.length) {
+                container.innerHTML = '';
                 return;
             }
 
-            if (discordActivityInterval) {
-                clearInterval(discordActivityInterval);
-                discordActivityInterval = null;
-            }
+            const cardsHtml = await Promise.all(filteredActivities.map(async (activity) => {
+                const imageUrl = await getActivityImage(activity, json.data);
 
-            lastActivityStart = startTimestamp;
-            lastActivityKey = activityKey;
+                const name = escapeHtml(activity.name || '');
+                const details = escapeHtml(activity.details || '');
+                const state = escapeHtml(activity.state || '');
+                const start = Number(activity.timestamps?.start || 0);
 
-            const update = () => {
-                const elapsed = Date.now() - startTimestamp;
-                timeEl.textContent = formatElapsedTime(elapsed);
-            };
+                const activityLabel = escapeHtml(getActivityTypeLabel(activity));
+                const activityIcon = getActivityTopIcon(activity);
+                const badgeText = escapeHtml(getActivityBadgeText(activity));
 
-            update();
-            discordActivityInterval = setInterval(update, 1000);
-        }
-
-        async function fetchDiscordStatus() {
-            try {
-                const response = await fetch(LANYARD_API);
-                if (!response.ok) throw new Error('Erro na API');
-
-                const json = await response.json();
-                if (!json?.data?.discord_user) throw new Error('Usuário não encontrado');
-
-                const user = json.data.discord_user;
-                const status = json.data.discord_status;
-                const activities = json.data.activities || [];
-
-                updateDiscordLinks();
-
-                const avatarUrl = user.avatar
-                    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
-                    : `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator || 0) % 5}.png`;
-
-                const avatarEl = document.getElementById('discord-avatar');
-                const displayNameEl = document.getElementById('display-name');
-                const usernameEl = document.getElementById('discord-username');
-                const discriminatorEl = document.getElementById('discord-discriminator');
-                const statusCircle = document.getElementById('discord-status-circle');
-
-                if (avatarEl && avatarEl.src !== avatarUrl) {
-                    avatarEl.src = avatarUrl;
-                }
-
-                if (displayNameEl) {
-                    displayNameEl.textContent = user.global_name || user.username || 'Discord';
-                }
-
-                if (usernameEl) {
-                    usernameEl.textContent = '@' + (user.username || 'usuario');
-                }
-
-                if (discriminatorEl) {
-                    if (user.discriminator && user.discriminator !== '0') {
-                        discriminatorEl.textContent = '#' + user.discriminator;
-                        discriminatorEl.style.display = 'inline';
-                    } else {
-                        discriminatorEl.textContent = '';
-                        discriminatorEl.style.display = 'none';
-                    }
-                }
-
-                if (statusCircle) {
-                    const statusConfig = getDiscordStatusConfig(status);
-                    statusCircle.style.backgroundColor = statusConfig.color;
-                    statusCircle.title = statusConfig.text;
-                }
-
-                const container = document.getElementById('discord-activities');
-                if (!container) return;
-
-                container.innerHTML = '';
-
-                const filteredActivities = activities.filter(activity => {
-                    if (!activity) return false;
-                    if (activity.type === 4) return false;
-                    if (!activity.name) return false;
-                    if (blockedActivities.includes(activity.name)) return false;
-                    return true;
-                });
-
-                if (!filteredActivities.length) return;
-
-                filteredActivities.forEach(activity => {
-
-                    const imageUrl = resolveDiscordAssetUrl(activity, json.data);
-
-                    const card = document.createElement('div');
-                    card.className = 'discord-activity-card show';
-
-                    const name = activity.name || '';
-                    const details = activity.details || '';
-                    const state = activity.state || '';
-
-                    let timeHTML = '';
-
-                    if (activity.timestamps?.start) {
-                        const start = activity.timestamps.start;
-
-                        function formatTime(ms) {
-                            const totalSeconds = Math.max(0, Math.floor(ms / 1000));
-                            const h = Math.floor(totalSeconds / 3600);
-                            const m = Math.floor((totalSeconds % 3600) / 60);
-                            const s = totalSeconds % 60;
-
-                            if (h > 0) {
-                                return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-                            }
-
-                            return `${m}:${String(s).padStart(2, '0')}`;
-                        }
-
-                        const timeId = "time_" + Math.random().toString(36).substring(2);
-
-                        timeHTML = `<p class="discord-activity-time" id="${timeId}">⏱ 0:00</p>`;
-
-                        setTimeout(() => {
-                            const el = document.getElementById(timeId);
-                            if (!el) return;
-
-                            const update = () => {
-                                const elapsed = Math.max(0, Date.now() - start);
-                                el.textContent = formatTime(elapsed);
-                            };
-
-                            update();
-                            setInterval(update, 1000);
-                        }, 100);
-                    }
-
-                    card.innerHTML = `
+                return `
+                    <div class="discord-activity-card show">
                         <div class="discord-activity-top">
-                            <span>Atividade do discord</span>
-                            <span style="opacity:.65;">•••</span>
+                            <div class="discord-activity-title-wrap">
+                                <span class="discord-activity-top-icon">${activityIcon}</span>
+                                <span class="discord-activity-top-label">${activityLabel}</span>
+                            </div>
+
+                            <span class="discord-activity-top-badge">${badgeText}</span>
                         </div>
 
                         <div class="discord-activity-body">
-
-                            <img class="discord-activity-image"
-                            src="${imageUrl || ''}"
-                            style="${imageUrl ? '' : 'display:none'}">
+                            <img
+                                class="discord-activity-image"
+                                src="${escapeHtml(imageUrl)}"
+                                alt="${name}"
+                                onerror="this.onerror=null;this.src='${DEFAULT_ACTIVITY_IMAGE}';"
+                            >
 
                             <div class="discord-activity-info">
-
                                 <h3 class="discord-activity-name">${name}</h3>
 
                                 ${details ? `<p class="discord-activity-details">${details}</p>` : ''}
-
                                 ${state ? `<p class="discord-activity-state">${state}</p>` : ''}
-
-                                ${timeHTML}
-
+                                ${start ? `<p class="discord-activity-time" data-start="${start}">0:00</p>` : ''}
                             </div>
-
                         </div>
-                    `;
-
-                    container.appendChild(card);
-
-                });
-
-            } catch (error) {
-                console.error('Erro ao buscar status do Discord:', error);
-            }
-        }
-        document.addEventListener('DOMContentLoaded', () => {
-            updateDiscordLinks();
-            fetchDiscordStatus();
-            setInterval(fetchDiscordStatus, 10000);
-        });
-
-        /* ================= MÚSICA DO SITE ================= */
-        (() => {
-            const spotifyUrl = 'https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=784b639399214e45';
-            const manualArtist = 'isotopxs';
-            const fallbackImage = 'media/Capa spotify.jpg';
-
-            async function loadSpotifySong(url) {
-                let title = 'Música Desconhecida (Erro)';
-                let artist = manualArtist;
-                let thumbnailUrl = fallbackImage;
-
-                try {
-                    const oembedBase = 'https://open.spotify.com/oembed';
-                    const oembedUrl = `${oembedBase}?url=${encodeURIComponent(url)}`;
-
-                    const res = await fetch(oembedUrl);
-                    if (!res.ok) throw new Error(`Status de resposta: ${res.status}`);
-
-                    const data = await res.json();
-                    title = data.title || title;
-                    artist = data.author_name?.trim() || manualArtist;
-                    thumbnailUrl = data.thumbnail_url || fallbackImage;
-                } catch (e) {
-                    console.error('❌ Erro ao buscar dados do Spotify. Usando fallback.', e);
-                }
-
-                renderMusic(url, title, artist, thumbnailUrl);
-            }
-
-            function renderMusic(url, title, artist, thumbnailUrl) {
-                const musicDiv = document.createElement('div');
-                musicDiv.id = 'musicInfo';
-
-                Object.assign(musicDiv.style, {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    marginTop: '20px',
-                    textAlign: 'center',
-                    color: 'white'
-                });
-
-                musicDiv.innerHTML = `
-                    <div style="font-size:1.7rem;user-select:none;font-weight:bold;margin-bottom:10px;">
-                        𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
-                    </div>
-                    <a href="${url}" target="_blank" rel="noopener noreferrer">
-                        <img src="${thumbnailUrl}" alt="Capa da música"
-                            style="width:150px;height:150px;margin-bottom:10px;cursor:pointer;border-radius:12px;border:2px solid #ff0000;box-shadow:0 0 8px #ff0000,0 0 16px rgba(255,0,0,0.9),0 0 35px rgba(255,0,0,0.6);">
-                    </a>
-                    <div class="music-data">
-                        <div style="font-size:18px;font-weight:bold;color:white;">${title}</div>
-                        <div style="font-size:14px;color:white;opacity:0.8;">${artist}</div>
                     </div>
                 `;
+            }));
 
-                document.getElementById('music-site-section')?.appendChild(musicDiv);
-            }
+            container.innerHTML = cardsHtml.join('');
+            startAllActivityTimers();
 
-            document.addEventListener('DOMContentLoaded', () => loadSpotifySong(spotifyUrl));
-        })();
+        } catch (error) {
+            console.error('Erro ao buscar status do Discord:', error);
+        }
+    }
 
-        /* ================= MOBILE FLOATING BOXES ================= */
-        function handleFloatingBoxes() {
-            const volumeBoxEl = document.getElementById('volume-box');
-            const viewCounter = document.getElementById('view-counter');
-            const overlayEl = document.getElementById('overlay');
+    document.addEventListener('DOMContentLoaded', () => {
+        updateDiscordLinks();
+        fetchDiscordStatus();
 
-            if (!volumeBoxEl || !viewCounter || !overlayEl) return;
-
-            let mobileContainer = document.getElementById('mobile-floating-boxes');
-            const isMobile = window.innerWidth <= 768;
-
-            if (isMobile) {
-                if (!mobileContainer) {
-                    mobileContainer = document.createElement('div');
-                    mobileContainer.id = 'mobile-floating-boxes';
-                    mobileContainer.className = 'mobile-floating-boxes';
-                    overlayEl.insertBefore(mobileContainer, overlayEl.firstChild);
-                }
-
-                mobileContainer.appendChild(volumeBoxEl);
-                mobileContainer.appendChild(viewCounter);
-            } else {
-                if (mobileContainer) {
-                    document.body.appendChild(volumeBoxEl);
-                    document.body.appendChild(viewCounter);
-                    mobileContainer.remove();
-                } else {
-                    document.body.appendChild(volumeBoxEl);
-                    document.body.appendChild(viewCounter);
-                }
-            }
+        if (discordRefreshInterval) {
+            clearInterval(discordRefreshInterval);
         }
 
-        window.addEventListener('load', handleFloatingBoxes);
-        window.addEventListener('resize', handleFloatingBoxes);
+        discordRefreshInterval = setInterval(fetchDiscordStatus, 10000);
+    });
 
+    /* ================= MÚSICA DO SITE ================= */
+    (() => {
+        const spotifyUrl = 'https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=784b639399214e45';
+        const manualArtist = 'isotopxs';
+        const fallbackImage = 'media/Capa spotify.jpg';
+
+        async function loadSpotifySong(url) {
+            let title = 'Música Desconhecida (Erro)';
+            let artist = manualArtist;
+            let thumbnailUrl = fallbackImage;
+
+            try {
+                const oembedBase = 'https://open.spotify.com/oembed';
+                const oembedUrl = `${oembedBase}?url=${encodeURIComponent(url)}`;
+
+                const res = await fetch(oembedUrl);
+                if (!res.ok) throw new Error(`Status de resposta: ${res.status}`);
+
+                const data = await res.json();
+                title = data.title || title;
+                artist = data.author_name?.trim() || manualArtist;
+                thumbnailUrl = data.thumbnail_url || fallbackImage;
+            } catch (e) {
+                console.error('❌ Erro ao buscar dados do Spotify. Usando fallback.', e);
+            }
+
+            renderMusic(url, title, artist, thumbnailUrl);
+        }
+
+        function renderMusic(url, title, artist, thumbnailUrl) {
+            const musicDiv = document.createElement('div');
+            musicDiv.id = 'musicInfo';
+
+            Object.assign(musicDiv.style, {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginTop: '20px',
+                textAlign: 'center',
+                color: 'white'
+            });
+
+            musicDiv.innerHTML = `
+                <div style="font-size:1.7rem;user-select:none;font-weight:bold;margin-bottom:10px;">
+                    𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
+                </div>
+                <a href="${url}" target="_blank" rel="noopener noreferrer">
+                    <img src="${thumbnailUrl}" alt="Capa da música"
+                        style="width:150px;height:150px;margin-bottom:10px;cursor:pointer;border-radius:12px;border:2px solid #ff0000;box-shadow:0 0 8px #ff0000,0 0 16px rgba(255,0,0,0.9),0 0 35px rgba(255,0,0,0.6);">
+                </a>
+                <div class="music-data">
+                    <div style="font-size:18px;font-weight:bold;color:white;">${title}</div>
+                    <div style="font-size:14px;color:white;opacity:0.8;">${artist}</div>
+                </div>
+            `;
+
+            document.getElementById('music-site-section')?.appendChild(musicDiv);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => loadSpotifySong(spotifyUrl));
+    })();
+
+    /* ================= MOBILE FLOATING BOXES ================= */
+    function handleFloatingBoxes() {
+        const volumeBoxEl = document.getElementById('volume-box');
+        const viewCounter = document.getElementById('view-counter');
+        const overlayEl = document.getElementById('overlay');
+
+        if (!volumeBoxEl || !viewCounter || !overlayEl) return;
+
+        let mobileContainer = document.getElementById('mobile-floating-boxes');
+        const isMobile = window.innerWidth <= 768;
+
+        if (isMobile) {
+            if (!mobileContainer) {
+                mobileContainer = document.createElement('div');
+                mobileContainer.id = 'mobile-floating-boxes';
+                mobileContainer.className = 'mobile-floating-boxes';
+                overlayEl.insertBefore(mobileContainer, overlayEl.firstChild);
+            }
+
+            mobileContainer.appendChild(volumeBoxEl);
+            mobileContainer.appendChild(viewCounter);
+        } else {
+            if (mobileContainer) {
+                document.body.appendChild(volumeBoxEl);
+                document.body.appendChild(viewCounter);
+                mobileContainer.remove();
+            } else {
+                document.body.appendChild(volumeBoxEl);
+                document.body.appendChild(viewCounter);
+            }
+        }
+    }
+
+    window.addEventListener('load', handleFloatingBoxes);
+    window.addEventListener('resize', handleFloatingBoxes);
+
+    /* ================= TÍTULO ANIMADO ================= */
     const titleBase = "Noxy7 ✦ ";
 
     const texts = [
@@ -1620,12 +1742,10 @@
     let deleting = false;
 
     function animateTitle() {
-
         const currentText = texts[textIndex];
 
         if (!deleting) {
             letterIndex++;
-
             document.title = titleBase + currentText.slice(0, letterIndex);
 
             if (letterIndex === currentText.length) {
@@ -1633,10 +1753,8 @@
                 setTimeout(animateTitle, 1500);
                 return;
             }
-
         } else {
             letterIndex--;
-
             document.title = titleBase + currentText.slice(0, letterIndex);
 
             if (letterIndex === 0) {

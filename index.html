@@ -1,1776 +1,595 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Noxy7 ✦ Bem-Vindo</title>
-    <meta name="description" content="Link personalizado do Noxy, onde tem links como Discord, perfil, links, Spotify, TikTok, Steam. Site personalizado feito por Noxy.gg">
-    <meta name="keywords" content="Noxy7, Discord, Perfil, Links, Spotify, TikTok, Steam">
-    <meta name="author" content="Noxy.gg">
-
-    <meta property="og:title" content="Noxy7" />
-    <meta property="og:description" content="Conheça o perfil interativo de Noxy7 com seus links" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/NoxyRJ/Site/main/media/perfil.gif" />
-    <meta property="og:url" content="https://noxyrj.github.io/1/" />
-    <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#FF0000">
-
-    <link rel="icon" type="image/png" href="media/icon.png" />
-    <link rel="icon" type="image/png" href="media/icon.png" sizes="36x36" />
-    <link rel="apple-touch-icon" href="media/icon.png" />
-    <link rel="shortcut icon" href="media/icon.png" type="image/png" />
-
-    <style>
-        /* ================= RESET E GERAL ================= */
-        *, *::before, *::after {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html, body {
-            width: 100%;
-            min-height: 100%;
-            font-family: Arial, sans-serif;
-            background: #000;
-            overflow-x: hidden;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-            scrollbar-width: thin;
-            scrollbar-color: #111 #000;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #000;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #111;
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #1f1f1f;
-        }
-
-        /* ================= FUNDO CORRIGIDO ================= */
-        #bg-container {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        #bg-image {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-
-            object-fit: cover;
-            object-position: left center;
-
-            display: block;
-        }
-
-        /* ================= OVERLAY PRINCIPAL ================= */
-        .overlay {
-            position: relative;
-            z-index: 1;
-            margin: 60px auto;
-            max-width: 570px;
-            width: 100%;
-            min-height: 100vh;
-            opacity: 0;
-            transition: opacity 3s;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            overflow: visible;
-        }
-
-        .overlay::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .overlay::-webkit-scrollbar-track {
-            background: #000;
-        }
-
-        .overlay::-webkit-scrollbar-thumb {
-            background: #111;
-            border-radius: 10px;
-        }
-
-        .overlay.show {
-            opacity: 1;
-        }
-
-        /* ================= CONTEÚDO ================= */
-        .content {
-            flex: 1;
-            text-align: center;
-            color: white;
-            opacity: 0;
-            transition: opacity 1s;
-        }
-
-        .content.show {
-            opacity: 1;
-        }
-
-        h1 {
-            font-size: clamp(1.8rem, 5vw, 3rem);
-            margin: 10px 0;
-        }
-
-        h2, p {
-            font-size: clamp(1rem, 2.5vw, 1.5rem);
-            margin-bottom: 1rem;
-            color: white;
-        }
-
-        /* ================= AJUSTE MOBILE ================= */
-        @media (max-width: 768px) {
-            .content {
-                padding-top: 40px;
-            }
-        }
-
-        /* ================= FIX MOBILE FLOATING BOXES ================= */
-        .mobile-floating-boxes {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            width: 100%;
-            margin-bottom: 6px;
-            margin-top: -65px;
-        }
-
-        @media (max-width: 768px) {
-            #volume-box,
-            #view-counter {
-                position: static !important;
-                top: auto !important;
-                right: auto !important;
-                left: auto !important;
-                transform: none !important;
-                z-index: auto !important;
-            }
-
-            #volume-box,
-            #view-counter {
-                margin: 0;
-            }
-        }
-
-        /* ================= AVATAR PRINCIPAL ================= */
-        .avatar-wrapper {
-            display: inline-block;
-            margin-bottom: 15px;
-            position: relative;
-            padding: 1px;
-            border-radius: 50%;
-            background: rgba(255, 0, 0, 0.35);
-        }
-
-        .avatar {
-            width: clamp(100px, 30vw, 150px);
-            border-radius: 50%;
-            display: block;
-            position: relative;
-            z-index: 2;
-            border: 2px solid #ff2a2a;
-        }
-
-        .avatar-border {
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            z-index: 1;
-            border: 2px solid #ff0000;
-            box-shadow:
-                0 0 10px #ff0000,
-                0 0 20px rgba(255, 0, 0, 0.9),
-                0 0 30px rgba(255, 0, 0, 0.6);
-            background: transparent;
-            pointer-events: none;
-            animation: avatarPulse 4.5s infinite ease-in-out;
-        }
-
-        @keyframes avatarPulse {
-            0% {
-                transform: scale(1);
-                box-shadow:
-                    0 0 4px #ff0000,
-                    0 0 10px rgba(255, 0, 0, 0.8),
-                    0 0 16px rgba(255, 0, 0, 0.5);
-            }
-
-            50% {
-                transform: scale(1.02);
-                box-shadow:
-                    0 0 12px #ff0000,
-                    0 0 16px rgba(255, 0, 0, 1),
-                    0 0 20px rgba(255, 0, 0, 0.8);
-            }
-
-            100% {
-                transform: scale(1);
-                box-shadow:
-                    0 0 4px #ff0000,
-                    0 0 10px rgba(255, 0, 0, 0.8),
-                    0 0 16px rgba(255, 0, 0, 0.5);
-            }
-        }
-
-        /* ================= IMAGENS ================= */
-        .imagem-extra {
-            width: 90%;
-            border-radius: 12px;
-            margin: 1rem auto;
-            display: block;
-        }
-
-        /* ================= TAGS ================= */
-        .tags-section h2 {
-            margin-bottom: 0.5rem;
-        }
-
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .tags span {
-            background: rgba(255,255,255,.1);
-            border-radius: 12px;
-            padding: 0.4rem 0.7rem;
-            font-size: 1rem;
-            color: white;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        /* ================= LINKS ================= */
-        .links-section h2 {
-            margin-bottom: 0.7rem;
-        }
-
-        .links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px 12px;
-            margin-top: 10px;
-            margin-bottom: 2rem;
-        }
-
-        .links a {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: #1b1b1f;
-            border-radius: 14px;
-            text-decoration: none;
-            color: #fff;
-            font-size: 1rem;
-            font-weight: 700;
-            line-height: 1;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
-            transition: transform 0.2s ease, background 0.2s ease;
-            user-select: none;
-        }
-
-        .links a:hover {
-            transform: translateY(-2px);
-            background: #232329;
-        }
-
-        .link-icon {
-            width: 20px;
-            height: 20px;
-            object-fit: contain;
-            flex-shrink: 0;
-            transition: transform 0.25s ease;
-        }
-
-        .links a:hover .link-icon {
-            transform: rotate(15deg);
-        }
-
-        /* ================= CARD PLAYLIST ================= */
-        .playlist-card {
-            background: rgba(30,215,96,.15);
-            border-radius: 16px;
-            padding: 1rem;
-            max-width: 400px;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin: 0 auto 1rem;
-            box-shadow: 0 0 8px #1DB95488;
-            position: relative;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .playlist-card:hover {
-            animation: pulseGlowGreen 1.5s infinite;
-        }
-
-        .playlist-card::before {
-            content: url("https://cdn.simpleicons.org/spotify/1DB954");
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 24px;
-            height: 24px;
-        }
-
-        .playlist-cover {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
-            object-fit: cover;
-        }
-
-        .playlist-info {
-            color: white;
-            flex: 1;
-            text-align: left;
-        }
-
-        .playlist-info h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .listen-btn {
-            padding: 0.5rem 1rem;
-            background: #fff9;
-            color: black;
-            border-radius: 9999px;
-            font-weight: 600;
-            font-size: 1rem;
-            border: none;
-            cursor: pointer;
-        }
-
-        .listen-btn:hover {
-            background: #fff;
-        }
-
-        /* ================= VOLUME BOX ================= */
-        #volume-box {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            color: white;
-            font-size: 18px;
-            background: rgba(0, 0, 0, 0.35);
-            padding: 5px 12px;
-            border-radius: 9px;
-            font-family: sans-serif;
-            display: none;
-            align-items: center;
-            gap: 10px;
-            user-select: none;
-            backdrop-filter: blur(6px);
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.6);
-            z-index: 999;
-        }
-
-        #volume-box button {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-
-        #volume-box input[type="range"] {
-            width: 100px;
-            max-width: 80%;
-        }
-
-        #volumeIcon {
-            width: 24px;
-            height: 24px;
-            object-fit: contain;
-            transform: none;
-            vertical-align: middle;
-        }
-
-        /* ================= CONTADOR DE VISITAS ================= */
-        .view-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            line-height: 1;
-        }
-
-        #view-counter {
-            display: none;
-            user-select: none;
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            color: white;
-            font-size: 18px;
-            background: rgba(0, 0, 0, 0.65);
-            padding: 2px 12px;
-            border-radius: 9px;
-            font-family: sans-serif;
-            align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(6px);
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.6);
-            z-index: 999;
-        }
-
-        #viewIcon {
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
-            transform: none;
-            vertical-align: middle;
-        }
-
-        /* ================= MODAL INTRO ================= */
-        #audio-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,.85);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
-            z-index: 9999;
-        }
-
-        .intro-logo {
-            width: 80%;
-            max-width: 700px;
-            margin-bottom: 2rem;
-
-            animation: logoPulse 2.5s ease-in-out infinite;
-        }
-
-        #audio-modal button {
-            padding: 12px 24px;
-            font-size: clamp(1rem, 2.5vw, 1.2rem);
-            background: rgb(255, 0, 0);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 0 10px #f00, 0 0 20px #f00;
-        }
-
-        /* ================= CONFIG DO PC ================= */
-        .config-btn {
-            position: relative;
-            z-index: 999;
-            display: block;
-            margin: 10px auto 25px auto;
-            background: rgb(255, 0, 0);
-            border: none;
-            padding: 10px 18px;
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
-        }
-
-        .config-btn:hover {
-            background: rgb(253, 69, 69);
-            transform: scale(1.05);
-        }
-
-        .config-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(6px);
-            z-index: 999999;
-            justify-content: center;
-            align-items: center;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .config-box {
-            background: rgba(25, 25, 25, 0.95);
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 0 30px rgba(255, 0, 100, 0.3);
-            color: white;
-            width: 90%;
-            max-width: 450px;
-            animation: aparecer 0.3s ease;
-            text-align: center;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .config-box ul {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .config-box li strong {
-            color: #ff0000;
-        }
-
-        .config-box li {
-            margin-bottom: 10px;
-            word-wrap: break-word;
-        }
-
-        .close-btn {
-            margin-top: 20px;
-            background: rgba(255, 0, 0, 0.8);
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .close-btn:hover {
-            background: rgb(253, 69, 69);
-        }
-
-        /* ================= DISCORD ================= */
-        .discord-avatar-white {
-            border: 2px solid rgba(255, 255, 255, 0.95);
-            box-shadow:
-                0 0 8px rgba(255, 255, 255, 0.85),
-                0 0 16px rgba(255, 255, 255, 0.55),
-                0 0 28px rgba(255, 255, 255, 0.25);
-            border-radius: 50%;
-        }
-
-        #discord-status-circle {
-            position: absolute;
-            bottom: 6px;
-            right: 6px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 3px solid #ffffff;
-            background-color: gray;
-            box-shadow:
-                0 0 8px rgba(255, 255, 255, 0.8),
-                0 0 16px rgba(255, 255, 255, 0.35);
-        }
-
-        /* ================= CARD ATIVIDADE DISCORD ================= */
-        .discord-activity-card {
-            display: none;
-            width: 100%;
-            max-width: 380px;
-            margin: 18px auto 0;
-            padding: 12px;
-            border-radius: 16px;
-            background: linear-gradient(180deg, #11151c, #0d1016);
-            box-shadow:
-                0 0 0 1px rgba(255,255,255,0.04),
-                0 10px 30px rgba(0,0,0,0.45);
-            text-align: left;
-            color: #fff;
-        }
-
-        .discord-activity-card.show {
-            display: block;
-        }
-
-        .discord-activity-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            gap: 10px;
-        }
-
-        .discord-activity-title-wrap {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            min-width: 0;
-        }
-
-        .discord-activity-top-label {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #d9d9d9;
-            user-select: none;
-        }
-
-        .discord-activity-top-icon {
-            width: 20px;
-            height: 20px;
-            object-fit: contain;
-            flex-shrink: 0;
-            filter: drop-shadow(0 0 4px rgba(255,255,255,0.18));
-        }
-
-        .discord-activity-top-badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 28px;
-            height: 28px;
-            padding: 0 10px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.08);
-            color: #dcdcdc;
-            font-size: 0.9rem;
-            font-weight: 700;
-            user-select: none;
-            flex-shrink: 0;
-        }
-
-        .discord-activity-body {
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
-
-        .discord-activity-image {
-            width: 96px;
-            height: 96px;
-            border-radius: 14px;
-            object-fit: cover;
-            background: #1a1a1a;
-            border: 1px solid rgba(255,255,255,0.08);
-            flex-shrink: 0;
-        }
-
-        .discord-activity-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .discord-activity-name {
-            margin: 0 0 4px;
-            font-size: 1.15rem;
-            font-weight: 800;
-            line-height: 1.2;
-            color: #fff;
-            word-break: break-word;
-        }
-
-        .discord-activity-details,
-        .discord-activity-state {
-            margin: 0;
-            font-size: 0.95rem;
-            line-height: 1.3;
-            color: #d0d0d0;
-            word-break: break-word;
-        }
-
-        .discord-activity-details {
-            margin-bottom: 2px;
-        }
-
-        .discord-activity-state {
-            color: #b8b8b8;
-            margin-bottom: 8px;
-        }
-
-        .discord-activity-time {
-            margin: 0;
-            font-size: 0.95rem;
-            color: #46d160;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .discord-activity-time::before {
-            content: "⏱";
-            font-size: 0.95rem;
-        }
-
-        /* ================= CRÉDITOS DO SITE ================= */
-        .site-credit {
-            width: 100%;
-            text-align: center;
-            margin: 40px 0 20px;
-            user-select: none;
-        }
-
-        .site-credit span {
-            font-size: 1.4rem;
-            font-weight: bold;
-            background: linear-gradient(
-                90deg,
-                #ffffff 0%,
-                #ffffff 35%,
-                #ff0000 47%,
-                #ff0000 50%,
-                #ff0000 53%,
-                #ff0000 58%,
-                #ffffff 65%,
-                #ffffff 100%
-            );
-            background-size: 200% 100%;
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: scanText 5s linear infinite;
-            text-shadow:
-                0 0 10px #ffffff,
-                0 0 15px #ff0000,
-                0 0 25px #ff0000,
-                0 0 30px #ff0000;
-        }
-
-        /* ================= NEON VERMELHO MELHORADO ================= */
-        .red-neon-frame {
-            box-shadow:
-                0 0 8px rgba(0, 0, 0, 0.65),
-                0 0 16px rgba(0, 0, 0, 0.65),
-                0 0 28px rgba(0, 0, 0, 0.65),
-                0 0 40px rgba(0, 0, 0, 0.65);
-            border: 2px solid rgba(0, 0, 0, 0.65);
-        }
-
-        .red-neon-frame-soft {
-            animation: redPulseFrame 2.8s infinite ease-in-out;
-        }
-
-        /* ================= ANIMAÇÕES ================= */
-        @keyframes pulseGlowGreen {
-            0%, 100% {
-                box-shadow: 0 0 4px rgba(30,215,96,.7);
-                transform: scale(1);
-            }
-            50% {
-                box-shadow: 0 0 12px rgba(30,215,96,1);
-                transform: scale(1.05);
-            }
-        }
-
-        @keyframes logoPulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.1);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        @keyframes aparecer {
-            from {
-                transform: scale(0.9);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        @keyframes blinkNeon {
-            0% {
-                opacity: 0.7;
-                text-shadow: 0 0 4px #fff;
-            }
-            100% {
-                opacity: 1;
-                text-shadow: 0 0 16px #fff;
-            }
-        }
-
-        @keyframes scanText {
-            0% {
-                background-position: -200% 0;
-            }
-            100% {
-                background-position: 200% 0;
-            }
-        }
-
-        @keyframes redPulseFrame {
-            0%, 100% {
-                box-shadow:
-                    0 0 8px rgba(0, 0, 0, 0.65),
-                    0 0 16px rgba(0, 0, 0, 0.65),
-                    0 0 28px rgba(0, 0, 0, 0.65),
-                    0 0 40px rgba(0, 0, 0, 0.65);
-            }
-            50% {
-                box-shadow:
-                    0 0 10px rgba(0, 0, 0, 0.75),
-                    0 0 18px rgba(0, 0, 0, 0.75),
-                    0 0 30px rgba(0, 0, 0, 0.75),
-                    0 0 44px rgba(0, 0, 0, 0.75);
-            }
-        }
-    </style>
-</head>
-
-<body>
-    <!-- ================= CONTROLES FIXOS ================= -->
-    <div id="volume-box">
-        <button id="volume" aria-label="Toggle volume">
-            <img id="volumeIcon" src="media/sound_on.png" alt="Volume" width="22">
-        </button>
-
-        <input
-            type="range"
-            id="volume-slider"
-            min="0"
-            max="1"
-            step="0.01"
-            value="0.2"
-            aria-label="Volume slider"
-        />
-    </div>
-
-    <div class="view-box" id="view-counter">
-        <img src="media/eye.png" id="viewIcon" alt="Views" width="28">
-        <span id="view-text">Carregando...</span>
-    </div>
-
-    <!-- ================= FUNDO ================= -->
-    <div id="bg-container">
-        <img src="media/bg.jpg" id="bg-image" alt="Fundo" draggable="false" style="user-select:none;-webkit-user-drag:none;">
-    </div>
-
-    <!-- ================= MODAL INICIAL ================= -->
-    <div id="audio-modal">
-        <img src="media/png inicial.png" alt="Logo" class="intro-logo" style="user-select:none;-webkit-user-drag:none;" draggable="false">
-        <button id="btn-play">𝗖𝗹𝗶𝗾𝘂𝗲 𝗮𝗾𝘂𝗶</button>
-        <p style="
-            user-select:none;
-            position:absolute;
-            bottom:20px;
-            left:50%;
-            transform:translateX(-50%);
-            color:#fff;
-            font-size:1.2rem;
-            margin:0;
-            font-weight:bold;
-            text-shadow:
-                0 0 5px #ffffff,
-                0 0 10px #ff4d4d,
-                0 0 18px #ff0000,
-                0 0 28px #ff0000,
-                0 0 40px #ff0000;
-            animation:blinkNeon 1.5s infinite alternate;
-        ">
-            𝐒𝐢𝐭𝐞 𝐟𝐞𝐢𝐭𝐨 𝐩𝐨𝐫: 𝐍𝐨𝐱𝐲.𝐠𝐠
-        </p>
-    </div>
-
-    <!-- ================= ÁUDIO ================= -->
-    <audio id="bg-music" loop>
-        <source src="media/music.mp3" type="audio/mp3" />
-    </audio>
-
-    <!-- ================= CONTEÚDO PRINCIPAL ================= -->
-    <div class="overlay" id="overlay">
-        <div class="content" id="main-content">
-
-            <!-- 1° FOTO DE PERFIL -->
-            <section class="profile-section">
-                <div class="avatar-wrapper">
-                    <div class="avatar-border"></div>
-                    <img src="media/perfil.jpg" alt="Avatar" class="avatar"
-                        style="user-select: none; -webkit-user-drag: none;" draggable="false" />
-                </div>
-                <h1 style="user-select: none;">𝑵𝒐𝒙𝒚7</h1>
-            </section>
-
-            <!-- 2° TEXTO 1 -->
-            <section class="text-section">
-                <p style="user-select: none; font-size: 1.3rem;">
-                    Eu sou o mano que conhece muitas pessoas
-                    Falo com poucas e a todo momento me sinto sozinho ~ Copa
-                </p>
-            </section>
-
-            <!-- 3° TAGS -->
-            <section class="tags-section" style="pointer-events:none;user-select:none;">
-                <h2 style="user-select: none; font-size: 1.7rem;">𝑻𝒂𝒈𝒔</h2>
-                <div class="tags">
-                    <span>👨‍💻 Programador</span>
-                    <span>🎮 Jogador</span>
-                    <span>☠️ Tóxico</span>
-                    <span>🌙 Insônia</span>
-                </div>
-            </section>
-
-            <div style="height:25px;"></div>
-
-            <!-- 4° GIF NEW VIDEO -->
-            <section class="gif-section">
-                <img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra red-neon-frame red-neon-frame-soft" id="gif-new-video"
-                    style="user-select: none; -webkit-user-drag: none;" draggable="false" />
-
-                <p style="
-                    user-select: none;
-                    font-size: 1.2rem;
-                    color: white;
-                    margin-top: 10px;
-                    text-shadow: 0 0 6px rgba(255,255,255,0.6);
-                ">
-                    O mundo é seu... e tudo que há nele está lá fora, trabalhe duro e conquiste! ~ Scarface
-                </p>
-            </section>
-
-            <div style="height:25px;"></div>
-
-            <!-- 5° BOTÕES DE LINKS -->
-            <section class="links-section">
-                <h2 style="user-select: none; font-size: 1.7rem;">𝑳𝒊𝒏𝒌𝒔</h2>
-
-                <div class="links">
-                    <a class="discord-user-link" href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/discord/5865F2" alt="Discord" class="link-icon"> Discord
-                    </a>
-
-                    <a href="https://steamcommunity.com/id/Noxy_gg/" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/steam/ffffff" alt="Steam" class="link-icon"> Steam
-                    </a>
-
-                    <a href="https://www.roblox.com/pt/users/315909186/profile" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/roblox/E2231A" alt="Roblox" class="link-icon"> Roblox
-                    </a>
-
-                    <a href="https://www.roblox.com/share/g/16392138" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/roblox/E2231A" alt="Grupo" class="link-icon"> Grupo
-                    </a>
-
-                    <a href="https://www.tiktok.com/@noxy.gg" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/tiktok/ffffff" alt="TikTok" class="link-icon"> TikTok
-                    </a>
-
-                    <a href="https://open.spotify.com/user/7ybhk69ilst4jfm3a24n6npzb" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/spotify/1ED760" alt="Spotify" class="link-icon"> Spotify
-                    </a>
-
-                    <a href="https://www.youtube.com/@NoxyRJ" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/youtube/FF0000" alt="YouTube" class="link-icon"> YouTube
-                    </a>
-
-                    <a href="https://www.instagram.com/hey.thsc7/?next=%2F" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/instagram/ff4aa2" alt="Instagram" class="link-icon"> Instagram
-                    </a>
-
-                    <a href="https://www.xbox.com/pt-BR/play/user/iCHiBANN8988" target="_blank" rel="noopener noreferrer">
-                        <img src="media/Xbox.png" alt="Xbox" class="link-icon"> Xbox
-                    </a>
-
-                    <a href="https://x.com/NoxyRJ" target="_blank" rel="noopener noreferrer">
-                        <img src="media/X.png" alt="Twitter" class="link-icon"> Twitter
-                    </a>
-
-                    <a href="https://www.twitch.tv/noxyrj_" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/twitch/9146FF" alt="Twitch" class="link-icon"> Twitch
-                    </a>
-
-                    <a href="https://linktr.ee/NoxyRJ_" target="_blank" rel="noopener noreferrer">
-                        <img src="https://cdn.simpleicons.org/linktree/43E660" alt="linktr.ee" class="link-icon"> linktr.ee
-                    </a>
-                </div>
-            </section>
-
-            <!-- 6° ICON DISCORD -->
-            <section id="discord-status" style="text-align: center; margin: 2rem 0; color: white; font-family: Arial, sans-serif; position: relative;">
-                <div style="font-size: 1.7rem; user-select: none; font-weight: bold; margin-bottom: 10px;">𝑫𝒊𝒔𝒄𝒐𝒓𝒅</div>
-
-                <div style="position: relative; display: inline-block;">
-                    <a class="discord-user-link" href="https://discord.com/users/278691315594559489" target="_blank" rel="noopener noreferrer">
-                        <img id="discord-avatar" class="discord-avatar-white" src="" alt="Avatar Discord"
-                            style="width: 120px; height: 120px; border-radius: 50%; transition: transform 0.3s;"
-                            onmouseover="this.style.transform='scale(1.05)'"
-                            onmouseout="this.style.transform='scale(1)'"
-                        />
-                    </a>
-                    <span id="discord-status-circle" title="Status"></span>
-                </div>
-
-                <div id="display-name" style="margin-top: 10px; font-size: 1.6rem; font-weight: bold;">Noxy7</div>
-                <div style="font-size: 1.1rem; opacity: 0.8;">
-                    <span id="discord-username">@</span><span id="discord-discriminator"></span>
-                </div>
-            </section>
-
-            <!-- CARD DE ATIVIDADE DO DISCORD -->
-            <section id="discord-activity-wrapper" style="text-align:center; margin-top:-8px;">
-                <div id="discord-activities"></div>
-            </section>
-
-            <div style="height:40px;"></div>
-
-            <!-- 7° CONFIG PC -->
-            <section class="pc-config-section">
-                <button id="btn-config" class="config-btn">💻 Configurações do meu PC</button>
-            </section>
-
-            <div style="height:25px;"></div>
-
-            <!-- 8° BANNER PERSONALIZADO NOXY -->
-            <section class="banner-section">
-                <img src="media/Banner_love.png" alt="Imagem Banner_love" class="imagem-extra red-neon-frame red-neon-frame-soft"
-                    style="user-select: none; -webkit-user-drag: none; display:block; margin: 15px auto; border-radius:12px;"
-                    draggable="false" />
-                <p style="user-select: none; font-size: 1.3rem;">Quem leu vai ter sorte no amor❤️ ~ Noxy</p>
-            </section>
-
-            <div style="height:25px;"></div>
-
-            <!-- 9° PLAYLIST SPOTIFY -->
-            <section class="playlist-section">
-                <h2 style="user-select: none; font-size: 1.7rem;">𝑷𝒍𝒂𝒚𝒍𝒊𝒔𝒕 𝑺𝒑𝒐𝒕𝒊𝒇𝒚</h2>
-                <div class="playlist-card" onclick="window.open('https://open.spotify.com/playlist/1O4sTRPvEHAIvvFjHIQPfR', '_blank')">
-                    <img src="media/Capa spotify.jpg" style="user-select: none; -webkit-user-drag: none;" draggable="false" alt="Capa Playlist Spotify" class="playlist-cover" />
-                    <div class="playlist-info">
-                        <h3 style="user-select: none;">Minha Playlist</h3>
-                        <button style="user-select: none;" class="listen-btn">Ouvir no Spotify</button>
-                    </div>
-                </div>
-            </section>
-
-            <div style="height:25px;"></div>
-
-            <!-- 10° MÚSICA DO SITE -->
-            <section id="music-site-section"></section>
-
-            <div style="height:40px;"></div>
-
-            <!-- 11° CRÉDITOS DO SITE -->
-            <section class="site-credit">
-                <span>Site feito por: Noxy.gg</span>
-            </section>
-
-        </div>
-    </div>
-
-    <!-- ================= PAINEL CONFIG ================= -->
-    <div id="config-panel" class="config-overlay">
-        <div class="config-box">
-            <h2 style="color: #ff0000;">💻 Configurações do PC</h2>
-            <ul>
-                <li><strong>Processador:</strong> AMD Ryzen 5 1600</li>
-                <li><strong>Placa-mãe:</strong> PCWare APM A320G</li>
-                <li><strong>Water Cooler:</strong> Water Cooler Rise Mode, RGB, 360mm</li>
-                <li><strong>Memória RAM:</strong> Asgard 8GBx2 3200Mhz série w2</li>
-                <li><strong>Placa de vídeo:</strong> Rx 550 4Gb</li>
-                <li><strong>Armazenamento:</strong> SSD 240GB + 2xHD 500GB</li>
-                <li><strong>Fans:</strong> 10 Fans Wx-1 argb, 800-2000rpm, Uni-fan</li>
-                <li><strong>Gabinete:</strong> Mancer CV500L , Mid Tower</li>
-                <li><strong>Fonte:</strong> GameMax GX800, 800w, 80 plus gold, PFC Ativo</li>
-            </ul>
-
-            <h2 style="color: #ff0000;">💻 Monitores</h2>
-            <ul>
-                <li><strong>Monitor primário:</strong> Dahua DHI-LM25-E231B, 25", IPS, 180Hz, Full HD</li>
-                <li><strong>Monitor secundário:</strong> HQ 21", 75Hz (horizontal)</li>
-            </ul>
-
-            <h2 style="color: #ff0000;">💻 Periféricos</h2>
-            <ul>
-                <li><strong>Teclado:</strong> Ajazz Ak820</li>
-                <li><strong>Mouse:</strong> Attack Shark x11 Black</li>
-                <li><strong>Headset:</strong> Mancer Aura</li>
-            </ul>
-
-            <button id="btn-fechar" class="close-btn">Fechar</button>
-        </div>
-    </div>
-
-    <script>
-    /* ================= CONFIG PRINCIPAL ================= */
-    const OWNER_DISCORD_ID = '278691315594559489';
-    const LANYARD_API = `https://api.lanyard.rest/v1/users/${OWNER_DISCORD_ID}`;
-
-    /* ================= ATIVIDADES BLOQUEADAS ================= */
-    const blockedActivities = [
-        'Noxy.gg',
-    ];
-
-    /* ================= ELEMENTOS PRINCIPAIS ================= */
-    const audioModal = document.getElementById('audio-modal');
-    const btnPlay = document.getElementById('btn-play');
-    const volumeBox = document.getElementById('volume-box');
-    const music = document.getElementById('bg-music');
-    const volumeBtn = document.getElementById('volume');
-    const volumeSlider = document.getElementById('volume-slider');
-    const volumeIcon = document.getElementById('volumeIcon');
-    const overlay = document.getElementById('overlay');
-    const mainContent = document.getElementById('main-content');
-    const gifNewVideo = document.getElementById('gif-new-video');
-
-    /* ================= CACHE DE IMAGENS ================= */
-    const activityImageCache = new Map();
-    const DEFAULT_ACTIVITY_IMAGE = 'media/icon.png';
-
-    /* ================= ÁUDIO INICIAL ================= */
-    music.volume = 0.1;
-
-    btnPlay.addEventListener('click', () => {
-        music.play().then(() => {
-            audioModal.style.display = 'none';
-            volumeBox.style.display = 'flex';
-            overlay.classList.add('show');
-            mainContent.classList.add('show');
-            document.getElementById('view-counter').style.display = 'flex';
-            updateViews();
-        }).catch((e) => {
-            console.warn('Erro ao iniciar áudio:', e);
-            audioModal.style.display = 'none';
-            volumeBox.style.display = 'flex';
-            overlay.classList.add('show');
-            mainContent.classList.add('show');
-            document.getElementById('view-counter').style.display = 'flex';
-            updateViews();
-        });
-    });
-
-    /* ================= BOTÃO DE VOLUME ================= */
-    volumeBtn.addEventListener('click', () => {
-        if (music.paused) {
-            music.play().catch(() => {});
-            volumeIcon.src = 'media/sound_on.png';
-        } else {
-            music.pause();
-            volumeIcon.src = 'media/sound_muted.png';
-        }
-    });
-
-    volumeSlider.addEventListener('input', () => {
-        music.volume = volumeSlider.value;
-
-        if (Number(music.volume) === 0) {
-            volumeIcon.src = 'media/sound_muted.png';
-        } else {
-            volumeIcon.src = 'media/sound_on.png';
-        }
-
-        if (music.paused && Number(music.volume) > 0) {
-            music.play().catch(() => {});
-        }
-    });
-
-    /* ================= PAINEL CONFIG DO PC ================= */
-    document.addEventListener('DOMContentLoaded', () => {
-        const btnConfig = document.getElementById('btn-config');
-        const btnFechar = document.getElementById('btn-fechar');
-        const painel = document.getElementById('config-panel');
-
-        if (btnConfig && btnFechar && painel && volumeBox) {
-            btnConfig.addEventListener('click', () => {
-                painel.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-                volumeBox.style.zIndex = '0';
-                volumeBox.style.filter = 'blur(3px) brightness(0.7)';
-                volumeBox.style.pointerEvents = 'none';
-            });
-
-            const fecharPainel = () => {
-                painel.style.display = 'none';
-                document.body.style.overflow = '';
-                volumeBox.style.zIndex = '999';
-                volumeBox.style.filter = 'none';
-                volumeBox.style.pointerEvents = 'auto';
-            };
-
-            btnFechar.addEventListener('click', fecharPainel);
-
-            painel.addEventListener('click', (e) => {
-                if (e.target === painel) {
-                    fecharPainel();
-                }
-            });
-        } else {
-            console.error('❌ Elementos do Painel de Configurações não encontrados no DOM.');
-        }
-
-        if (gifNewVideo) {
-            gifNewVideo.src = 'media/Extra.gif';
-            gifNewVideo.alt = 'GIF animado extra';
-        }
-    });
-
-    /* ================= CONTADOR DE VISITAS ================= */
-    const BIN_ID = '685cb3a58a456b7966b5ccfb';
-    const API_KEY = '$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW';
-    const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-    const visited = localStorage.getItem('siteVisited');
-
-    async function updateViews() {
-        try {
-            const res = await fetch(URL, {
-                headers: { 'X-Master-Key': API_KEY }
-            });
-
-            const { record } = await res.json();
-            let views = record.views;
-
-            if (!visited) {
-                views++;
-                await fetch(URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify({ views })
-                });
-                localStorage.setItem('siteVisited', 'true');
-            }
-
-            document.getElementById('view-text').textContent = `${views} visitantes`;
-        } catch (e) {
-            console.error('Erro ao atualizar visitas:', e);
-            document.getElementById('view-text').textContent = 'Erro';
-        }
-    }
-
-    /* ================= DISCORD + ATIVIDADE ================= */
-    let discordRefreshInterval = null;
-    let discordTimeInterval = null;
-
-    function updateDiscordLinks() {
-        const discordAnchors = document.querySelectorAll('.discord-user-link');
-        discordAnchors.forEach(anchor => {
-            anchor.href = `https://discord.com/users/${OWNER_DISCORD_ID}`;
-        });
-    }
-
-    function formatElapsedTime(ms) {
-        const totalSeconds = Math.max(0, Math.floor(ms / 1000));
-        const hours = Math.floor(totalSeconds / 3600);
-        const minutes = Math.floor((totalSeconds % 3600) / 60);
-        const seconds = totalSeconds % 60;
-
-        if (hours > 0) {
-            return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-        }
-
-        return `${minutes}:${String(seconds).padStart(2, '0')}`;
-    }
-
-    function getDiscordStatusConfig(status) {
-        switch (status) {
-            case 'online':
-                return { color: '#43B581', text: 'Online' };
-            case 'idle':
-                return { color: '#FAA61A', text: 'Ausente' };
-            case 'dnd':
-                return { color: '#F04747', text: 'Não perturbe' };
-            default:
-                return { color: 'gray', text: 'Offline' };
-        }
-    }
-
-    function escapeHtml(text = '') {
-        return String(text)
-            .replaceAll('&', '&amp;')
-            .replaceAll('<', '&lt;')
-            .replaceAll('>', '&gt;')
-            .replaceAll('"', '&quot;')
-            .replaceAll("'", '&#39;');
-    }
-
-    function resolveDiscordAssetUrl(activity, fullData = null) {
-        if (!activity) return '';
-
-        if (activity.name === 'Spotify' && fullData?.spotify?.album_art_url) {
-            return fullData.spotify.album_art_url;
-        }
-
-        const large = activity.assets?.large_image;
-        const small = activity.assets?.small_image;
-        const asset = large || small;
-
-        if (!asset) return '';
-
-        if (asset.startsWith('mp:')) {
-            return `https://media.discordapp.net/${asset.slice(3)}`;
-        }
-
-        if (activity.application_id) {
-            return `https://cdn.discordapp.com/app-assets/${activity.application_id}/${asset}.png`;
-        }
-
-        return '';
-    }
-
-    async function getSteamImageByGameName(gameName) {
-        try {
-            const res = await fetch(`https://store.steampowered.com/api/storesearch/?term=${encodeURIComponent(gameName)}&l=portuguese&cc=BR`);
-            if (!res.ok) return '';
-
-            const data = await res.json();
-            const items = Array.isArray(data?.items) ? data.items : [];
-            if (!items.length) return '';
-
-            const normalizedName = gameName.trim().toLowerCase();
-
-            const exactMatch = items.find(item =>
-                item?.name?.trim?.().toLowerCase() === normalizedName
-            );
-
-            const bestMatch = exactMatch || items[0];
-            if (!bestMatch?.id) return '';
-
-            return `https://cdn.cloudflare.steamstatic.com/steam/apps/${bestMatch.id}/header.jpg`;
-        } catch (error) {
-            console.warn('Erro ao buscar imagem na Steam:', error);
-            return '';
-        }
-    }
-
-    async function getWikipediaImageByGameName(gameName) {
-        try {
-            const searchRes = await fetch(
-                `https://pt.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(gameName + ' jogo')}&format=json&origin=*`
-            );
-
-            if (!searchRes.ok) return '';
-
-            const searchData = await searchRes.json();
-            const firstResult = searchData?.query?.search?.[0];
-            if (!firstResult?.title) return '';
-
-            const pageRes = await fetch(
-                `https://pt.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(firstResult.title)}&prop=pageimages&piprop=original&format=json&origin=*`
-            );
-
-            if (!pageRes.ok) return '';
-
-            const pageData = await pageRes.json();
-            const pages = pageData?.query?.pages;
-            if (!pages) return '';
-
-            const page = Object.values(pages)[0];
-            return page?.original?.source || '';
-        } catch (error) {
-            console.warn('Erro ao buscar imagem na Wikipedia:', error);
-            return '';
-        }
-    }
-
-    async function getActivityImage(activity, fullData = null) {
-        if (!activity?.name) return '';
-
-        const cacheKey = `${activity.name}::${activity.application_id || ''}::${activity.assets?.large_image || ''}::${activity.assets?.small_image || ''}`;
-
-        if (activityImageCache.has(cacheKey)) {
-            return activityImageCache.get(cacheKey);
-        }
-
-        let imageUrl = resolveDiscordAssetUrl(activity, fullData);
-
-        if (!imageUrl && activity.name !== 'Spotify') {
-            imageUrl = await getSteamImageByGameName(activity.name);
-        }
-
-        if (!imageUrl && activity.name !== 'Spotify') {
-            imageUrl = await getWikipediaImageByGameName(activity.name);
-        }
-
-        if (!imageUrl) {
-            imageUrl = DEFAULT_ACTIVITY_IMAGE;
-        }
-
-        activityImageCache.set(cacheKey, imageUrl);
-        return imageUrl;
-    }
-
-    function startAllActivityTimers() {
-        if (discordTimeInterval) {
-            clearInterval(discordTimeInterval);
-            discordTimeInterval = null;
-        }
-
-        const updateTimers = () => {
-            const timeElements = document.querySelectorAll('.discord-activity-time[data-start]');
-            timeElements.forEach(el => {
-                const start = Number(el.dataset.start || 0);
-                if (!start) return;
-
-                const elapsed = Date.now() - start;
-                el.textContent = formatElapsedTime(elapsed);
-            });
-        };
-
-        updateTimers();
-        discordTimeInterval = setInterval(updateTimers, 1000);
-    }
-
-    function getActivityTypeLabel(activity) {
-        if (!activity) return 'Atividade';
-
-        if (activity.name === 'Spotify') return 'Música';
-
-        switch (activity.type) {
-            case 0:
-                return 'Jogando';
-            case 1:
-                return 'Transmitindo';
-            case 2:
-                return 'Ouvindo';
-            case 3:
-                return 'Assistindo';
-            case 5:
-                return 'Competindo';
-            default:
-                return 'Atividade';
-        }
-    }
-
-    function getActivityTopIcon(activity) {
-        if (!activity) return '🎮';
-
-        if (activity.name === 'Spotify') return '🎵';
-
-        switch (activity.type) {
-            case 0:
-                return '🎮';
-            case 1:
-                return '📺';
-            case 2:
-                return '🎧';
-            case 3:
-                return '🎬';
-            case 5:
-                return '🏆';
-            default:
-                return '✨';
-        }
-    }
-
-    function getActivityBadgeText(activity) {
-        if (!activity) return 'Ativo';
-
-        if (activity.name === 'Spotify') return 'Spotify';
-
-        switch (activity.type) {
-            case 0:
-                return 'Game';
-            case 1:
-                return 'Live';
-            case 2:
-                return 'Áudio';
-            case 3:
-                return 'Vídeo';
-            case 5:
-                return 'Ranked';
-            default:
-                return 'Ativo';
-        }
-    }
-
-    async function fetchDiscordStatus() {
-        try {
-            const response = await fetch(LANYARD_API);
-            if (!response.ok) throw new Error('Erro na API');
-
-            const json = await response.json();
-            if (!json?.data?.discord_user) throw new Error('Usuário não encontrado');
-
-            const user = json.data.discord_user;
-            const status = json.data.discord_status;
-            const activities = json.data.activities || [];
-
-            updateDiscordLinks();
-
-            const avatarUrl = user.avatar
-                ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
-                : `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator || 0) % 5}.png`;
-
-            const avatarEl = document.getElementById('discord-avatar');
-            const displayNameEl = document.getElementById('display-name');
-            const usernameEl = document.getElementById('discord-username');
-            const discriminatorEl = document.getElementById('discord-discriminator');
-            const statusCircle = document.getElementById('discord-status-circle');
-
-            if (avatarEl && avatarEl.src !== avatarUrl) {
-                avatarEl.src = avatarUrl;
-            }
-
-            if (displayNameEl) {
-                displayNameEl.textContent = user.global_name || user.username || 'Discord';
-            }
-
-            if (usernameEl) {
-                usernameEl.textContent = '@' + (user.username || 'usuario');
-            }
-
-            if (discriminatorEl) {
-                if (user.discriminator && user.discriminator !== '0') {
-                    discriminatorEl.textContent = '#' + user.discriminator;
-                    discriminatorEl.style.display = 'inline';
-                } else {
-                    discriminatorEl.textContent = '';
-                    discriminatorEl.style.display = 'none';
-                }
-            }
-
-            if (statusCircle) {
-                const statusConfig = getDiscordStatusConfig(status);
-                statusCircle.style.backgroundColor = statusConfig.color;
-                statusCircle.title = statusConfig.text;
-            }
-
-            const container = document.getElementById('discord-activities');
-            if (!container) return;
-
-            const filteredActivities = activities.filter(activity => {
-                if (!activity) return false;
-                if (activity.type === 4) return false;
-                if (!activity.name) return false;
-                if (blockedActivities.includes(activity.name)) return false;
-                return true;
-            });
-
-            if (!filteredActivities.length) {
-                container.innerHTML = '';
-                return;
-            }
-
-            const cardsHtml = await Promise.all(filteredActivities.map(async (activity) => {
-                const imageUrl = await getActivityImage(activity, json.data);
-
-                const name = escapeHtml(activity.name || '');
-                const details = escapeHtml(activity.details || '');
-                const state = escapeHtml(activity.state || '');
-                const start = Number(activity.timestamps?.start || 0);
-
-                const activityLabel = escapeHtml(getActivityTypeLabel(activity));
-                const activityIcon = getActivityTopIcon(activity);
-                const badgeText = escapeHtml(getActivityBadgeText(activity));
-
-                return `
-                    <div class="discord-activity-card show">
-                        <div class="discord-activity-top">
-                            <div class="discord-activity-title-wrap">
-                                <span class="discord-activity-top-icon">${activityIcon}</span>
-                                <span class="discord-activity-top-label">${activityLabel}</span>
-                            </div>
-
-                            <span class="discord-activity-top-badge">${badgeText}</span>
-                        </div>
-
-                        <div class="discord-activity-body">
-                            <img
-                                class="discord-activity-image"
-                                src="${escapeHtml(imageUrl)}"
-                                alt="${name}"
-                                onerror="this.onerror=null;this.src='${DEFAULT_ACTIVITY_IMAGE}';"
-                            >
-
-                            <div class="discord-activity-info">
-                                <h3 class="discord-activity-name">${name}</h3>
-
-                                ${details ? `<p class="discord-activity-details">${details}</p>` : ''}
-                                ${state ? `<p class="discord-activity-state">${state}</p>` : ''}
-                                ${start ? `<p class="discord-activity-time" data-start="${start}">0:00</p>` : ''}
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }));
-
-            container.innerHTML = cardsHtml.join('');
-            startAllActivityTimers();
-
-        } catch (error) {
-            console.error('Erro ao buscar status do Discord:', error);
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        updateDiscordLinks();
-        fetchDiscordStatus();
-
-        if (discordRefreshInterval) {
-            clearInterval(discordRefreshInterval);
-        }
-
-        discordRefreshInterval = setInterval(fetchDiscordStatus, 10000);
-    });
-
-    /* ================= MÚSICA DO SITE ================= */
-    (() => {
-        const spotifyUrl = 'https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ?si=784b639399214e45';
-        const manualArtist = 'isotopxs';
-        const fallbackImage = 'media/Capa spotify.jpg';
-
-        async function loadSpotifySong(url) {
-            let title = 'Música Desconhecida (Erro)';
-            let artist = manualArtist;
-            let thumbnailUrl = fallbackImage;
-
-            try {
-                const oembedBase = 'https://open.spotify.com/oembed';
-                const oembedUrl = `${oembedBase}?url=${encodeURIComponent(url)}`;
-
-                const res = await fetch(oembedUrl);
-                if (!res.ok) throw new Error(`Status de resposta: ${res.status}`);
-
-                const data = await res.json();
-                title = data.title || title;
-                artist = data.author_name?.trim() || manualArtist;
-                thumbnailUrl = data.thumbnail_url || fallbackImage;
-            } catch (e) {
-                console.error('❌ Erro ao buscar dados do Spotify. Usando fallback.', e);
-            }
-
-            renderMusic(url, title, artist, thumbnailUrl);
-        }
-
-        function renderMusic(url, title, artist, thumbnailUrl) {
-            const musicDiv = document.createElement('div');
-            musicDiv.id = 'musicInfo';
-
-            Object.assign(musicDiv.style, {
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: '20px',
-                textAlign: 'center',
-                color: 'white'
-            });
-
-            musicDiv.innerHTML = `
-                <div style="font-size:1.7rem;user-select:none;font-weight:bold;margin-bottom:10px;">
-                    𝑴𝒖𝒔𝒊𝒄𝒂 𝒅𝒐 𝑺𝒊𝒕𝒆
-                </div>
-                <a href="${url}" target="_blank" rel="noopener noreferrer">
-                    <img src="${thumbnailUrl}" alt="Capa da música"
-                        style="width:150px;height:150px;margin-bottom:10px;cursor:pointer;border-radius:12px;border:2px solid #ff0000;box-shadow:0 0 8px #ff0000,0 0 16px rgba(255,0,0,0.9),0 0 35px rgba(255,0,0,0.6);">
-                </a>
-                <div class="music-data">
-                    <div style="font-size:18px;font-weight:bold;color:white;">${title}</div>
-                    <div style="font-size:14px;color:white;opacity:0.8;">${artist}</div>
-                </div>
-            `;
-
-            document.getElementById('music-site-section')?.appendChild(musicDiv);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => loadSpotifySong(spotifyUrl));
-    })();
-
-    /* ================= MOBILE FLOATING BOXES ================= */
-    function handleFloatingBoxes() {
-        const volumeBoxEl = document.getElementById('volume-box');
-        const viewCounter = document.getElementById('view-counter');
-        const overlayEl = document.getElementById('overlay');
-
-        if (!volumeBoxEl || !viewCounter || !overlayEl) return;
-
-        let mobileContainer = document.getElementById('mobile-floating-boxes');
-        const isMobile = window.innerWidth <= 768;
-
-        if (isMobile) {
-            if (!mobileContainer) {
-                mobileContainer = document.createElement('div');
-                mobileContainer.id = 'mobile-floating-boxes';
-                mobileContainer.className = 'mobile-floating-boxes';
-                overlayEl.insertBefore(mobileContainer, overlayEl.firstChild);
-            }
-
-            mobileContainer.appendChild(volumeBoxEl);
-            mobileContainer.appendChild(viewCounter);
-        } else {
-            if (mobileContainer) {
-                document.body.appendChild(volumeBoxEl);
-                document.body.appendChild(viewCounter);
-                mobileContainer.remove();
-            } else {
-                document.body.appendChild(volumeBoxEl);
-                document.body.appendChild(viewCounter);
-            }
-        }
-    }
-
-    window.addEventListener('load', handleFloatingBoxes);
-    window.addEventListener('resize', handleFloatingBoxes);
-
-    /* ================= TÍTULO ANIMADO ================= */
-    const titleBase = "Noxy7 ✦ ";
-
-    const texts = [
-        "Bem-Vindo",
-        "Site Personalizado",
-        "Exclusivo do Noxy"
-    ];
-
-    let textIndex = 0;
-    let letterIndex = 0;
-    let deleting = false;
-
-    function animateTitle() {
-        const currentText = texts[textIndex];
-
-        if (!deleting) {
-            letterIndex++;
-            document.title = titleBase + currentText.slice(0, letterIndex);
-
-            if (letterIndex === currentText.length) {
-                deleting = true;
-                setTimeout(animateTitle, 1500);
-                return;
-            }
-        } else {
-            letterIndex--;
-            document.title = titleBase + currentText.slice(0, letterIndex);
-
-            if (letterIndex === 0) {
-                deleting = false;
-                textIndex++;
-
-                if (textIndex >= texts.length) {
-                    textIndex = 0;
-                }
-            }
-        }
-
-        setTimeout(animateTitle, 250);
-    }
-
-    animateTitle();
-    </script>
-</body>
-</html>
+<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Noxy7 ✦ Bem-Vindo</title><meta name="description" content="Link personalizado do Noxy, onde tem links como Discord, perfil, links, Spotify, TikTok, Steam. Site personalizado feito por Noxy.gg"><meta name="keywords" content="Noxy7, Discord, Perfil, Links, Spotify, TikTok, Steam"><meta name="author" content="Noxy.gg"><meta property="og:title" content="Noxy7" /><meta property="og:description" content="Conheça o perfil interativo de Noxy7 com seus links" /><meta property="og:image" content="https://raw.githubusercontent.com/NoxyRJ/Site/main/media/perfil.gif" /><meta property="og:url" content="https://noxyrj.github.io/1/" /><meta property="og:type" content="website" /><meta name="theme-color" content="#FF0000"><link rel="icon" type="image/png" href="media/icon.png" /><link rel="apple-touch-icon" href="media/icon.png" /><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;user-select:none;-webkit-user-select:none}:root{--red:#ff1a1a;--red-dim:rgba(255,26,26,0.18);--glass:rgba(10,10,12,0.55);--glass-border:rgba(255,255,255,0.07);--text:#f0f0f0;--text-muted:rgba(240,240,240,0.55);--font-display:'Syne',sans-serif;--font-body:'DM Sans',sans-serif}html,body{width:100%;min-height:100%;font-family:var(--font-body);background:#000;overflow-x:hidden;overflow-y:auto;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none;color:var(--text)}::-webkit-scrollbar{width:0;height:0;display:none}#bg-container{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;will-change:transform}#bg-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:left center;display:block;filter:brightness(0.35) saturate(0.7);will-change:filter}#bg-container::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center top,transparent 30%,rgba(0,0,0,0.7) 100%),radial-gradient(ellipse at center bottom,rgba(0,0,0,0.8) 0%,transparent 60%);pointer-events:none}.overlay{position:relative;z-index:3;margin:0 auto;max-width:560px;width:100%;min-height:100vh;opacity:0;transition:opacity 2.5s ease;display:flex;flex-direction:column;padding:70px 20px 60px}.overlay.show{opacity:1}.content{flex:1;text-align:center;opacity:0;transition:opacity 1.2s ease 0.5s}.content.show{opacity:1}h2{font-family:var(--font-display);font-size:1.1rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1rem}p{font-family:var(--font-body);font-size:1rem;line-height:1.7;color:var(--text-muted);margin-bottom:1rem}.profile-section{display:flex;align-items:flex-start;gap:22px;margin-bottom:2rem;text-align:left}.hero-right{flex:1;min-width:0;display:flex;flex-direction:column;gap:20px}.hero-svg{width:100%;max-width:340px;display:block;overflow:visible;margin-left:-4px;will-change:filter}@media(max-width:520px){.hero-svg{margin-left:0;max-width:100%}}.hero-tags{justify-content:flex-start !important;margin:8px 0 0 !important}.hero-quote{margin:4px 0 0 !important}.avatar-wrapper{display:inline-block;position:relative;padding:3px;border-radius:50%;background:var(--red);flex-shrink:0;will-change:transform,box-shadow}.avatar-inner{border-radius:50%;background:#000;padding:3px}.avatar{width:clamp(110px,26vw,145px);border-radius:50%;display:block}#discord-status-circle{position:absolute;bottom:8px;right:8px;width:18px;height:18px;border-radius:50%;border:3px solid #0a0a0c;background:gray;z-index:10}.quote-block{margin-top:4px;background:rgba(10,10,12,.40);border:1px solid rgba(255,255,255,.05);border-left:3px solid var(--red);border-radius:0 14px 14px 0;padding:18px 22px 18px 28px;text-align:left;backdrop-filter:blur(12px)}.quote-block p{font-size:0.95rem;font-style:italic;margin:0;color:rgba(240,240,240,0.75)}.tags{display:flex;flex-wrap:wrap;justify-content:center;gap:16px;margin-top:8px;margin-bottom:28px}.tags span{width:60px;height:60px;display:flex;align-items:center;justify-content:center;position:relative;border-radius:20px;background:rgba(255,26,26,.010);border:1.5px solid rgba(255,60,60,.22);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);overflow:visible;cursor:default;box-shadow:inset 0 1px 0 rgba(255,255,255,.02),0 6px 16px rgba(0,0,0,.12);transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease,background .25s ease}.tags span::before{display:none}.tags span::after{content:attr(data-label);position:absolute;left:50%;bottom:calc(100% + 14px);transform:translateX(-50%) translateY(10px) scale(.95);opacity:0;padding:10px 16px;border-radius:14px;background:linear-gradient(135deg,rgba(20,20,25,.98),rgba(10,10,15,.98));border:1px solid rgba(255,40,40,.35);color:#fff;font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.08em;white-space:nowrap;pointer-events:none;backdrop-filter:blur(20px);box-shadow:0 0 25px rgba(255,26,26,.20),0 10px 30px rgba(0,0,0,.45);transition:opacity .22s ease,transform .22s ease;z-index:99999}.tags span:hover{z-index:50;transform:translateY(-5px) scale(1.08);border-color:#ff4444;background:linear-gradient(180deg,rgba(255,40,40,.12),rgba(255,26,26,.04));box-shadow:0 0 22px rgba(255,26,26,.28),0 14px 32px rgba(0,0,0,.36),inset 0 0 18px rgba(255,26,26,.10)}.tags span svg{width:28px;height:28px;position:relative;z-index:1;transition:transform .25s ease,filter .25s ease;filter:drop-shadow(0 0 4px rgba(255,68,68,.28))}.tags span:hover svg{transform:scale(1.12);filter:drop-shadow(0 0 7px #ff4444) drop-shadow(0 0 14px rgba(255,68,68,.45))}.tags span:hover::after{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}.imagem-extra{width:92%;border-radius:16px;margin:0 auto 1rem;display:block;border:1px solid var(--glass-border)}.image-caption{font-size:0.9rem;font-style:italic;color:var(--text-muted);margin-top:8px;margin-bottom:2rem}.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-bottom:2rem}.links a{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;background:var(--glass);border:1px solid var(--glass-border);border-radius:12px;text-decoration:none;color:var(--text);font-size:0.9rem;font-weight:500;font-family:var(--font-body);backdrop-filter:blur(10px);transition:border-color 0.25s,background 0.25s,transform 0.2s;white-space:nowrap}.links a:hover{border-color:var(--red);background:var(--red-dim);transform:translateY(-2px)}.link-icon{width:18px;height:18px;object-fit:contain;flex-shrink:0}.discord-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:28px 24px;margin:0 auto 2rem;backdrop-filter:blur(16px);max-width:380px;position:relative;overflow:hidden}.discord-card::before{content:"";position:absolute;inset:0;border-radius:20px;background:radial-gradient(ellipse at 50% 0%,rgba(255,26,26,0.07) 0%,transparent 65%);pointer-events:none}.discord-avatar-white{border:2px solid rgba(255,255,255,0.15);border-radius:50%;width:112px !important;height:112px !important;display:block}#discord-avatar-decoration{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:148px !important;height:148px !important;pointer-events:none;z-index:3}#display-name{font-family:var(--font-display);font-size:1.3rem;font-weight:700;margin-top:12px}#discord-username{font-size:0.9rem;color:var(--text-muted)}#discord-badges{display:none;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:14px}.d-badge{position:relative;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;cursor:default;transition:transform 0.2s,border-color 0.2s,background 0.2s}.d-badge:hover{transform:scale(1.18) translateY(-3px);border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.08)}.d-badge::after{content:attr(data-tip);position:absolute;bottom:calc(100%+8px);left:50%;transform:translateX(-50%) scale(0.85);background:rgba(10,10,14,0.95);border:1px solid rgba(255,255,255,0.1);color:#f0f0f0;font-family:var(--font-body);font-size:0.75rem;padding:5px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.18s,transform 0.18s;z-index:10}.d-badge:hover::after{opacity:1;transform:translateX(-50%) scale(1)}.discord-activity-card{display:none;width:100%;max-width:380px;margin:12px auto 0;padding:14px 16px;border-radius:16px;background:rgba(8,8,10,0.7);border:1px solid var(--glass-border);backdrop-filter:blur(16px);text-align:left;color:#fff}.discord-activity-card.show{display:block}.discord-activity-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px}.discord-activity-title-wrap{display:flex;align-items:center;gap:8px;min-width:0}.discord-activity-top-label{font-size:0.9rem;font-weight:600;font-family:var(--font-display);color:rgba(240,240,240,0.75);text-transform:uppercase;letter-spacing:0.08em}.discord-activity-top-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:100px;background:var(--red-dim);border:1px solid rgba(255,26,26,0.25);color:#ff9090;font-size:0.78rem;font-weight:600;flex-shrink:0}.discord-activity-body{display:flex;gap:12px;align-items:flex-start}.discord-activity-image{width:88px;height:88px;border-radius:12px;object-fit:cover;background:#111;border:1px solid var(--glass-border);flex-shrink:0}.discord-activity-info{flex:1;min-width:0}.discord-activity-name{margin:0 0 4px;font-size:1rem;font-weight:700;font-family:var(--font-display);color:#fff;word-break:break-word}.discord-activity-details,.discord-activity-state{margin:0;font-size:0.85rem;line-height:1.4;color:rgba(240,240,240,0.65);word-break:break-word}.discord-activity-details{margin-bottom:2px}.discord-activity-state{margin-bottom:8px}.discord-activity-time{margin:0;font-size:0.85rem;color:#46d160;font-weight:600;display:flex;align-items:center;gap:5px}.discord-activity-time::before{content:"⏱"}.playlist-card{background:linear-gradient(135deg,rgba(10,28,18,0.85) 0%,rgba(5,18,12,0.9) 100%);border:1px solid rgba(29,185,84,0.25);border-radius:20px;padding:0;max-width:400px;margin:0 auto 1rem;cursor:pointer;transition:border-color 0.3s,transform 0.25s,box-shadow 0.3s;backdrop-filter:blur(16px);position:relative;overflow:hidden}.playlist-card:hover{border-color:#1DB954;transform:translateY(-3px);box-shadow:0 12px 40px rgba(29,185,84,0.2)}.playlist-card-inner{display:flex;align-items:center;gap:16px;padding:16px;position:relative;z-index:1}.playlist-card-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 0% 50%,rgba(29,185,84,0.12) 0%,transparent 60%);pointer-events:none}.playlist-cover{width:80px;height:80px;border-radius:12px;object-fit:cover;flex-shrink:0;box-shadow:0 4px 20px rgba(0,0,0,0.5)}.playlist-info{color:white;flex:1;text-align:left}.playlist-info-label{font-size:0.68rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:#1DB954;margin-bottom:4px;font-family:var(--font-display)}.playlist-info h3{font-family:var(--font-display);font-size:1.05rem;font-weight:800;margin-bottom:10px;color:#fff}.listen-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 16px;background:#1DB954;color:#000;border-radius:100px;font-weight:700;font-size:0.82rem;border:none;cursor:pointer;font-family:var(--font-body);transition:background 0.2s,transform 0.15s}.listen-btn:hover{background:#1ed760;transform:scale(1.05)}.playlist-spotify-icon{position:absolute;top:14px;right:16px;opacity:0.5;z-index:1}#volume-box{position:fixed;top:14px;left:14px;color:white;font-size:16px;background:rgba(8,8,10,0.75);padding:8px 14px;border-radius:100px;font-family:var(--font-body);display:none;align-items:center;gap:10px;backdrop-filter:blur(16px);border:1px solid var(--glass-border);z-index:999}#volume-box button{background:none;border:none;color:white;cursor:pointer;display:flex;align-items:center}#volume-box input[type="range"]{width:80px;accent-color:var(--red)}#volumeIcon{width:20px;height:20px;object-fit:contain}.view-box{display:flex;align-items:center;gap:8px}#view-counter{display:none;position:fixed;top:14px;right:14px;color:white;font-size:0.9rem;background:rgba(8,8,10,0.75);padding:8px 14px;border-radius:100px;font-family:var(--font-body);align-items:center;gap:8px;backdrop-filter:blur(16px);border:1px solid var(--glass-border);z-index:999}#viewIcon{width:20px;height:20px;object-fit:contain}#audio-modal{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:1.5rem;z-index:9999;backdrop-filter:blur(4px)}.intro-logo{width:80%;max-width:600px;margin-bottom:2.5rem;animation:introLogoNeon 2.8s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(255,255,255,0.55)) drop-shadow(0 0 14px rgba(255,26,26,0.65)) drop-shadow(0 0 28px rgba(255,26,26,0.35))}@keyframes introLogoNeon{0%,100%{transform:scale(1);filter:drop-shadow(0 0 6px rgba(255,255,255,0.55)) drop-shadow(0 0 14px rgba(255,26,26,0.65)) drop-shadow(0 0 28px rgba(255,26,26,0.35))}50%{transform:scale(1.04);filter:drop-shadow(0 0 10px rgba(255,255,255,0.75)) drop-shadow(0 0 22px rgba(255,26,26,0.9)) drop-shadow(0 0 45px rgba(255,26,26,0.55))}}#audio-modal button{padding:15px 44px;font-size:0.95rem;font-family:var(--font-display);font-weight:700;letter-spacing:0.14em;background:rgba(255,26,26,0.12);color:#fff;border:1.5px solid rgba(255,26,26,0.9);border-radius:100px;cursor:pointer;text-transform:uppercase;position:relative;overflow:hidden;transition:background 0.3s,border-color 0.3s,transform 0.2s,box-shadow 0.3s;box-shadow:0 0 16px rgba(255,26,26,0.25)}#audio-modal button::after{content:'';position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.1),transparent);transition:left 0.5s ease}#audio-modal button:hover{background:rgba(255,26,26,0.22);border-color:#ff1a1a;transform:scale(1.04);box-shadow:0 0 28px rgba(255,26,26,0.5)}#audio-modal button:hover::after{left:140%}.config-btn{position:relative;z-index:999;display:inline-flex;align-items:center;gap:8px;margin:0 auto 2rem;background:var(--glass);border:1px solid rgba(255,26,26,0.35);padding:12px 24px;border-radius:100px;color:white;font-weight:600;font-family:var(--font-display);font-size:0.95rem;cursor:pointer;transition:background 0.3s,border-color 0.3s,transform 0.2s;backdrop-filter:blur(12px)}.config-btn:hover{background:var(--red-dim);border-color:var(--red);transform:scale(1.03)}.config-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(14px);z-index:999999;justify-content:center;align-items:center;padding:20px;overflow:hidden}.config-box{background:rgba(8,8,12,0.97);padding:0;border-radius:24px;border:1px solid rgba(255,26,26,0.18);color:white;width:92%;max-width:460px;animation:aparecer 0.3s ease;text-align:left;max-height:min(88vh,680px);display:flex;flex-direction:column;box-shadow:0 0 60px rgba(255,26,26,0.08),0 30px 60px rgba(0,0,0,0.6);overflow:hidden}.cfg-body{padding:20px 20px 24px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:rgba(255,26,26,0.35) transparent}.cfg-body::-webkit-scrollbar{width:4px}.cfg-body::-webkit-scrollbar-track{background:transparent}.cfg-body::-webkit-scrollbar-thumb{background:rgba(255,26,26,0.35);border-radius:4px}.cfg-body::-webkit-scrollbar-thumb:hover{background:rgba(255,26,26,0.9)}.cfg-body-wrap{position:relative;flex:1;overflow:hidden;display:flex;flex-direction:column}.cfg-body-wrap::after{content:'';position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(transparent,rgba(8,8,12,0.97));pointer-events:none}.cfg-header{position:relative;z-index:2;background:rgba(8,8,12,0.98);border-bottom:1px solid rgba(255,26,26,0.12);padding:22px 24px 18px;text-align:center;flex-shrink:0}.cfg-header-title{font-family:var(--font-display);font-size:1.15rem;font-weight:800;letter-spacing:0.14em;text-transform:uppercase;background:linear-gradient(90deg,#ff4444 0%,#ff1a1a 50%,#ff6644 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}.cfg-header-sub{font-family:var(--font-body);font-size:0.78rem;color:rgba(240,240,240,0.35);margin-top:4px;letter-spacing:0.06em}.cfg-section{margin-bottom:22px}.cfg-section-label{display:flex;align-items:center;gap:8px;font-family:var(--font-display);font-size:0.72rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,26,26,0.7);margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid rgba(255,26,26,0.1)}.cfg-grid{display:flex;flex-direction:column;gap:6px}.cfg-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;background:rgba(255,255,255,0.028);border:1px solid rgba(255,255,255,0.055);border-radius:12px;transition:background 0.2s,border-color 0.2s;position:relative;overflow:hidden}.cfg-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#ff1a1a,transparent);border-radius:3px 0 0 3px;opacity:0;transition:opacity 0.2s}.cfg-item:hover{background:rgba(255,26,26,0.06);border-color:rgba(255,26,26,0.2)}.cfg-item:hover::before{opacity:1}.cfg-key{font-family:var(--font-display);font-size:0.78rem;font-weight:700;color:#ff6060;white-space:nowrap;min-width:110px;flex-shrink:0;padding-top:1px}.cfg-val{font-family:var(--font-body);font-size:0.85rem;color:rgba(240,240,240,0.8);line-height:1.45}.cfg-footer{padding:16px 20px 20px;text-align:center;border-top:1px solid rgba(255,255,255,0.05);flex-shrink:0}.close-btn{background:rgba(255,26,26,0.1);border:1px solid rgba(255,26,26,0.3);padding:11px 32px;border-radius:100px;color:white;cursor:pointer;font-family:var(--font-display);font-weight:700;font-size:0.85rem;letter-spacing:0.1em;text-transform:uppercase;transition:background 0.25s,border-color 0.25s,transform 0.15s}.close-btn:hover{background:rgba(255,26,26,0.25);border-color:#ff1a1a;transform:scale(1.03)}.site-credit{width:100%;text-align:center;margin:40px 0 10px}.site-credit span{font-family:var(--font-display);font-size:0.85rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;background:linear-gradient(90deg,#fff 0%,#fff 35%,#ff1a1a 47%,#ff1a1a 53%,#fff 65%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:scanText 5s linear infinite}@keyframes scanText{0%{background-position:-200% 0}100%{background-position:200% 0}}@keyframes aparecer{from{transform:scale(0.93);opacity:0}to{transform:scale(1);opacity:1}}@keyframes blinkNeon{0%{opacity:0.7}100%{opacity:1}}.section-gap{height:32px}.section-heading{font-family:var(--font-display);font-size:0.8rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--text-muted);margin-bottom:1rem}#particles-canvas{position:fixed;inset:0;z-index:1;pointer-events:none;will-change:transform}.trail{position:fixed;border-radius:50%;pointer-events:none;z-index:1;transform:translate(-50%,-50%)}.trail-dot{width:7px;height:7px;background:#ff1a1a;box-shadow:0 0 8px #ff1a1a,0 0 16px rgba(255,26,26,0.9)}.trail-glow{width:26px;height:26px;background:radial-gradient(circle,rgba(255,26,26,0.3),transparent 70%)}@keyframes trailFade{0%{opacity:0.9}100%{opacity:0;transform:translate(-50%,-50%) scale(0.3)}}body.low-fps .trail{display:none !important}body.low-fps #particles-canvas{display:none !important}.mobile-floating-boxes{display:flex;justify-content:center;align-items:center;gap:10px;width:100%;margin:0 auto 22px;flex-wrap:wrap}#scroll-bar{position:fixed;top:0;left:0;height:3px;width:0%;background:#ff1a1a;z-index:99999;box-shadow:0 0 8px rgba(255,26,26,0.7),0 0 2px #ff1a1a;pointer-events:none;opacity:0;transition:opacity 0.25s ease;will-change:width}body.entered #scroll-bar{opacity:1}#live-clock{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:rgba(8,8,10,0.75);border:1px solid rgba(255,255,255,0.07);border-radius:100px;padding:8px 16px;font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:600;color:#f0f0f0;display:none;align-items:center;gap:8px;backdrop-filter:blur(16px);z-index:999;letter-spacing:0.08em;min-width:116px;justify-content:center}@keyframes clockPulse{0%,100%{opacity:1;box-shadow:0 0 6px #ff1a1a}50%{opacity:0.4;box-shadow:0 0 2px #ff1a1a}}#clock-dot{width:8px;height:8px;border-radius:50%;background:#ff1a1a;box-shadow:0 0 6px #ff1a1a;display:inline-block;animation:clockPulse 1s ease-in-out infinite;flex-shrink:0}#volume-box,#view-counter,#live-clock{white-space:nowrap;box-shadow:0 0 18px rgba(255,26,26,0.10)}@media(min-width:769px){#volume-box{left:22px;top:18px}#view-counter{right:22px;top:18px}#live-clock{top:18px}body.clock-up #live-clock{transform:translate(-50%,-90px);opacity:0;pointer-events:none;transition:transform 0.3s,opacity 0.3s}}#audio-viz-canvas{display:none !important}@media(max-width:768px){#volume-box,#view-counter,#live-clock{position:static!important;margin:0;transform:none!important}body.entered #volume-box,body.entered #view-counter,body.entered #live-clock{display:flex}#live-clock{font-size:0.78rem;padding:6px 12px;flex-shrink:0;order:2}#volume-box{order:1;padding:7px 10px}#view-counter{order:3;padding:7px 10px}#volume-box input[type="range"]{width:66px}.mobile-floating-boxes{align-items:center;justify-content:center;gap:8px}.content{padding-top:10px}.links{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}.discord-card{padding:20px 16px}.discord-activity-image{width:72px;height:72px}.config-box{max-height:min(92vh,620px)}}@media(max-width:520px){.overlay{padding:24px 14px 50px}.profile-section{flex-direction:column;text-align:center;align-items:center;gap:14px}.hero-right{align-items:center;width:100%;text-align:center}.hero-name-wrap{width:100%;max-width:360px;text-align:center;overflow:visible}.hero-svg{margin:0 auto !important;width:100%;max-width:340px;height:auto;display:block}.hero-svg text{text-anchor:start !important}.hero-tags{justify-content:center!important}.quote-block{text-align:left;font-size:0.9rem;border-radius:12px;border-left:3px solid var(--red)}.links{grid-template-columns:repeat(2,1fr);gap:7px}.links a{font-size:0.85rem;padding:9px 10px}.discord-card{border-radius:16px}.playlist-card-inner{gap:12px}.playlist-cover{width:68px;height:68px}.section-gap{height:20px}.imagem-extra{width:100%}.config-box{border-radius:18px}.cfg-key{min-width:88px;font-size:0.74rem}.cfg-val{font-size:0.82rem}#discord-badges{gap:5px}.d-badge{width:30px;height:30px}.d-badge img{width:18px!important;height:18px!important}}@media(max-width:380px){.links{grid-template-columns:repeat(2,1fr)}.hero-name-wrap{max-width:300px}.hero-svg{max-width:300px}}</style>
+</head><body><div id="scroll-bar"></div><div id="live-clock"><span id="clock-dot"></span><span id="clock-time">00:00:00</span></div><div id="volume-box"><button id="volume"><img id="volumeIcon" src="media/sound_on.png" alt="Volume" width="20"></button><input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.2" /></div><div class="view-box" id="view-counter"><img src="media/eye.png" id="viewIcon" alt="Views" width="20"><span id="view-text">Carregando...</span></div><div id="bg-container"><img src="media/bg.jpg" id="bg-image" alt="Fundo" draggable="false"></div><canvas id="particles-canvas"></canvas><canvas id="audio-viz-canvas"></canvas><div id="audio-modal"><img src="media/png inicial.png" alt="Logo" class="intro-logo" draggable="false"><button id="btn-play">Clique para entrar</button><p style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.5);font-size:0.8rem;font-family:var(--font-display);letter-spacing:0.15em;text-transform:uppercase;white-space:nowrap;animation:blinkNeon 1.8s infinite alternate;">Site feito por: Noxy.gg</p></div><audio id="bg-music" loop><source src="media/music.mp3" type="audio/mp3"/></audio><div class="overlay" id="overlay"><div class="content" id="main-content"><section class="profile-section"><div class="avatar-wrapper" style="flex-shrink:0;"><div class="avatar-inner"><img src="media/perfil.jpg" alt="Avatar" class="avatar" draggable="false"/></div></div><div class="hero-right"><div class="hero-name-wrap"><svg viewBox="0 0 480 105" class="hero-svg" xmlns="http://www.w3.org/2000/svg"><defs><filter id="g1"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="g2"><feGaussianBlur stdDeviation="9" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<style>@keyframes noxy-snake{0%{stroke-dashoffset:1300}100%{stroke-dashoffset:-100}}</style>
+</defs><text x="6" y="92" font-family="Syne,sans-serif" font-weight="800" font-size="96" text-anchor="start" fill="#fff" letter-spacing="-3">Noxy7</text><text x="6" y="92" font-family="Syne,sans-serif" font-weight="800" font-size="96" fill="none" stroke="#ff1a1a" stroke-width="2" stroke-opacity="0.18" letter-spacing="-3" text-anchor="start" filter="url(#g2)">Noxy7</text><text x="6" y="92" font-family="Syne,sans-serif" font-weight="800" font-size="96" fill="none" stroke="#ff2200" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="90 1210" letter-spacing="-3" text-anchor="start" filter="url(#g1)" style="stroke-opacity:.55;animation:noxy-snake 2.4s linear infinite">Noxy7</text><text x="6" y="92" font-family="Syne,sans-serif" font-weight="800" font-size="96" fill="none" stroke="#ff3300" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="55 1245" letter-spacing="-3" text-anchor="start" filter="url(#g1)" style="animation:noxy-snake 2.4s linear infinite;stroke-dashoffset:30">Noxy7</text><text x="6" y="92" font-family="Syne,sans-serif" font-weight="800" font-size="96" fill="none" stroke="#ff6644" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="18 1282" letter-spacing="-3" text-anchor="start" style="animation:noxy-snake 2.4s linear infinite;stroke-dashoffset:60">Noxy7</text><text x="6" y="92" font-family="Syne,sans-serif" font-weight="800" font-size="96" fill="none" stroke="#ffccbb" stroke-width="0.9" stroke-linecap="round" stroke-dasharray="7 1293" letter-spacing="-3" text-anchor="start" style="animation:noxy-snake 2.4s linear infinite;stroke-dashoffset:66">Noxy7</text></svg></div><div class="tags hero-tags"><span data-label="Programador"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="13" rx="2.5" stroke="#ff4a4a" stroke-width="1.7"/><path d="M9 10L6.7 12L9 14M15 10L17.3 12L15 14" stroke="#ff4a4a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 8.5L11 15.5" stroke="#ff7777" stroke-width="1.7" stroke-linecap="round"/></svg></span><span data-label="Jogador"><svg viewBox="0 0 24 24" fill="none"><path d="M7.2 15.8H6.5C4.6 15.8 3.3 14.1 3.8 12.3L4.7 9C5.1 7.7 6.2 6.8 7.6 6.8H16.4C17.8 6.8 18.9 7.7 19.3 9L20.2 12.3C20.7 14.1 19.4 15.8 17.5 15.8H16.8L14.8 13.8H9.2L7.2 15.8Z" stroke="#ff4a4a" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 10.5H10.8M9.4 9.1V11.9" stroke="#ff7777" stroke-width="1.6" stroke-linecap="round"/><circle cx="15" cy="10.1" r=".8" fill="#ff4a4a"/><circle cx="17" cy="12" r=".8" fill="#ff7777"/></svg></span><span data-label="Tóxico"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5.2C14.5 5.2 16.5 7.2 16.5 9.7C16.5 12.2 14.5 14.2 12 14.2C9.5 14.2 7.5 12.2 7.5 9.7C7.5 7.2 9.5 5.2 12 5.2Z" stroke="#ff4a4a" stroke-width="1.7"/><path d="M8.2 13.1L5.6 18.5C7.4 19.2 9.6 19.6 12 19.6C14.4 19.6 16.6 19.2 18.4 18.5L15.8 13.1" stroke="#ff4a4a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10.4" cy="9.3" r=".8" fill="#ff7777"/><circle cx="13.6" cy="9.3" r=".8" fill="#ff7777"/><path d="M10.3 12H13.7" stroke="#ff7777" stroke-width="1.5" stroke-linecap="round"/><path d="M10.2 4.2L9.6 2.8M12 4V2.4M13.8 4.2L14.4 2.8" stroke="#ff7777" stroke-width="1.4" stroke-linecap="round"/></svg></span><span data-label="Insônia"><svg viewBox="0 0 24 24" fill="none"><path d="M19.6 14.2C17.1 18.8 10.8 19.6 7.2 15.9C3.6 12.3 4.4 6 9 3.5C8.2 7.2 10.5 11.5 14.1 13C15.9 13.8 17.8 14 19.6 14.2Z" stroke="#ff4a4a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.8 6.2L18 4.7L19.2 6.2L20.8 6.8L19.2 7.5L18 9L16.8 7.5L15.2 6.8L16.8 6.2Z" stroke="#ff7777" stroke-width="1.2" stroke-linejoin="round"/></svg></span></div><div class="quote-block hero-quote"><p>Eu sou o mano que conhece muitas pessoas, falo com poucas e a todo momento me sinto sozinho ~ Copa</p></div></div></section><div class="section-gap"></div><section><img src="media/imagem.jpg" alt="Imagem extra" class="imagem-extra" id="gif-new-video" draggable="false"/><p class="image-caption">O mundo é seu... e tudo que há nele está lá fora, trabalhe duro e conquiste! ~ Scarface</p></section><div class="section-gap"></div><section><p class="section-heading">Links</p><div class="links"><a class="discord-user-link" href="#" target="_blank"><img src="https://cdn.simpleicons.org/discord/5865F2" class="link-icon"> Discord</a><a href="https://steamcommunity.com/id/Noxy_gg/" target="_blank"><img src="https://cdn.simpleicons.org/steam/ffffff" class="link-icon"> Steam</a><a href="https://www.roblox.com/pt/users/315909186/profile" target="_blank"><img src="https://cdn.simpleicons.org/roblox/E2231A" class="link-icon"> Roblox</a><a href="https://www.roblox.com/share/g/16392138" target="_blank"><img src="https://cdn.simpleicons.org/roblox/E2231A" class="link-icon"> Grupo</a><a href="https://www.tiktok.com/@noxy.gg" target="_blank"><img src="https://cdn.simpleicons.org/tiktok/ffffff" class="link-icon"> TikTok</a><a href="https://open.spotify.com/user/7ybhk69ilst4jfm3a24n6npzb" target="_blank"><img src="https://cdn.simpleicons.org/spotify/1ED760" class="link-icon"> Spotify</a><a href="https://www.youtube.com/@NoxyRJ" target="_blank"><img src="https://cdn.simpleicons.org/youtube/FF0000" class="link-icon"> YouTube</a><a href="https://www.instagram.com/hey.thsc7/" target="_blank"><img src="https://cdn.simpleicons.org/instagram/ff4aa2" class="link-icon"> Instagram</a><a href="https://www.xbox.com/pt-BR/play/user/iCHiBANN8988" target="_blank"><img src="media/Xbox.png" class="link-icon"> Xbox</a><a href="https://x.com/NoxyRJ" target="_blank"><img src="media/X.png" class="link-icon"> Twitter</a><a href="https://www.twitch.tv/nooxyrj" target="_blank"><img src="https://cdn.simpleicons.org/twitch/9146FF" class="link-icon"> Twitch</a></div></section><section id="discord-status" style="text-align:center;margin:2rem 0;position:relative;"><p class="section-heading">Discord</p><div class="discord-card"><div style="position:relative;display:inline-block;"><a class="discord-user-link" href="#" target="_blank" style="display:inline-block;position:relative;"><img id="discord-avatar" class="discord-avatar-white" src="" alt="Avatar Discord"/><img id="discord-avatar-decoration" src="" alt=""/></a><span id="discord-status-circle" title="Status"></span></div><div id="display-name" style="margin-top:12px;">Noxy7</div><div style="font-size:0.9rem;color:var(--text-muted);margin-top:2px;"><span id="discord-username">@</span><span id="discord-discriminator"></span></div><div id="discord-badges"></div><div id="discord-since" style="display:none;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.06);font-family:var(--font-body);"><div id="discord-since-years" style="font-size:0.95rem;font-weight:700;font-family:var(--font-display);color:#fff;"></div><div id="discord-since-text" style="font-size:0.78rem;color:rgba(240,240,240,0.4);margin-top:2px;"></div></div></div></section><section id="discord-activity-wrapper" style="text-align:center;margin-top:-12px;margin-bottom:2rem;"><div id="discord-activities"></div></section><div class="section-gap"></div><section style="text-align:center;margin-bottom:1rem;"><button id="btn-config" class="config-btn">💻 Configurações do meu PC</button></section><div class="section-gap"></div><section><img src="media/Banner_love.png" alt="Banner" class="imagem-extra" draggable="false"/><p class="image-caption">Quem leu vai ter sorte no amor ❤️ ~ Noxy</p></section><div class="section-gap"></div><section><p class="section-heading">Playlist Spotify</p><div class="playlist-card" onclick="window.open('https://open.spotify.com/playlist/1O4sTRPvEHAIvvFjHIQPfR','_blank')"><div class="playlist-card-bg"></div><svg class="playlist-spotify-icon" width="22" height="22" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.623.623 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.623.623 0 11-.277-1.215c3.809-.87 7.076-.496 9.712 1.115a.623.623 0 01.207.857zm1.223-2.722a.78.78 0 01-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 01-.973-.519.781.781 0 01.519-.972c3.632-1.102 8.147-.568 11.234 1.328a.78.78 0 01.257 1.072zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.937.937 0 11-.543-1.793c3.525-1.07 9.381-.863 13.087 1.27a.937.937 0 01-.927 1.68z"/></svg><div class="playlist-card-inner"><img src="media/Capa spotify.jpg" draggable="false" alt="Capa" class="playlist-cover"/><div class="playlist-info"><div class="playlist-info-label">Playlist</div><h3>Minha Playlist</h3><button class="listen-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+Ouvir no Spotify
+</button></div></div></div></section><div class="section-gap"></div><section id="music-site-section"></section><div class="section-gap"></div><section class="site-credit"><span>Site feito por: Noxy.gg</span></section></div></div><div id="config-panel" class="config-overlay"><div class="config-box"><div class="cfg-header"><div class="cfg-header-title">⚙ Setup do Noxy7</div><div class="cfg-header-sub">Hardware · Monitores · Periféricos</div></div><div class="cfg-body-wrap"><div class="cfg-body"><div class="cfg-section"><div class="cfg-section-label"><span>🖥</span> Configurações do PC</div><div class="cfg-grid"><div class="cfg-item"><span class="cfg-key">Processador</span><span class="cfg-val">AMD Ryzen 5 1600</span></div><div class="cfg-item"><span class="cfg-key">Placa-mãe</span><span class="cfg-val">PCWare APM A320G</span></div><div class="cfg-item"><span class="cfg-key">Water Cooler</span><span class="cfg-val">Rise Mode RGB 360mm</span></div><div class="cfg-item"><span class="cfg-key">Memória RAM</span><span class="cfg-val">Asgard 8GBx2 3200Mhz série W2</span></div><div class="cfg-item"><span class="cfg-key">Placa de vídeo</span><span class="cfg-val">RX 550 4GB</span></div><div class="cfg-item"><span class="cfg-key">Armazenamento</span><span class="cfg-val">SSD 240GB + 2× HD 500GB</span></div><div class="cfg-item"><span class="cfg-key">Fans</span><span class="cfg-val">10× Wx-1 ARGB — 800 a 2000 RPM</span></div><div class="cfg-item"><span class="cfg-key">Gabinete</span><span class="cfg-val">Mancer CV500L Mid Tower</span></div><div class="cfg-item"><span class="cfg-key">Fonte</span><span class="cfg-val">GameMax GX800 — 800W 80+ Gold</span></div></div></div><div class="cfg-section"><div class="cfg-section-label"><span>🖥️</span> Monitores</div><div class="cfg-grid"><div class="cfg-item"><span class="cfg-key">Primário</span><span class="cfg-val">Dahua DHI-LM25-E231B — 25" IPS 180Hz Full HD</span></div><div class="cfg-item"><span class="cfg-key">Secundário</span><span class="cfg-val">HQ 21" 75Hz (horizontal)</span></div></div></div><div class="cfg-section" style="margin-bottom:0"><div class="cfg-section-label"><span>🖱️</span> Periféricos</div><div class="cfg-grid"><div class="cfg-item"><span class="cfg-key">Teclado</span><span class="cfg-val">Ajazz AK820</span></div><div class="cfg-item"><span class="cfg-key">Mouse</span><span class="cfg-val">Attack Shark X11 Black</span></div><div class="cfg-item"><span class="cfg-key">Headset</span><span class="cfg-val">Onikuma Gt808</span></div></div></div></div></div><div class="cfg-footer"><button id="btn-fechar" class="close-btn">Fechar</button></div></div></div>
+<script>'use strict';
+const OWNER_DISCORD_ID = '278691315594559489';
+const LANYARD_API      = `https://api.lanyard.rest/v1/users/${OWNER_DISCORD_ID}`;
+const BIN_ID           = '685cb3a58a456b7966b5ccfb';
+const API_KEY          = '$2a$10$oZaxBKrkt0bsikz7EJMgwOPHSwO2d3mf2ErT7iM67w68jYxhT4psW';
+const blockedActivities = new Set(['Noxy.gg']);
+const $ = id => document.getElementById(id);
+const DOM = {
+audioModal   : $('audio-modal'),
+music        : $('bg-music'),
+volSlider    : $('volume-slider'),
+volIcon      : $('volumeIcon'),
+overlay      : $('overlay'),
+mainContent  : $('main-content'),
+viewCounter  : $('view-counter'),
+viewText     : $('view-text'),
+liveClock    : $('live-clock'),
+clockTime    : $('clock-time'),
+volBox       : $('volume-box'),
+scrollBar    : $('scroll-bar'),
+bgImage      : $('bg-image'),
+discAvatar   : $('discord-avatar'),
+discDeco     : $('discord-avatar-decoration'),
+discName     : $('display-name'),
+discUser     : $('discord-username'),
+discDisc     : $('discord-discriminator'),
+discCircle   : $('discord-status-circle'),
+discSince    : $('discord-since'),
+discSinceYrs : $('discord-since-years'),
+discSinceTxt : $('discord-since-text'),
+discBadges   : $('discord-badges'),
+discActs     : $('discord-activities'),
+configPanel  : $('config-panel'),
+btnConfig    : $('btn-config'),
+btnFechar    : $('btn-fechar'),
+gifVideo     : $('gif-new-video'),
+musicSec     : $('music-site-section'),
+avatarWrap   : document.querySelector('.avatar-wrapper'),
+heroSvg      : document.querySelector('.hero-svg'),
+quoteBlock   : document.querySelector('.quote-block'),
+discCard     : document.querySelector('.discord-card'),
+playCard     : document.querySelector('.playlist-card'),
+};
+let lastVolume = 0.1;
+DOM.music.volume = 0.1;
+$('btn-play').addEventListener('click', () => {
+DOM.music.play().catch(() => {});
+document.body.classList.add('entered');
+window.scrollTo({ top: 0, behavior: 'auto' });
+DOM.audioModal.style.display = 'none';
+DOM.volBox.style.display = 'flex';
+DOM.overlay.classList.add('show');
+DOM.mainContent.classList.add('show');
+DOM.liveClock.style.display = 'flex';
+updateViews();
+setTimeout(initAudioViz, 300);
+});
+$('volume').addEventListener('click', () => {
+if (DOM.music.volume > 0) {
+lastVolume = DOM.music.volume;
+DOM.music.volume = 0;
+DOM.volSlider.value = 0;
+DOM.volIcon.src = 'media/sound_muted.png';
+} else {
+DOM.music.volume = lastVolume;
+DOM.volSlider.value = lastVolume;
+DOM.volIcon.src = 'media/sound_on.png';
+DOM.music.play().catch(() => {});
+}
+});
+DOM.volSlider.addEventListener('input', () => {
+const v = parseFloat(DOM.volSlider.value);
+DOM.music.volume = v;
+DOM.volIcon.src = v === 0 ? 'media/sound_muted.png' : 'media/sound_on.png';
+if (v > 0) { lastVolume = v; DOM.music.play().catch(() => {}); }
+});
+document.addEventListener('DOMContentLoaded', () => {
+const fechar = () => { DOM.configPanel.style.display = 'none'; document.body.style.overflow = ''; };
+DOM.btnConfig.addEventListener('click', () => { DOM.configPanel.style.display = 'flex'; document.body.style.overflow = 'hidden'; });
+DOM.btnFechar.addEventListener('click', fechar);
+DOM.configPanel.addEventListener('click', e => { if (e.target === DOM.configPanel) fechar(); });
+DOM.gifVideo.src = 'media/Extra.gif';
+});
+async function updateViews() {
+DOM.viewCounter.style.display = 'flex';
+DOM.viewText.textContent = 'Carregando...';
+try {
+const res  = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, { headers: { 'X-Master-Key': API_KEY } });
+if (!res.ok) throw 0;
+const data = await res.json();
+if (typeof data.record?.views !== 'number') throw 0;
+let views = data.record.views;
+const hoje = new Date().toISOString().slice(0, 10);
+if (localStorage.getItem('noxy_visited_date') !== hoje) {
+views++;
+const s = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+method: 'PUT',
+headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+body: JSON.stringify({ views })
+});
+if (!s.ok) throw 0;
+localStorage.setItem('noxy_visited_date', hoje);
+}
+DOM.viewText.textContent = `${views.toLocaleString('pt-BR')} visitantes`;
+} catch {
+DOM.viewCounter.style.display = 'none';
+}
+}
+const FLAG_BADGES = [
+{ flag:64,     label:'HypeSquad Bravery',        img:'https://cdn.discordapp.com/badge-icons/8a88d63823d8a71cd5e390baa45efa02.png' },
+{ flag:128,    label:'HypeSquad Brilliance',     img:'https://cdn.discordapp.com/badge-icons/011940fd013082d85d96680507cc7f99.png' },
+{ flag:256,    label:'HypeSquad Balance',        img:'https://cdn.discordapp.com/badge-icons/3aa41de486fa12454c3761e8e223442e.png' },
+];
+const BADGE_NAME_MAP = {
+'HOUSE_BRAVERY':                { label:'HypeSquad Bravery',           img:'https://cdn.discordapp.com/badge-icons/8a88d63823d8a71cd5e390baa45efa02.png' },
+'HOUSE_BRILLIANCE':             { label:'HypeSquad Brilliance',        img:'https://cdn.discordapp.com/badge-icons/011940fd013082d85d96680507cc7f99.png' },
+'HOUSE_BALANCE':                { label:'HypeSquad Balance',           img:'https://cdn.discordapp.com/badge-icons/3aa41de486fa12454c3761e8e223442e.png' },
+'NITRO':                        { label:'Discord Nitro',               img:'https://cdn.discordapp.com/badge-icons/2ba85e8026a8614b640c2837bcdfe21b.png' },
+'NITRO_CLASSIC':                { label:'Nitro Classic',               img:'https://cdn.discordapp.com/badge-icons/2ba85e8026a8614b640c2837bcdfe21b.png' },
+'NITRO_BASIC':                  { label:'Nitro Basic',                 img:'https://cdn.discordapp.com/badge-icons/2ba85e8026a8614b640c2837bcdfe21b.png' },
+};
+function makeBadge(label, imgUrl) {
+const d = document.createElement('div');
+d.className = 'd-badge';
+d.dataset.tip = label;
+d.innerHTML = `<img src="${imgUrl}" width="24" height="24" style="object-fit:contain;display:block;" loading="lazy" onerror="this.closest('.d-badge').remove()">`;
+return d;
+}
+function _buildBadgeItems(arr) {
+return arr;
+}
+function renderBadgesFromNames(namesArray, premiumType, container) {
+if (!container) return;
+const frag  = document.createDocumentFragment();
+const items = namesArray.map(n => BADGE_NAME_MAP[n]).filter(Boolean).map(d => makeBadge(d.label, d.img));
+if (premiumType > 0 && !namesArray.some(n => n.includes('NITRO'))) {
+const lbl = premiumType===1?'Nitro Classic':premiumType===3?'Nitro Basic':'Discord Nitro';
+items.unshift(makeBadge(lbl, 'https://cdn.discordapp.com/badge-icons/2ba85e8026a8614b640c2837bcdfe21b.png'));
+}
+_buildBadgeItems(items).forEach(i => frag.appendChild(i));
+container.innerHTML = '';
+container.appendChild(frag);
+container.style.display = items.length || !namesArray.length ? 'flex' : 'none';
+}
+function renderBadges(flags, premiumType, container) {
+if (!container) return;
+const frag  = document.createDocumentFragment();
+const items = [];
+if (premiumType > 0) {
+const lbl = premiumType===1?'Nitro Classic':premiumType===3?'Nitro Basic':'Discord Nitro';
+items.push(makeBadge(lbl, 'https://cdn.discordapp.com/badge-icons/2ba85e8026a8614b640c2837bcdfe21b.png'));
+}
+FLAG_BADGES.forEach(b => { if ((flags & b.flag) === b.flag) items.push(makeBadge(b.label, b.img)); });
+_buildBadgeItems(items).forEach(i => frag.appendChild(i));
+container.innerHTML = '';
+container.appendChild(frag);
+container.style.display = 'flex';
+}
+const statusMap = { online:'#43B581', idle:'#FAA61A', dnd:'#F04747' };
+const activityImageCache = new Map();
+let   discordTimeInterval = null;
+let   discordAbort = null;
+function updateDiscordLinks() {
+const href = `https://discord.com/users/${OWNER_DISCORD_ID}`;
+document.querySelectorAll('.discord-user-link').forEach(a => a.href = href);
+}
+function formatTime(ms) {
+const t = Math.max(0, ms / 1000 | 0);
+const h = (t / 3600) | 0, m = ((t % 3600) / 60) | 0, s = t % 60;
+const pad = n => String(n).padStart(2, '0');
+return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
+}
+function escapeHtml(t = '') {
+return String(t).replace(/[&<>]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;' }[c]));
+}
+async function getActivityImage(act, data) {
+if (!act?.name) return 'media/icon.png';
+const key = `${act.name}::${act.application_id || ''}::${act.assets?.large_image || ''}`;
+if (activityImageCache.has(key)) return activityImageCache.get(key);
+let url = '';
+if (act.name === 'Spotify' && data?.spotify?.album_art_url) {
+url = data.spotify.album_art_url;
+} else if (act.assets?.large_image) {
+url = act.assets.large_image.startsWith('mp:')
+? `https://media.discordapp.net/${act.assets.large_image.slice(3)}`
+: act.application_id
+? `https://cdn.discordapp.com/app-assets/${act.application_id}/${act.assets.large_image}.png`
+: '';
+}
+if (!url && act.name !== 'Spotify') {
+try {
+const r = await fetch(`https://store.steampowered.com/api/storesearch/?term=${encodeURIComponent(act.name)}&l=pt&cc=BR`);
+const d = await r.json();
+if (d?.items?.[0]?.id) url = `https://cdn.cloudflare.steamstatic.com/steam/apps/${d.items[0].id}/header.jpg`;
+} catch {}
+}
+url = url || 'media/icon.png';
+activityImageCache.set(key, url);
+return url;
+}
+async function fetchDiscordStatus() {
+if (discordAbort) discordAbort.abort();
+discordAbort = new AbortController();
+let lanyard = null;
+let lanyardUser = null;
+let japi = null;
+let profile = null;
+try {
+try {
+const res = await fetch(LANYARD_API, { signal: discordAbort.signal });
+if (res.ok) {
+const json = await res.json();
+if (json?.success !== false && json?.data) {
+lanyard = json.data;
+lanyardUser = json.data.discord_user || null;
+}
+}
+} catch (e) {
+if (e?.name === 'AbortError') throw e;
+}
+try {
+const r = await fetch(`https://japi.rest/discord/v1/user/${OWNER_DISCORD_ID}`);
+if (r.ok) {
+const d = await r.json();
+japi = d?.data || null;
+}
+} catch {}
+profile = lanyardUser || japi;
+if (!profile) {
+DOM.discName.textContent = 'Usuário indisponível';
+DOM.discUser.textContent = '@desconhecido';
+DOM.discDisc.textContent = '';
+DOM.discAvatar.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+DOM.discCircle.style.backgroundColor = 'gray';
+DOM.discBadges.innerHTML = '';
+DOM.discBadges.style.display = 'none';
+DOM.discActs.innerHTML = '';
+DOM.discSince.style.display = 'none';
+return;
+}
+updateDiscordLinks();
+const profileId = String(profile.id || OWNER_DISCORD_ID);
+const avatarHash = profile.avatar || profile.avatar_hash || null;
+const discriminator = String(profile.discriminator || '0');
+const avatarUrl = avatarHash
+? `https://cdn.discordapp.com/avatars/${profileId}/${avatarHash}.${String(avatarHash).startsWith('a_') ? 'gif' : 'png'}?size=128`
+: `https://cdn.discordapp.com/embed/avatars/${Number(discriminator || 0) % 5}.png`;
+if (DOM.discAvatar.src !== avatarUrl) DOM.discAvatar.src = avatarUrl;
+DOM.discName.textContent = profile.global_name || profile.display_name || profile.username || 'Discord';
+DOM.discUser.textContent = '@' + (profile.username || 'usuario');
+DOM.discDisc.textContent = (discriminator && discriminator !== '0') ? '#' + discriminator : '';
+DOM.discCircle.style.backgroundColor = statusMap[lanyard?.discord_status] || 'gray';
+try {
+const ts = Number((BigInt(profileId) >> 22n) + 1420070400000n);
+const created = new Date(ts);
+const diffMs = Date.now() - ts;
+const anos = (diffMs / 31536e6) | 0;
+const meses = ((diffMs % 31536e6) / 2592e6) | 0;
+const dias = ((diffMs % 2592e6) / 86400e3) | 0;
+const partes = [];
+if (anos > 0) partes.push(`${anos} ano${anos > 1 ? 's' : ''}`);
+if (meses > 0) partes.push(`${meses} ${meses > 1 ? 'meses' : 'mês'}`);
+if (dias > 0 && anos === 0) partes.push(`${dias} dia${dias > 1 ? 's' : ''}`);
+DOM.discSinceYrs.textContent = `No Discord há ${partes.join(' e ') || 'pouco tempo'}`;
+DOM.discSinceTxt.textContent = `desde ${created.toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' })}`;
+DOM.discSince.style.display = 'block';
+} catch {
+DOM.discSince.style.display = 'none';
+}
+const deco = profile.avatar_decoration_data || lanyardUser?.avatar_decoration_data;
+if (deco?.asset) {
+DOM.discDeco.src = `https://cdn.discordapp.com/avatar-decoration-presets/${deco.asset}.png?size=160`;
+DOM.discDeco.style.display = 'block';
+} else {
+DOM.discDeco.style.display = 'none';
+}
+const names = Array.isArray(japi?.public_flags_array)
+? [...japi.public_flags_array]
+: [];
+const flags = Number(japi?.public_flags ?? profile.public_flags ?? profile.flags ?? 0);
+const premium = Number(japi?.premium_type ?? profile.premium_type ?? 0);
+if (premium > 0 && !names.some(n => String(n).includes('NITRO'))) {
+names.push(premium === 1 ? 'NITRO_CLASSIC' : premium === 3 ? 'NITRO_BASIC' : 'NITRO');
+}
+if (lanyard?.boost_since && !names.some(n => String(n).startsWith('GUILD_BOOSTER'))) {
+names.push('GUILD_BOOSTER_LVL1');
+}
+if (names.length > 0) {
+renderBadgesFromNames([...new Set(names)], 0, DOM.discBadges);
+} else {
+renderBadges(flags, premium, DOM.discBadges);
+}
+const filtered = (lanyard?.activities || []).filter(a => a?.type !== 4 && a?.name && !blockedActivities.has(a.name));
+if (!filtered.length) {
+DOM.discActs.innerHTML = '';
+return;
+}
+const cards = await Promise.all(filtered.map(async act => {
+const img   = await getActivityImage(act, lanyard);
+const label = act.name === 'Spotify' ? 'Música' : (['Jogando','Transmitindo','Ouvindo','Assistindo','','Competindo'][act.type] || 'Atividade');
+const icon  = act.name === 'Spotify' ? '🎵' : '🎮';
+return `<div class="discord-activity-card show"><div class="discord-activity-top"><div class="discord-activity-title-wrap"><span>${icon}</span><span class="discord-activity-top-label">${label}</span></div><span class="discord-activity-top-badge">${act.name === 'Spotify' ? 'Spotify' : 'Ativo'}</span></div><div class="discord-activity-body"><img class="discord-activity-image" src="${escapeHtml(img)}" alt="${escapeHtml(act.name)}" loading="lazy" onerror="this.src='media/icon.png'"><div class="discord-activity-info"><h3 class="discord-activity-name">${escapeHtml(act.name)}</h3>${act.details ? `<p class="discord-activity-details">${escapeHtml(act.details)}</p>` : ''}${act.state ? `<p class="discord-activity-state">${escapeHtml(act.state)}</p>` : ''}${act.timestamps?.start ? `<p class="discord-activity-time" data-start="${act.timestamps.start}">0:00</p>` : ''}</div></div></div>`;
+}));
+DOM.discActs.innerHTML = cards.join('');
+if (discordTimeInterval) clearInterval(discordTimeInterval);
+const tick = () => DOM.discActs.querySelectorAll('.discord-activity-time[data-start]').forEach(el => {
+el.textContent = formatTime(Date.now() - Number(el.dataset.start));
+});
+tick();
+discordTimeInterval = setInterval(tick, 1000);
+} catch (e) {
+if (e?.name !== 'AbortError') console.error('Discord error:', e);
+}
+}
+updateDiscordLinks();
+fetchDiscordStatus();
+setInterval(fetchDiscordStatus, 15000);
+(async () => {
+const url = 'https://open.spotify.com/intl-pt/track/0c5GfvbEqVAXTCfSkhswtJ';
+let title = 'Música', artist = 'isotopxs', thumb = 'media/Capa spotify.jpg';
+try {
+const r = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`);
+if (r.ok) { const d = await r.json(); title = d.title || title; artist = d.author_name?.trim() || artist; thumb = d.thumbnail_url || thumb; }
+} catch {}
+if (!DOM.musicSec) return;
+DOM.musicSec.innerHTML = `<p class="section-heading" style="margin-bottom:1rem;">Música do Site</p><a href="${url}" target="_blank" rel="noopener" style="display:block;max-width:400px;margin:0 auto;text-decoration:none;"><div style="background:linear-gradient(135deg,rgba(20,10,10,0.9),rgba(10,5,5,0.95));border:1px solid rgba(255,26,26,0.2);border-radius:20px;padding:0;overflow:hidden;backdrop-filter:blur(16px);transition:transform 0.25s,box-shadow 0.3s;position:relative;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 40px rgba(255,26,26,0.18)'" onmouseout="this.style.transform='';this.style.boxShadow=''"><div style="position:absolute;inset:0;background:radial-gradient(ellipse at 0% 50%,rgba(255,26,26,0.08) 0%,transparent 60%);pointer-events:none;"></div><div style="display:flex;align-items:center;gap:16px;padding:16px;position:relative;z-index:1;"><div style="position:relative;flex-shrink:0;"><img src="${thumb}" style="width:80px;height:80px;border-radius:12px;object-fit:cover;display:block;box-shadow:0 4px 20px rgba(0,0,0,0.5);" loading="lazy"><div style="position:absolute;inset:0;border-radius:12px;background:rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;"><svg width="28" height="28" viewBox="0 0 24 24" fill="white" opacity="0.9"><path d="M8 5v14l11-7z"/></svg></div></div><div style="flex:1;text-align:left;min-width:0;"><div style="font-size:0.68rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:#ff4444;margin-bottom:4px;font-family:'Syne',sans-serif;">Música do site</div><div style="font-size:1rem;font-weight:800;font-family:'Syne',sans-serif;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${title}</div><div style="font-size:0.82rem;color:rgba(240,240,240,0.5);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${artist}</div><div style="margin-top:10px;display:inline-flex;align-items:center;gap:6px;padding:5px 12px;background:rgba(255,26,26,0.15);border:1px solid rgba(255,26,26,0.3);border-radius:100px;font-size:0.75rem;font-weight:600;color:#ff6666;font-family:'DM Sans',sans-serif;"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Ouvir agora</div></div></div></div></a>`;
+})();
+const AR = { level: 0, bass: 0, beat: 0 };
+let _vizReady = false;
+let _prevBright = '', _prevSat = '', _prevAvatarGlow = '', _prevAvatarScale = '';
+let _prevSvgFilter = '', _prevBorderAlpha = '';
+function applyAudioReactive(level, bass, beat) {
+if (document.body.classList.contains('low-fps')) return;
+if (DOM.bgImage) {
+const bright = (0.35 + bass * 0.18).toFixed(3);
+const sat    = (0.7  + level * 0.7).toFixed(3);
+const f      = `brightness(${bright}) saturate(${sat})`;
+if (DOM.bgImage.style.filter !== f) DOM.bgImage.style.filter = f;
+}
+if (DOM.avatarWrap) {
+const glow  = (12 + bass * 34).toFixed(1);
+const alpha = (0.28 + beat * 0.45).toFixed(3);
+const scale = (1  + bass * 0.025).toFixed(4);
+const sh = `0 0 ${glow}px rgba(255,26,26,${alpha})`;
+const sc = `scale(${scale})`;
+if (DOM.avatarWrap.style.boxShadow !== sh) DOM.avatarWrap.style.boxShadow = sh;
+if (DOM.avatarWrap.style.transform  !== sc) DOM.avatarWrap.style.transform  = sc;
+}
+if (DOM.heroSvg) {
+const glow  = (4 + bass * 18).toFixed(1);
+const alpha = (0.15 + beat * 0.45).toFixed(3);
+const f = `drop-shadow(0 0 ${glow}px rgba(255,26,26,${alpha}))`;
+if (DOM.heroSvg.style.filter !== f) DOM.heroSvg.style.filter = f;
+}
+const borderAlpha = (0.08 + level * 0.30).toFixed(3);
+if (borderAlpha !== _prevBorderAlpha) {
+_prevBorderAlpha = borderAlpha;
+const bc = `rgba(255,26,26,${borderAlpha})`;
+if (DOM.discCard) DOM.discCard.style.borderColor = bc;
+if (DOM.playCard) DOM.playCard.style.borderColor = bc;
+}
+const tagGlow  = (4 + level * 16).toFixed(1);
+const tagAlpha = (0.10 + level * 0.24).toFixed(3);
+const tsh = `0 0 ${tagGlow}px rgba(255,26,26,${tagAlpha})`;
+document.querySelectorAll('.tags span').forEach(s => { if (s.style.boxShadow !== tsh) s.style.boxShadow = tsh; });
+}
+function resetAudioReactive() {
+if (DOM.bgImage)     DOM.bgImage.style.filter        = '';
+if (DOM.avatarWrap) { DOM.avatarWrap.style.boxShadow = ''; DOM.avatarWrap.style.transform = ''; }
+if (DOM.heroSvg)     DOM.heroSvg.style.filter        = '';
+if (DOM.discCard)    DOM.discCard.style.borderColor   = '';
+if (DOM.playCard)    DOM.playCard.style.borderColor   = '';
+document.querySelectorAll('.tags span').forEach(s => { s.style.boxShadow = ''; });
+_prevBorderAlpha = '';
+}
+function setMusicReactive(level = 0, bass = 0, beat = 0) {
+AR.level = Math.max(0, Math.min(1, level));
+AR.bass  = Math.max(0, Math.min(1, bass));
+AR.beat  = Math.max(0, Math.min(1, beat));
+const isPlaying = DOM.music && !DOM.music.paused && DOM.music.volume > 0;
+if (isPlaying && (AR.level > 0.01 || AR.bass > 0.01)) applyAudioReactive(AR.level, AR.bass, AR.beat);
+else resetAudioReactive();
+}
+function initAudioViz() {
+if (_vizReady) return;
+_vizReady = true;
+const audio = DOM.music;
+if (!audio || (!window.AudioContext && !window.webkitAudioContext)) { setMusicReactive(0,0,0); return; }
+try {
+const AudioCtx  = window.AudioContext || window.webkitAudioContext;
+const ctxAudio  = new AudioCtx();
+const analyser  = ctxAudio.createAnalyser();
+analyser.fftSize = 128;
+analyser.smoothingTimeConstant = 0.78;
+ctxAudio.createMediaElementSource(audio).connect(analyser);
+analyser.connect(ctxAudio.destination);
+const data     = new Uint8Array(analyser.frequencyBinCount);
+const bassN    = Math.max(4, (data.length * 0.18) | 0);
+let   lastLvl  = 0;
+function loop() {
+if (ctxAudio.state === 'suspended') ctxAudio.resume().catch(() => {});
+analyser.getByteFrequencyData(data);
+let sum = 0, bassSum = 0;
+for (let i = 0; i < data.length; i++) {
+const v = data[i] / 255;
+sum += v;
+if (i < bassN) bassSum += v;
+}
+const paused = audio.paused || audio.volume === 0;
+const level  = paused ? 0 : (sum / data.length) * audio.volume;
+const bass   = paused ? 0 : (bassSum / bassN)   * audio.volume;
+const beat   = Math.max(0, level - lastLvl) * 3.2;
+lastLvl = level * 0.75 + lastLvl * 0.25;
+setMusicReactive(level, bass, beat);
+requestAnimationFrame(loop);
+}
+loop();
+} catch (e) { console.warn('Sincronizador desativado:', e); setMusicReactive(0,0,0); }
+}
+DOM.music.addEventListener('pause', resetAudioReactive);
+(function () {
+const canvas = $('particles-canvas');
+if (!canvas) return;
+const ctx = canvas.getContext('2d', { alpha: true });
+let W, H;
+const PARTICLE_COUNT = 55;
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize, { passive: true });
+const particles = Array.from({ length: PARTICLE_COUNT }, () => ({
+x: 0, y: 0, r: 0, speed: 0, opacity: 0, drift: 0, pulse: 0,
+init(random) {
+this.x       = Math.random() * W;
+this.y       = random ? Math.random() * H : H + 10;
+this.r       = Math.random() * 1.8 + 0.4;
+this.speed   = Math.random() * 0.4 + 0.15;
+this.opacity = Math.random() * 0.5 + 0.1;
+this.drift   = (Math.random() - 0.5) * 0.3;
+this.pulse   = Math.random() * Math.PI * 2;
+}
+}));
+particles.forEach(p => p.init(true));
+function loop() {
+ctx.clearRect(0, 0, W, H);
+const isPlaying  = DOM.music && !DOM.music.paused && DOM.music.volume > 0;
+const lvl  = isPlaying ? Math.min(1, AR.level) : 0;
+const bass = isPlaying ? Math.min(1, AR.bass)  : 0;
+for (let i = 0; i < PARTICLE_COUNT; i++) {
+const p = particles[i];
+p.y -= p.speed * (1 + lvl * 1.4);
+p.x += p.drift * (1 + lvl * 0.8);
+p.pulse += 0.02 + lvl * 0.035;
+p.opacity = Math.sin(p.pulse) * 0.2 + 0.3 + lvl * 0.22;
+if (p.y < -10) p.init(false);
+const size  = p.r * (1 + bass * 1.2);
+const alpha = Math.min(0.85, p.opacity);
+ctx.beginPath(); ctx.arc(p.x, p.y, size, 0, 6.283);
+ctx.fillStyle = `rgba(255,26,26,${alpha})`; ctx.fill();
+ctx.beginPath(); ctx.arc(p.x, p.y, size * (2.5 + bass * 1.2), 0, 6.283);
+ctx.fillStyle = `rgba(255,26,26,${(alpha * (0.2 + bass * 0.12)).toFixed(3)})`; ctx.fill();
+}
+requestAnimationFrame(loop);
+}
+loop();
+})();
+(function () {
+const POOL_SIZE  = 24;
+const HALF       = POOL_SIZE / 2;
+const poolDot    = [];
+const poolGlow   = [];
+let   dotIdx     = 0, glowIdx = 0;
+let   lx = 0, ly = 0;
+let   trailFrame = null;
+let   pendingX   = 0, pendingY = 0, hasPending = false;
+for (let i = 0; i < HALF; i++) {
+const d = document.createElement('div');
+d.className = 'trail trail-dot';
+d.style.cssText = 'opacity:0;left:0;top:0;';
+document.body.appendChild(d);
+poolDot.push(d);
+const g = document.createElement('div');
+g.className = 'trail trail-glow';
+g.style.cssText = 'opacity:0;left:0;top:0;';
+document.body.appendChild(g);
+poolGlow.push(g);
+}
+function spawnTrail(x, y) {
+const d = poolDot[dotIdx % HALF];
+dotIdx++;
+d.style.left    = x + 'px';
+d.style.top     = y + 'px';
+d.style.opacity = '0.9';
+d.style.animation = 'none';
+void d.offsetWidth;
+d.style.animation = 'trailFade 0.7s ease-out forwards';
+const g = poolGlow[glowIdx % HALF];
+glowIdx++;
+g.style.left    = x + 'px';
+g.style.top     = y + 'px';
+g.style.opacity = '0.9';
+g.style.animation = 'none';
+void g.offsetWidth;
+g.style.animation = 'trailFade 0.6s ease-out forwards';
+}
+document.addEventListener('mousemove', e => {
+if (Math.hypot(e.clientX - lx, e.clientY - ly) < 5) return;
+lx = e.clientX; ly = e.clientY;
+pendingX = lx; pendingY = ly; hasPending = true;
+if (!trailFrame) trailFrame = requestAnimationFrame(() => {
+trailFrame = null;
+if (hasPending && !document.body.classList.contains('low-fps')) {
+spawnTrail(pendingX, pendingY);
+hasPending = false;
+}
+});
+}, { passive: true });
+})();
+function handleFloating() {
+const { volBox: v, liveClock: clock, viewCounter: c, overlay: o } = DOM;
+if (!v || !clock || !c || !o) return;
+let mc = $('mobile-floating-boxes');
+if (window.innerWidth <= 768) {
+if (!mc) { mc = document.createElement('div'); mc.id = 'mobile-floating-boxes'; mc.className = 'mobile-floating-boxes'; o.insertBefore(mc, o.firstChild); }
+mc.appendChild(v); mc.appendChild(clock); mc.appendChild(c);
+} else {
+document.body.appendChild(v); document.body.appendChild(clock); document.body.appendChild(c);
+if (mc) mc.remove();
+}
+}
+window.addEventListener('load',   handleFloating);
+window.addEventListener('resize', handleFloating, { passive: true });
+function handleClockScroll() {
+if (window.innerWidth <= 768) { document.body.classList.remove('clock-up'); return; }
+document.body.classList.toggle('clock-up', window.scrollY > 35);
+}
+window.addEventListener('scroll', handleClockScroll, { passive: true });
+window.addEventListener('resize', handleClockScroll, { passive: true });
+window.addEventListener('load',   handleClockScroll);
+const base   = 'Noxy7 ✦ ';
+const titles = ['Bem-Vindo', 'Site Personalizado', 'Exclusivo do Noxy'];
+let ti = 0, li = 0, del = false;
+function animTitle() {
+const cur = titles[ti];
+if (!del) { li++; document.title = base + cur.slice(0, li); if (li === cur.length) { del = true; setTimeout(animTitle, 1500); return; } }
+else      { li--; document.title = base + cur.slice(0, li); if (li === 0) { del = false; ti = (ti + 1) % titles.length; } }
+setTimeout(animTitle, 250);
+}
+animTitle();
+(function () {
+const bar = DOM.scrollBar;
+if (!bar) return;
+let pending = false;
+window.addEventListener('scroll', () => {
+if (pending) return;
+pending = true;
+requestAnimationFrame(() => {
+pending = false;
+const total = document.documentElement.scrollHeight - window.innerHeight;
+bar.style.width = (total > 0 ? (window.scrollY / total) * 100 : 0) + '%';
+});
+}, { passive: true });
+})();
+(function () {
+const ct = DOM.clockTime;
+if (!ct) return;
+const pad = n => String(n).padStart(2, '0');
+function tick() {
+const n = new Date();
+ct.textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`;
+}
+tick();
+setInterval(tick, 1000);
+})();
+(function () {
+let frames = 0, lastTime = performance.now(), lowCounter = 0;
+function check(now) {
+frames++;
+if (now - lastTime >= 1000) {
+const fps = frames; frames = 0; lastTime = now;
+if (fps < 42) lowCounter++; else lowCounter = Math.max(0, lowCounter - 1);
+if (lowCounter >= 3) document.body.classList.add('low-fps');
+if (fps >= 55)       { document.body.classList.remove('low-fps'); lowCounter = 0; }
+}
+requestAnimationFrame(check);
+}
+requestAnimationFrame(check);
+})();</script>
+</body></html>

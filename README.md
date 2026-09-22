@@ -8,15 +8,16 @@ This project was developed to provide a clean, responsive, and visually immersiv
 
 ## Features
 
-- Personalized profile presentation
-- Social media and gaming platform integration
-- Discord profile and activity display
-- Spotify music integration
-- Custom playlists
+- Personalized profile presentation with animated hero section
+- Social media and gaming platform links (Discord, Steam, Roblox, TikTok, Spotify, YouTube, Instagram, Xbox, X, Twitch)
+- Live Discord profile and activity display via the Lanyard API
+- Automatic Spotify playlist integration — cover art and title update on their own whenever the playlist changes
+- Featured "site music" card with live Spotify oEmbed data
+- Custom PC hardware/setup showcase panel
 - Visitor counter
-- Responsive layout
-- Animated visual effects
-- Optimized user interface
+- Fully responsive layout with mobile-optimized effects
+- Animated visual effects (particle background, cursor trail, audio-reactive glow)
+- Optimized user interface with lazy-loaded images
 
 ## Technologies
 
@@ -37,3 +38,4 @@ The goal of this project is to create a centralized digital identity platform wh
     ├── images
     ├── audio
     └── assets
+```
